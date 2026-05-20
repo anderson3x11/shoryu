@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getPlayerProfile, getBattleLog } from '@/lib/buckler'
 import { PlayerHeader } from '@/components/player-header'
-import { CharacterStats } from '@/components/character-stats'
+import { CharacterStats, type PhaseData } from '@/components/character-stats'
 import { PlayCounts } from '@/components/play-counts'
 import { MatchHistory } from '@/components/match-history'
 
@@ -29,12 +29,18 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
   const banner = profile.fighter_banner_info
   const shortId = banner?.personal_info?.short_id ?? id
 
+  // Build phase list — currently only one phase available from profile page.
+  // When Buckler exposes per-phase endpoints, add more PhaseData entries here.
+  const phases: PhaseData[] = profile.play
+    ? [{ id: 'current', label: 'Current', chars: profile.play.character_league_infos ?? [] }]
+    : []
+
   return (
     <div className="space-y-4 max-w-5xl mx-auto">
       <PlayerHeader banner={banner} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {profile.play && <CharacterStats playData={profile.play} />}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+        <CharacterStats phases={phases} />
         {profile.play && <PlayCounts playData={profile.play} />}
       </div>
 

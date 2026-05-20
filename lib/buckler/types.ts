@@ -75,10 +75,21 @@ export interface BucklerPlayData {
     custom_room_match_play_count: number
     total_all_character_play_point: number
   }
+  current_season_id: number          // e.g. 12 (current phase)
+  season_ids: number[]               // all available phase IDs, e.g. [12,11,10,...,0]
   character_league_infos: Array<{
     character_id: number
     is_played: boolean
     league_info: BucklerLeagueInfo
+    character_name: string
+    character_tool_name: string
+  }>
+  character_win_rates: Array<{
+    character_id: number
+    battle_count: number
+    win_count: number
+    character_name: string
+    character_tool_name: string
   }>
 }
 
