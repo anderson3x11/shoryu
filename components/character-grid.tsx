@@ -13,11 +13,6 @@ export function CharacterGrid() {
           style={{ '--char-color': char.color } as React.CSSProperties}
           title={char.name}
         >
-          {/* Character color gradient — shows through transparent PNG areas */}
-          <div
-            className="absolute inset-0"
-            style={{ background: `linear-gradient(to top, ${char.color} 0%, ${char.color}55 40%, #0f0f0f 100%)` }}
-          />
           <Image
             src={getCharacterImageUrl(char.slug)}
             alt={char.name}

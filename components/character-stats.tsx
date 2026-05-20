@@ -23,9 +23,6 @@ interface CharacterStatsProps {
   phases: PhaseData[]
 }
 
-// Row height: badge (44px image + 2px gap + 12px text) + py-2.5 (20px) ≈ 78px.
-// Master/Diamond rows add a second text line but the badge height stays the same.
-const ROW_PX = 80
 const VISIBLE_ROWS = 5
 
 function sortByBest(chars: PhaseCharInfo[]): PhaseCharInfo[] {
@@ -73,7 +70,7 @@ export function CharacterStats({ phases }: CharacterStatsProps) {
   const displayed = activePhase ? sortByBest(activePhase.chars) : []
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800 flex flex-col py-0 gap-0">
+    <Card className="absolute inset-0 bg-zinc-900 border-zinc-800 flex flex-col py-0 gap-0">
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-4 pb-3 flex-shrink-0">
         <CardTitle className="text-zinc-400 uppercase tracking-wider">Characters</CardTitle>
@@ -97,12 +94,9 @@ export function CharacterStats({ phases }: CharacterStatsProps) {
         )}
       </div>
 
-      {/* List — scrolls after VISIBLE_ROWS rows */}
-      <div className="relative">
-      <div
-        className="overflow-y-auto"
-        style={{ maxHeight: ROW_PX * VISIBLE_ROWS }}
-      >
+      {/* List — fills remaining card height, scrolls when content exceeds it */}
+      <div className="relative flex-1 min-h-0">
+      <div className="overflow-y-auto h-full">
         {displayed.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 gap-2 text-zinc-600">
             <span className="text-2xl">—</span>

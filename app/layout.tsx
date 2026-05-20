@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Bebas_Neue, Barlow } from 'next/font/google'
+import { NavSearch } from '@/components/nav-search'
 import './globals.css'
 
 const bebasNeue = Bebas_Neue({ weight: '400', variable: '--font-display', subsets: ['latin'] })
@@ -16,13 +17,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased min-h-screen bg-zinc-950 text-zinc-100">
         <nav className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-6 h-14 flex items-center gap-8">
-            <a href="/" className="flex items-center gap-0.5 font-display text-2xl tracking-wider leading-none">
+            <a href="/" className="flex items-center gap-0.5 font-display text-2xl tracking-wider leading-none flex-shrink-0">
               <span className="text-red-500">U</span>
               <span className="text-zinc-100">SF6</span>
             </a>
-            <div className="flex items-center gap-4 text-sm text-zinc-400">
-              <a href="/" className="hover:text-white transition-colors">Home</a>
-            </div>
+            <NavSearch />
           </div>
         </nav>
         <main className="max-w-7xl mx-auto px-6 py-8">

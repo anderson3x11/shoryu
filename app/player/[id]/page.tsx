@@ -39,8 +39,11 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
     <div className="space-y-4 max-w-5xl mx-auto">
       <PlayerHeader banner={banner} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-        <CharacterStats phases={phases} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Relative wrapper with no in-flow content → row height = PlayCounts height */}
+        <div className="relative">
+          <CharacterStats phases={phases} />
+        </div>
         {profile.play && <PlayCounts playData={profile.play} />}
       </div>
 
