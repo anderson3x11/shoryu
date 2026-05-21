@@ -4,6 +4,7 @@ import { PlayerHeader } from '@/components/player-header'
 import { CharacterStats, type PhaseData } from '@/components/character-stats'
 import { PlayCounts } from '@/components/play-counts'
 import { MatchHistory } from '@/components/match-history'
+import { MatchupChart } from '@/components/matchup-chart'
 
 interface PlayerPageProps {
   params: Promise<{ id: string }>
@@ -63,6 +64,8 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
         </div>
         {profile.play && <PlayCounts playData={profile.play} />}
       </div>
+
+      <MatchupChart playerId={String(shortId)} />
 
       <MatchHistory
         initialBattles={allBattles}
