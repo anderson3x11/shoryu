@@ -57,7 +57,7 @@ export async function getPlayerProfile(shortId: string | number): Promise<Buckle
 export async function getBattleLog(
   shortId: string | number,
   page = 1,
-  mode: 'rank' | 'casual' | 'hub' | 'extreme' = 'rank'
+  mode: 'rank' | 'casual' | 'hub' | 'custom' | 'extreme' = 'rank'
 ): Promise<BucklerBattleLogPage | null> {
   return fetchPageData<BucklerBattleLogPage>(
     `/en/profile/${shortId}/battlelog/${mode}?page=${page}`,

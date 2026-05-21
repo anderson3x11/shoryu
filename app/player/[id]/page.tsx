@@ -19,10 +19,27 @@ export async function generateMetadata({ params }: PlayerPageProps) {
 export default async function PlayerPage({ params }: PlayerPageProps) {
   const { id } = await params
 
-  const [profile, battleLog] = await Promise.all([
+  const [profile, rankLog, casualLog, hubLog, customLog] = await Promise.all([
     getPlayerProfile(id),
-    getBattleLog(id),
+    getBattleLog(id, 1, 'rank'),
+    getBattleLog(id, 1, 'casual'),
+    getBattleLog(id, 1, 'hub'),
+    getBattleLog(id, 1, 'custom'),
   ])
+
+  const allBattles = [
+    ...(rankLog?.replay_list ?? []),
+    ...(casualLog?.replay_list ?? []),
+    ...(hubLog?.replay_list ?? []),
+    ...(customLog?.replay_list ?? []),
+  ].sort((a, b) => b.uploaded_at - a.uploaded_at).slice(0, 10)
+
+  const allTotalPages = Math.max(
+    rankLog?.total_page ?? 1,
+    casualLog?.total_page ?? 1,
+    hubLog?.total_page ?? 1,
+    customLog?.total_page ?? 1,
+  )
 
   if (!profile) notFound()
 
@@ -48,8 +65,10 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
       </div>
 
       <MatchHistory
-        battles={battleLog?.replay_list ?? []}
+        initialBattles={allBattles}
+        initialTotalPages={allTotalPages}
         currentShortId={shortId}
+        playerId={String(shortId)}
       />
     </div>
   )

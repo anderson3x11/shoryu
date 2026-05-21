@@ -28,11 +28,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="max-w-7xl mx-auto px-6 py-8">
           {children}
         </main>
-        <footer className="border-t border-zinc-800 mt-16">
-          <div className="max-w-7xl mx-auto px-6 py-6 text-center text-xs text-zinc-600">
-            Not affiliated with Capcom. Data sourced from Buckler&apos;s Boot Camp.
-          </div>
-        </footer>
       </body>
     </html>
   )

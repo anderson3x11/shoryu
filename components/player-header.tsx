@@ -70,9 +70,14 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
 
         {/* Player info */}
         <div className="flex-1 min-w-0 space-y-1">
-          <h1 className="text-2xl font-bold text-white leading-none">
+          <a
+            href={`https://www.streetfighter.com/6/buckler/profile/${info.short_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-2xl font-bold text-white leading-none hover:text-zinc-300 transition-colors"
+          >
             {info.fighter_id}
-          </h1>
+          </a>
           <div className="flex items-center gap-2 flex-wrap">
             {flag && <span className="text-base leading-none">{flag}</span>}
             {banner.home_name && (
