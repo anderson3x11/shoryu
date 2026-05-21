@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Card, CardTitle } from '@/components/ui/card'
-import { getRankImageUrl, getRank, TIER_COLORS, showsMasterRating } from '@/lib/constants/ranks'
+import { getRankImageUrl, getRank, TIER_COLORS, showsMasterRating, getEffectiveRankId } from '@/lib/constants/ranks'
 import { getCharacterByBucklerId, getCharacterImageUrl } from '@/lib/constants/characters'
 import type { BucklerLeagueInfo } from '@/lib/buckler'
 
@@ -37,15 +37,30 @@ function sortByBest(chars: PhaseCharInfo[]): PhaseCharInfo[] {
 }
 
 function RankBadge({ li }: { li: BucklerLeagueInfo }) {
-  const rank = getRank(li.league_rank)
+  const effectiveId = getEffectiveRankId(li.league_rank, li.master_league, li.master_rating_ranking, li.master_rating)
+  const rank = getRank(effectiveId)
   const color = TIER_COLORS[rank.tier] ?? '#ffffff'
+  const isLegend = effectiveId === 37
   const hasMR = showsMasterRating(li.league_rank) && li.master_rating > 0
 
+  let subText: string
+  if (isLegend && li.master_rating_ranking > 0) {
+    subText = `#${li.master_rating_ranking}`
+  } else if (hasMR) {
+    subText = `${li.master_rating.toLocaleString()} MR`
+  } else if (li.league_point > 0) {
+    subText = `${li.league_point.toLocaleString()} LP`
+  } else {
+    subText = '—'
+  }
+
+  const w = 88
+  const h = 55
   return (
-    <div className="flex flex-col items-center gap-0.5 flex-shrink-0" style={{ width: 88 }}>
-      <div className="relative" style={{ width: 88, height: 44 }}>
+    <div className="flex flex-col items-center gap-0.5 flex-shrink-0" style={{ width: w }}>
+      <div className="relative" style={{ width: w, height: h }}>
         <Image
-          src={getRankImageUrl(li.league_rank)}
+          src={getRankImageUrl(effectiveId)}
           alt={rank.name}
           fill
           className="object-contain drop-shadow-sm"
@@ -53,11 +68,7 @@ function RankBadge({ li }: { li: BucklerLeagueInfo }) {
         />
       </div>
       <span className="text-xs font-bold tabular-nums" style={{ color }}>
-        {hasMR
-          ? `${li.master_rating.toLocaleString()} MR`
-          : li.league_point > 0
-          ? `${li.league_point.toLocaleString()} LP`
-          : '—'}
+        {subText}
       </span>
     </div>
   )
@@ -105,7 +116,6 @@ export function CharacterStats({ phases }: CharacterStatsProps) {
         ) : (
           displayed.map((c, i) => {
             const char = getCharacterByBucklerId(c.character_id)
-            const color = char?.color ?? '#3f3f46'
 
             return (
               <div
@@ -116,10 +126,7 @@ export function CharacterStats({ phases }: CharacterStatsProps) {
                   {i + 1}
                 </span>
 
-                <div
-                  className="relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0"
-                  style={{ background: `linear-gradient(to top, ${color}99 0%, #18181b 100%)` }}
-                >
+                <div className="relative w-14 h-14 overflow-hidden flex-shrink-0">
                   {char && (
                     <Image
                       src={getCharacterImageUrl(char.slug)}

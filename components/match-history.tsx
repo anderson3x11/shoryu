@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardTitle } from '@/components/ui/card'
-import { getRankImageUrl } from '@/lib/constants/ranks'
+import { getRankImageUrl, getEffectiveRankId } from '@/lib/constants/ranks'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import type { BucklerBattle } from '@/lib/buckler'
 import { getBattleWinner } from '@/lib/buckler'
@@ -64,6 +64,10 @@ export function MatchHistory({ battles, currentShortId }: MatchHistoryProps) {
             lost: opp.round_results.filter(r => r > 0).length,
           }
 
+          const oppRankId = getEffectiveRankId(opp.league_rank, opp.master_league, 0, opp.master_rating)
+          const rankW = 80
+          const rankH = 50
+
           return (
             <div
               key={battle.replay_id}
@@ -78,7 +82,7 @@ export function MatchHistory({ battles, currentShortId }: MatchHistoryProps) {
               </span>
 
               {/* My character */}
-              <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-zinc-800 flex-shrink-0">
+              <div className="relative w-14 h-14 overflow-hidden flex-shrink-0">
                 {mySlug && (
                   <Image
                     src={getCharacterImageUrl(mySlug)}
@@ -90,13 +94,16 @@ export function MatchHistory({ battles, currentShortId }: MatchHistoryProps) {
                 )}
               </div>
 
-              {/* Score */}
-              <span className="text-sm font-bold text-zinc-400 flex-shrink-0 tabular-nums w-10 text-center">
-                {rounds.won}–{rounds.lost}
-              </span>
+              {/* Score + date */}
+              <div className="flex flex-col items-center gap-0.5 flex-shrink-0 w-10">
+                <span className="text-sm font-bold text-zinc-400 tabular-nums">
+                  {rounds.won}–{rounds.lost}
+                </span>
+                {date && <span className="text-[10px] text-zinc-600 tabular-nums">{date}</span>}
+              </div>
 
               {/* Opponent character */}
-              <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-zinc-800 flex-shrink-0">
+              <div className="relative w-14 h-14 overflow-hidden flex-shrink-0">
                 {oppSlug && (
                   <Image
                     src={getCharacterImageUrl(oppSlug)}
@@ -123,21 +130,16 @@ export function MatchHistory({ battles, currentShortId }: MatchHistoryProps) {
               </div>
 
               {/* Rank centered, date pinned to bottom-right */}
-              <div className="self-stretch flex-shrink-0 relative flex items-center justify-end" style={{ width: 80 }}>
-                <div className="relative" style={{ width: 80, height: 40 }}>
+              <div className="self-stretch flex-shrink-0 flex items-center justify-end" style={{ width: rankW }}>
+                <div className="relative" style={{ width: rankW, height: rankH }}>
                   <Image
-                    src={getRankImageUrl(opp.league_rank)}
+                    src={getRankImageUrl(oppRankId)}
                     alt=""
                     fill
                     className="object-contain"
                     unoptimized
                   />
                 </div>
-                {date && (
-                  <span className="absolute bottom-0 right-0 text-[10px] text-zinc-600 tabular-nums">
-                    {date}
-                  </span>
-                )}
               </div>
             </div>
           )

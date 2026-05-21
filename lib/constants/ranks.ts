@@ -39,7 +39,7 @@ function buildRanks(): Record<number, Rank> {
 export const RANKS = buildRanks()
 
 export function getRankImageUrl(rankId: number): string {
-  return `https://www.streetfighter.com/6/buckler/assets/images/material/rank/rank${rankId}_s.png`
+  return `/ranks/rank${rankId}.png`
 }
 
 export function getRank(rankId: number): Rank {
@@ -48,6 +48,21 @@ export function getRank(rankId: number): Rank {
 
 export function isMasterOrAbove(rankId: number): boolean {
   return rankId >= 36 || rankId === 40 || rankId === 41 || rankId === 42
+}
+
+// Master sub-tier thresholds by MR. Legend = top 500 by global ranking.
+export function getEffectiveRankId(
+  leagueRank: number,
+  _masterLeague: number,
+  masterRatingRanking: number = 0,
+  masterRating: number = 0
+): number {
+  if (leagueRank !== 36) return leagueRank
+  if (masterRatingRanking >= 1 && masterRatingRanking <= 500) return 37 // Legend
+  if (masterRating >= 1800) return 42 // Ultimate Master
+  if (masterRating >= 1700) return 41 // Grand Master
+  if (masterRating >= 1600) return 40 // High Master
+  return 36 // Master
 }
 
 export function showsMasterRating(rankId: number): boolean {

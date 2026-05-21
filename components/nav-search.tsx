@@ -6,7 +6,7 @@ import { Search } from 'lucide-react'
 import Image from 'next/image'
 import type { BucklerFighterBanner } from '@/lib/buckler'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
-import { getRankImageUrl, getRank } from '@/lib/constants/ranks'
+import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
 
 export function NavSearch() {
   const router = useRouter()
@@ -86,15 +86,16 @@ export function NavSearch() {
       {open && results.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1.5 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 overflow-hidden">
           {results.slice(0, 6).map((r) => {
-            const rankId = r.favorite_character_league_info?.league_rank
-            const rank = rankId ? getRank(rankId) : null
+            const li = r.favorite_character_league_info
+            const rankId = li ? getEffectiveRankId(li.league_rank, 0, li.master_rating_ranking, li.master_rating) : null
+            const rank = rankId != null ? getRank(rankId) : null
             const charSlug = r.favorite_character_tool_name
 
             return (
               <button
                 key={r.personal_info.short_id}
                 onClick={() => handleSelect(r)}
-                className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-zinc-800 transition-colors text-left"
+                className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-zinc-800 transition-colors text-left cursor-pointer"
               >
                 <div className="relative w-7 h-7 rounded overflow-hidden bg-zinc-800 flex-shrink-0">
                   {charSlug && (

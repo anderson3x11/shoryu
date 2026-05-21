@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Card } from '@/components/ui/card'
-import { getRankImageUrl, getRank, TIER_COLORS, showsMasterRating } from '@/lib/constants/ranks'
+import { getRankImageUrl, getRank, TIER_COLORS, showsMasterRating, getEffectiveRankId } from '@/lib/constants/ranks'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import type { BucklerFighterBanner } from '@/lib/buckler'
 
@@ -37,13 +37,19 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
   const info = banner.personal_info
   const charSlug = banner.favorite_character_tool_name
   const leagueInfo = banner.favorite_character_league_info
-  const rankId = leagueInfo?.league_rank ?? 39
   const mr = leagueInfo?.master_rating ?? 0
   const lp = leagueInfo?.league_point ?? 0
   const flag = banner.home_name ? (FLAG[banner.home_name] ?? '') : ''
-  const rank = getRank(rankId)
+  const effectiveRankId = getEffectiveRankId(
+    leagueInfo?.league_rank ?? 39,
+    leagueInfo?.master_league ?? 0,
+    leagueInfo?.master_rating_ranking ?? 0,
+    mr
+  )
+  const isLegend = effectiveRankId === 37
+  const rank = getRank(effectiveRankId)
   const rankColor = TIER_COLORS[rank.tier] ?? '#ffffff'
-  const hasMR = showsMasterRating(rankId) && mr > 0
+  const hasMR = showsMasterRating(leagueInfo?.league_rank ?? 39) && mr > 0
 
   return (
     <Card className="bg-zinc-900 py-0 gap-0">
@@ -88,16 +94,20 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
 
         {/* Rank — landscape container kills the transparent bottom padding in the PNG */}
         <div className="flex-shrink-0 flex flex-col items-center justify-center gap-1">
-          <div className="relative" style={{ width: 160, height: 72 }}>
+          <div className="relative" style={{ width: 160, height: 100 }}>
             <Image
-              src={getRankImageUrl(rankId)}
+              src={getRankImageUrl(effectiveRankId)}
               alt={rank.name}
               fill
               className="object-contain drop-shadow-md"
               unoptimized
             />
           </div>
-          {hasMR ? (
+          {isLegend && (leagueInfo?.master_rating_ranking ?? 0) > 0 ? (
+            <span className="text-base font-bold tabular-nums" style={{ color: rankColor }}>
+              #{leagueInfo!.master_rating_ranking}
+            </span>
+          ) : hasMR ? (
             <span className="text-base font-bold tabular-nums" style={{ color: rankColor }}>
               {mr.toLocaleString()} MR
             </span>
