@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${barlow.variable} ${bebasNeue.variable}`}>
-      <body className="antialiased min-h-screen bg-zinc-950 text-zinc-100">
+      <body className="antialiased min-h-screen bg-zinc-950 text-zinc-100" suppressHydrationWarning>
         <nav className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-6 h-14 flex items-center gap-8">
             <a href="/" className="flex items-center gap-2 flex-shrink-0">

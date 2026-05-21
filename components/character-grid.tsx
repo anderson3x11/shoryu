@@ -5,7 +5,7 @@ import { CHARACTERS, getCharacterImageUrl } from '@/lib/constants/characters'
 export function CharacterGrid() {
   return (
     <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-13 gap-2">
-      {CHARACTERS.map((char) => (
+      {CHARACTERS.filter((c) => !c.comingSoon).map((char) => (
         <Link
           key={char.id}
           href={`/character/${char.id}`}
