@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { BookOpen, Swords, FileSpreadsheet, CirclePlay, MessagesSquare, ExternalLink } from 'lucide-react'
+import { BookOpen, Swords, FileSpreadsheet, CirclePlay, MessagesSquare, ExternalLink, Tv2 } from 'lucide-react'
 import { CHARACTERS, getCharacterImageUrl } from '@/lib/constants/characters'
 import { CHARACTER_LINKS } from '@/lib/constants/character-links'
 
@@ -16,6 +16,23 @@ export async function generateMetadata({ params }: CharacterPageProps) {
 
 export function generateStaticParams() {
   return CHARACTERS.map((c) => ({ name: c.id }))
+}
+
+async function getYoutubeThumbnail(url: string): Promise<string | null> {
+  const videoMatch = url.match(/[?&]v=([^&]+)/)
+  if (videoMatch) return `https://img.youtube.com/vi/${videoMatch[1]}/mqdefault.jpg`
+
+  try {
+    const res = await fetch(
+      `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`,
+      { next: { revalidate: 86400 } }
+    )
+    if (res.ok) {
+      const data = await res.json()
+      return data.thumbnail_url ?? null
+    }
+  } catch {}
+  return null
 }
 
 interface LinkCardProps {
@@ -44,6 +61,28 @@ function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
   )
 }
 
+function VideoCard({ href, title, thumbnail }: { href: string; title: string; thumbnail: string | null }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden hover:border-zinc-600 transition-colors"
+    >
+      <div className="relative w-full aspect-video bg-zinc-800">
+        {thumbnail && <Image src={thumbnail} alt={title} fill className="object-cover" unoptimized />}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
+          <CirclePlay size={36} className="text-white/80" />
+        </div>
+      </div>
+      <div className="flex items-center justify-between px-3 py-2 gap-2">
+        <span className="text-sm font-medium text-zinc-100 leading-tight truncate">{title}</span>
+        <ExternalLink size={13} className="shrink-0 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+      </div>
+    </a>
+  )
+}
+
 export default async function CharacterPage({ params }: CharacterPageProps) {
   const { name } = await params
   const char = CHARACTERS.find((c) => c.id === name)
@@ -51,9 +90,21 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
   const links = CHARACTER_LINKS[char.id] ?? {}
 
+  // Collect all YouTube URLs and fetch thumbnails in parallel
+  const watchItems = [
+    links.playlist    && { title: 'SF6 High Level Replays', url: links.playlist },
+    links.misterCrimson && { title: 'Matchup Guide — Mister Crimson', url: links.misterCrimson },
+  ].filter(Boolean) as { title: string; url: string }[]
+
+  const guideItems = links.videoGuides ?? []
+
+  const allYtItems = [...watchItems, ...guideItems]
+  const thumbnails = await Promise.all(allYtItems.map((item) => getYoutubeThumbnail(item.url)))
+  const thumbMap = Object.fromEntries(allYtItems.map((item, i) => [item.url, thumbnails[i]]))
+
   const hasGuides = !!(links.supercombo || links.ufd || links.raidhyn)
-  const hasWatch = !!(links.playlist || links.misterCrimson)
   const hasCommunity = !!(links.discords?.length)
+  const hasPlayersToWatch = !!(links.playersToWatch?.length)
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
@@ -93,16 +144,45 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           </section>
         )}
 
-        {hasWatch && (
+        {watchItems.length > 0 && (
           <section className="space-y-2">
             <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Watch</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {links.playlist && (
-                <LinkCard href={links.playlist} icon={<CirclePlay size={16} />} title="SF6 High Level Replays" domain="youtube.com · SF6HighLevelReplays" color="#ef4444" />
-              )}
-              {links.misterCrimson && (
-                <LinkCard href={links.misterCrimson} icon={<CirclePlay size={16} />} title="Matchup Guide — Mister Crimson" domain="youtube.com" color="#ef4444" />
-              )}
+              {watchItems.map((item) => (
+                <VideoCard key={item.url} href={item.url} title={item.title} thumbnail={thumbMap[item.url]} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {guideItems.length > 0 && (
+          <section className="space-y-2">
+            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Video Guides</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {guideItems.map((guide) => (
+                <VideoCard key={guide.url} href={guide.url} title={guide.title} thumbnail={thumbMap[guide.url]} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {hasPlayersToWatch && (
+          <section className="space-y-2">
+            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Players to Watch</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {links.playersToWatch!.map((player) => (
+                <a
+                  key={player.name}
+                  href={`https://twitch.tv/${player.twitch}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-purple-700/60 hover:bg-zinc-800/60 transition-colors"
+                >
+                  <Tv2 size={15} className="shrink-0 text-purple-400" />
+                  <span className="text-sm font-medium text-zinc-100 group-hover:text-white transition-colors truncate">{player.name}</span>
+                  <ExternalLink size={13} className="shrink-0 ml-auto text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+                </a>
+              ))}
             </div>
           </section>
         )}

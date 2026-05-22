@@ -11,7 +11,7 @@ export const PRO_PLAYERS: ProPlayer[] = [
   {
     short_id: "3921133935",
     name: "Mister Crimson",
-    twitch: "MisterCrimson",
+    twitch: "MistahCrimson",
     twitter: "MistahCrimson",
   },
   {
