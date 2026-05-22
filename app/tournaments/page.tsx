@@ -1,8 +1,33 @@
 import { ExternalLink } from 'lucide-react'
 import { getTournaments } from '@/lib/liquipedia'
-import type { Tournament, TournamentYear } from '@/lib/liquipedia'
+import type { Player, Tournament, TournamentYear } from '@/lib/liquipedia'
 
 export const metadata = { title: 'Tournaments - Shoryu' }
+
+function proxy(url: string) {
+  return `/api/lp-icon?url=${encodeURIComponent(url)}`
+}
+
+function PlayerCell({ player, className }: { player: Player; className?: string }) {
+  return (
+    <a
+      href={player.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex items-center gap-1.5 hover:text-white transition-colors ${className ?? ''}`}
+    >
+      {player.flagUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={proxy(player.flagUrl)} alt={player.flagAlt ?? ''} className="h-3 w-auto object-contain shrink-0" />
+      )}
+      {player.charUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={proxy(player.charUrl)} alt={player.charAlt ?? ''} className="h-5 w-5 object-contain rounded-sm shrink-0" />
+      )}
+      {player.name}
+    </a>
+  )
+}
 
 function TournamentRow({ t }: { t: Tournament }) {
   return (
@@ -17,7 +42,7 @@ function TournamentRow({ t }: { t: Tournament }) {
           <span className="inline-flex items-center justify-center w-8 h-5 shrink-0">
             {t.iconUrl && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={`/api/lp-icon?url=${encodeURIComponent(t.iconUrl)}`} alt="" className="max-w-full max-h-full object-contain" />
+              <img src={proxy(t.iconUrl)} alt="" className="max-w-full max-h-full object-contain" />
             )}
           </span>
           {t.name}
@@ -32,28 +57,10 @@ function TournamentRow({ t }: { t: Tournament }) {
         {t.location ?? <span className="text-zinc-600">—</span>}
       </td>
       <td className="py-2.5 pr-4 whitespace-nowrap text-sm">
-        {t.winner ? (
-          <a
-            href={t.winnerUrl!}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-amber-400 hover:text-amber-300 transition-colors"
-          >
-            {t.winner}
-          </a>
-        ) : null}
+        {t.winner && <PlayerCell player={t.winner} className="text-amber-400" />}
       </td>
-      <td className="py-2.5 whitespace-nowrap text-sm">
-        {t.runnerUp ? (
-          <a
-            href={t.runnerUpUrl!}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-zinc-400 hover:text-zinc-200 transition-colors"
-          >
-            {t.runnerUp}
-          </a>
-        ) : null}
+      <td className="py-2.5 pr-4 whitespace-nowrap text-sm">
+        {t.runnerUp && <PlayerCell player={t.runnerUp} className="text-zinc-300" />}
       </td>
     </tr>
   )

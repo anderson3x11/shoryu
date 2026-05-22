@@ -1,5 +1,14 @@
 import { unstable_cache } from 'next/cache'
 
+export type Player = {
+  name: string
+  url: string
+  flagUrl: string | null
+  flagAlt: string | null
+  charUrl: string | null
+  charAlt: string | null
+}
+
 export type Tournament = {
   name: string
   url: string
@@ -7,10 +16,8 @@ export type Tournament = {
   date: string
   prizePool: string | null
   location: string | null
-  winner: string | null
-  winnerUrl: string | null
-  runnerUp: string | null
-  runnerUpUrl: string | null
+  winner: Player | null
+  runnerUp: Player | null
 }
 
 export type TournamentYear = {
@@ -30,10 +37,36 @@ function stripHtml(html: string): string {
     .trim()
 }
 
-function extractPlayer(cellHtml: string): { name: string; url: string } | null {
-  const m = cellHtml.match(/<a href="(\/fighters\/[^"]+)"[^>]*>([^<]+)<\/a>/)
-  if (!m) return null
-  return { name: m[2].trim(), url: `https://liquipedia.net${m[1]}` }
+function attr(tag: string, name: string): string | null {
+  const m = tag.match(new RegExp(`${name}="([^"]+)"`))
+  return m ? m[1] : null
+}
+
+// Upgrade a Liquipedia thumb URL from 18px to 36px for better quality
+function thumb2x(src: string): string {
+  return src.replace(/\/(\d+)px-/, (_, n) => `/${parseInt(n) * 2}px-`)
+}
+
+function extractPlayer(cellHtml: string): Player | null {
+  const linkM = cellHtml.match(/<a href="(\/fighters\/[^"]+)"[^>]*>([^<]+)<\/a>/)
+  if (!linkM) return null
+
+  const flagM = cellHtml.match(/<span class="flag">(<img[^>]+\/>)<\/span>/)
+  const flagSrc = flagM ? attr(flagM[1], 'src') : null
+  const flagAlt = flagM ? attr(flagM[1], 'alt') : null
+
+  const charM = cellHtml.match(/<span class="heads-padding-right">(<img[^>]+\/>)<\/span>/)
+  const charSrc = charM ? attr(charM[1], 'src') : null
+  const charAlt = charM ? attr(charM[1], 'alt') : null
+
+  return {
+    name: linkM[2].trim(),
+    url: `https://liquipedia.net${linkM[1]}`,
+    flagUrl: flagSrc ? `https://liquipedia.net${flagSrc}` : null,
+    flagAlt,
+    charUrl: charSrc ? `https://liquipedia.net${thumb2x(charSrc)}` : null,
+    charAlt,
+  }
 }
 
 function parse(html: string): TournamentYear[] {
@@ -76,7 +109,7 @@ function parse(html: string): TournamentYear[] {
     prizeEntries.push({ prize: m[1].trim(), pos: m.index })
   }
 
-  // Location cells: Right-60
+  // Location cells
   const locEntries: { location: string; pos: number }[] = []
   const locRegex = /class="divCell EventDetails-Right-60[^"]*">([\s\S]*?)<\/div>/g
   while ((m = locRegex.exec(html)) !== null) {
@@ -84,14 +117,14 @@ function parse(html: string): TournamentYear[] {
     if (loc) locEntries.push({ location: loc, pos: m.index })
   }
 
-  // Placement cells — match from opening class to </div> (no nested divs in these cells)
-  const firstEntries: { player: ReturnType<typeof extractPlayer>; pos: number }[] = []
+  // Placement cells
+  const firstEntries: { player: Player | null; pos: number }[] = []
   const firstRegex = /class="divCell Placement FirstPlace">([\s\S]*?)<\/div>/g
   while ((m = firstRegex.exec(html)) !== null) {
     firstEntries.push({ player: extractPlayer(m[1]), pos: m.index })
   }
 
-  const secondEntries: { player: ReturnType<typeof extractPlayer>; pos: number }[] = []
+  const secondEntries: { player: Player | null; pos: number }[] = []
   const secondRegex = /class="divCell Placement SecondPlace">([\s\S]*?)<\/div>/g
   while ((m = secondRegex.exec(html)) !== null) {
     secondEntries.push({ player: extractPlayer(m[1]), pos: m.index })
@@ -114,16 +147,13 @@ function parse(html: string): TournamentYear[] {
         : null
 
     const location = inRange(locEntries)?.location ?? null
-    const first = inRange(firstEntries)?.player ?? null
-    const second = inRange(secondEntries)?.player ?? null
+    const winner = inRange(firstEntries)?.player ?? null
+    const runnerUp = inRange(secondEntries)?.player ?? null
 
-    // Icon appears before the tournament name in the same row — find the last
-    // usable icon between the previous name position and this name position
     const prevPos = nameEntries[i - 1]?.pos ?? 0
     const iconEntry = iconEntries.filter(e => e.pos < pos && e.pos > prevPos).pop()
     const iconUrl = iconEntry?.iconUrl ?? null
 
-    // Nearest preceding year heading
     let rowYear: number | null = null
     for (let j = yearPositions.length - 1; j >= 0; j--) {
       if (yearPositions[j].pos <= pos) { rowYear = yearPositions[j].year; break }
@@ -131,13 +161,7 @@ function parse(html: string): TournamentYear[] {
     if (!rowYear) continue
 
     if (!yearMap.has(rowYear)) yearMap.set(rowYear, [])
-    yearMap.get(rowYear)!.push({
-      name, url, iconUrl, date, prizePool, location,
-      winner: first?.name ?? null,
-      winnerUrl: first?.url ?? null,
-      runnerUp: second?.name ?? null,
-      runnerUpUrl: second?.url ?? null,
-    })
+    yearMap.get(rowYear)!.push({ name, url, iconUrl, date, prizePool, location, winner, runnerUp })
   }
 
   return [...yearMap.entries()]
