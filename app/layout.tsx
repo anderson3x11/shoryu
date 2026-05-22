@@ -22,7 +22,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <span className="font-display text-2xl tracking-wider leading-none text-zinc-100">Shoryu</span>
               <Image src="/logo.png" alt="Shoryu" width={36} height={36} className="object-contain" />
             </a>
+            <div className="h-5 w-px bg-zinc-700 shrink-0" />
             <NavSearch />
+            <div className="h-5 w-px bg-zinc-700 shrink-0" />
+            <a href="/pros" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0">
+              Pros
+            </a>
           </div>
         </nav>
         <main className="max-w-7xl mx-auto px-6 py-8">

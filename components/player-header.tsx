@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Card } from '@/components/ui/card'
 import { getRankImageUrl, getRank, TIER_COLORS, showsMasterRating, getEffectiveRankId } from '@/lib/constants/ranks'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
+import { getProPlayer } from '@/lib/data/pro-players'
 import type { BucklerFighterBanner } from '@/lib/buckler'
 
 interface PlayerHeaderProps {
@@ -35,6 +36,7 @@ const FLAG: Record<string, string> = {
 
 export function PlayerHeader({ banner }: PlayerHeaderProps) {
   const info = banner.personal_info
+  const proPlayer = getProPlayer(info.short_id)
   const charSlug = banner.favorite_character_tool_name
   const leagueInfo = banner.favorite_character_league_info
   const mr = leagueInfo?.master_rating ?? 0
@@ -90,6 +92,28 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
             )}
           </div>
           <p className="text-xs text-zinc-600 tabular-nums">#{info.short_id}</p>
+          {proPlayer && (
+            <div className="flex items-center gap-2 flex-wrap pt-0.5">
+              {proPlayer.twitch && (
+                <a href={`https://twitch.tv/${proPlayer.twitch}`} target="_blank" rel="noopener noreferrer"
+                  className="text-xs px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 hover:bg-purple-800/60 transition-colors">
+                  Twitch
+                </a>
+              )}
+              {proPlayer.twitter && (
+                <a href={`https://x.com/${proPlayer.twitter}`} target="_blank" rel="noopener noreferrer"
+                  className="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 hover:bg-sky-500/30 transition-colors">
+                  Twitter
+                </a>
+              )}
+              {proPlayer.youtube && (
+                <a href={`https://youtube.com/@${proPlayer.youtube}`} target="_blank" rel="noopener noreferrer"
+                  className="text-xs px-2 py-0.5 rounded bg-red-900/60 text-red-300 hover:bg-red-800/60 transition-colors">
+                  YouTube
+                </a>
+              )}
+            </div>
+          )}
           {banner.title_data?.title_data_val && (
             <p className="text-xs text-zinc-500 italic">
               &ldquo;{banner.title_data.title_data_val}&rdquo;

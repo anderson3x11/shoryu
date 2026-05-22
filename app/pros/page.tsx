@@ -1,0 +1,98 @@
+import Link from 'next/link'
+import Image from 'next/image'
+import { PRO_PLAYERS, type ProPlayer } from '@/lib/data/pro-players'
+import { getPlayerProfile } from '@/lib/buckler/client'
+import { getCharacterImageUrl } from '@/lib/constants/characters'
+import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
+import type { BucklerFighterBanner } from '@/lib/buckler'
+
+export const metadata = { title: 'Pro Players & Creators - Shoryu' }
+
+function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighterBanner | null }) {
+  const charSlug = banner?.favorite_character_tool_name
+  const li = banner?.favorite_character_league_info
+  const rankId = li
+    ? getEffectiveRankId(li.league_rank, li.master_league ?? 0, li.master_rating_ranking, li.master_rating)
+    : null
+  const rank = rankId != null ? getRank(rankId) : null
+
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors">
+
+      {/* Character portrait — links to profile */}
+      <Link href={`/player/${player.short_id}`} className="relative w-12 h-12 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0 block">
+        {charSlug && (
+          <Image
+            src={getCharacterImageUrl(charSlug)}
+            alt={banner?.favorite_character_name ?? ''}
+            fill
+            className="object-cover object-top"
+            unoptimized
+          />
+        )}
+      </Link>
+
+      {/* Name + socials */}
+      <div className="flex-1 min-w-0 space-y-1">
+        <Link href={`/player/${player.short_id}`} className="font-semibold text-zinc-100 hover:text-white transition-colors leading-tight truncate block">
+          {player.name}
+        </Link>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {player.twitch && (
+            <a href={`https://twitch.tv/${player.twitch}`} target="_blank" rel="noopener noreferrer"
+              className="text-xs px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 hover:bg-purple-800/60 transition-colors">
+              Twitch
+            </a>
+          )}
+          {player.twitter && (
+            <a href={`https://x.com/${player.twitter}`} target="_blank" rel="noopener noreferrer"
+              className="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 hover:bg-sky-500/30 transition-colors">
+              Twitter
+            </a>
+          )}
+          {player.youtube && (
+            <a href={`https://youtube.com/@${player.youtube}`} target="_blank" rel="noopener noreferrer"
+              className="text-xs px-2 py-0.5 rounded bg-red-900/60 text-red-300 hover:bg-red-800/60 transition-colors">
+              YouTube
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Rank icon */}
+      {rankId && rank && (
+        <div className="relative flex-shrink-0" style={{ width: 80, height: 50 }}>
+          <Image
+            src={getRankImageUrl(rankId)}
+            alt={rank.name}
+            fill
+            className="object-contain"
+            unoptimized
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default async function ProsPage() {
+  const profiles = await Promise.all(
+    PRO_PLAYERS.map((p) => getPlayerProfile(p.short_id))
+  )
+
+  return (
+    <div className="space-y-6">
+      <h1 className="font-display text-4xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {PRO_PLAYERS.map((player, i) => (
+          <ProCard
+            key={player.short_id}
+            player={player}
+            banner={profiles[i]?.fighter_banner_info ?? null}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
