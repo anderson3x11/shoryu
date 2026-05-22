@@ -140,6 +140,33 @@ export interface BucklerSearchPage {
   page: number
 }
 
+// One entry in the ranking list
+export interface BucklerRankingEntry {
+  character_id: number
+  character_name: string
+  character_tool_name: string
+  fighter_banner_info: BucklerFighterBanner
+  league_point: number
+  league_rank: number
+  master_league: number
+  master_rating_ranking: number  // global rank position (ties share same number)
+  order: number
+  rating: number                 // MR value
+}
+
+// The object at pageProps.master_rating_ranking
+export interface BucklerRankingData {
+  current_page: number
+  ranking_fighter_list: BucklerRankingEntry[]
+  total_count: number
+  total_page: number
+}
+
+// Ranking page pageProps
+export interface BucklerRankingPage {
+  master_rating_ranking: BucklerRankingData
+}
+
 // Determine who won a battle
 export function getBattleWinner(battle: BucklerBattle): 1 | 2 | null {
   const p1wins = battle.player1_info.round_results.filter(r => r > 0).length

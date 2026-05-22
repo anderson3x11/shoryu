@@ -4,6 +4,8 @@ import type {
   BucklerProfilePage,
   BucklerBattleLogPage,
   BucklerSearchPage,
+  BucklerRankingPage,
+  BucklerRankingData,
 } from './types'
 
 const BUCKLER_BASE = 'https://www.streetfighter.com/6/buckler'
@@ -52,6 +54,14 @@ export async function searchPlayers(query: string): Promise<BucklerFighterBanner
 
 export async function getPlayerProfile(shortId: string | number): Promise<BucklerProfilePage | null> {
   return fetchPageData<BucklerProfilePage>(`/en/profile/${shortId}`)
+}
+
+export async function getRanking(page = 1): Promise<BucklerRankingData | null> {
+  const data = await fetchPageData<BucklerRankingPage>(
+    `/en/ranking/master?page=${page}`,
+    300
+  )
+  return data?.master_rating_ranking ?? null
 }
 
 export async function getBattleLog(

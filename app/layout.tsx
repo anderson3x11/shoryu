@@ -31,6 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="/tournaments" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0">
               Tournaments
             </a>
+            <a href="/ranking" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0">
+              Ranking
+            </a>
           </div>
         </nav>
         <main className="max-w-7xl mx-auto px-6 py-8">
