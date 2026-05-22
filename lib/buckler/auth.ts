@@ -22,6 +22,3 @@ export function getSessionCookie(): string | null {
   return null
 }
 
-export function clearSession(): void {
-  cachedCookie = null
-}

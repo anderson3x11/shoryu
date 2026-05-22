@@ -40,17 +40,9 @@ export const CHARACTERS: Character[] = [
   { id: 'ingrid',   name: 'Ingrid',    slug: 'ingrid',   bucklerCharId: 0,  color: '#d4af37', comingSoon: true },
 ]
 
-export const CHARACTER_BY_SLUG = new Map<string, Character>(
-  CHARACTERS.map((c) => [c.slug, c])
-)
-
 export const CHARACTER_BY_BUCKLER_ID = new Map<number, Character>(
   CHARACTERS.map((c) => [c.bucklerCharId, c])
 )
-
-export function getCharacterBySlug(slug: string): Character | undefined {
-  return CHARACTER_BY_SLUG.get(slug)
-}
 
 export function getCharacterByBucklerId(id: number): Character | undefined {
   return CHARACTER_BY_BUCKLER_ID.get(id)

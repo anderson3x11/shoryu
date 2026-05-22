@@ -46,10 +46,6 @@ export function getRank(rankId: number): Rank {
   return RANKS[rankId] ?? { id: rankId, name: 'Unknown', tier: 'unknown', strength: 0 }
 }
 
-export function isMasterOrAbove(rankId: number): boolean {
-  return rankId >= 36 || rankId === 40 || rankId === 41 || rankId === 42
-}
-
 // Master sub-tier thresholds by MR. Legend = top 500 by global ranking.
 export function getEffectiveRankId(
   leagueRank: number,
@@ -67,10 +63,6 @@ export function getEffectiveRankId(
 
 export function showsMasterRating(rankId: number): boolean {
   return rankId >= 36
-}
-
-export function isLegend(rankId: number): boolean {
-  return rankId === 37
 }
 
 export const TIER_COLORS: Record<string, string> = {
