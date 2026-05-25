@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search } from 'lucide-react'
+import { Search, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import type { BucklerFighterBanner } from '@/lib/buckler'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
@@ -15,17 +15,24 @@ export function NavSearch() {
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const search = useCallback(async (q: string) => {
     if (q.length < 2) { setResults([]); setOpen(false); return }
-    if (/^\d+$/.test(q)) { setResults([]); setOpen(false); return }
+    if (/^\d+$/.test(q)) { setResults([]); setOpen(true); return }
+
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
+
     setLoading(true)
     try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`)
+      const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`, { signal: abortRef.current.signal })
       const data = await res.json()
       setResults(data.results ?? [])
       setOpen(true)
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') setResults([])
     } finally {
       setLoading(false)
     }
@@ -65,6 +72,8 @@ export function NavSearch() {
     if (results.length === 1) handleSelect(results[0])
   }
 
+  const isNumericQuery = /^\d+$/.test(query) && query.length >= 2
+
   return (
     <div ref={containerRef} className="relative w-56">
       <form onSubmit={handleSubmit}>
@@ -83,7 +92,19 @@ export function NavSearch() {
         </div>
       </form>
 
-      {open && results.length > 0 && (
+      {open && isNumericQuery && (
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+          <button
+            onClick={() => { router.push(`/player/${query}`); setQuery(''); setOpen(false) }}
+            className="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-zinc-800 transition-colors text-left cursor-pointer"
+          >
+            <ArrowRight className="w-3.5 h-3.5 text-zinc-500 flex-shrink-0" />
+            <span className="text-xs text-zinc-300">Player <span className="font-mono text-white">#{query}</span></span>
+          </button>
+        </div>
+      )}
+
+      {open && !isNumericQuery && results.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1.5 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 overflow-hidden">
           {results.slice(0, 6).map((r) => {
             const li = r.favorite_character_league_info

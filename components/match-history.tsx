@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -39,6 +39,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
   const [page, setPage]           = useState(1)
   const [battles, setBattles]     = useState<BucklerBattle[]>(initialBattles)
   const [totalPages, setTotal]    = useState(initialTotalPages)
+  const [charFilter, setCharFilter] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
   async function load(nextMode: Mode, nextPage: number) {
@@ -52,6 +53,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
 
   function switchMode(m: Mode) {
     if (m === mode) return
+    setCharFilter(null)
     startTransition(() => { load(m, 1) })
   }
 
@@ -60,6 +62,26 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
   }
 
   const sid = Number(currentShortId)
+
+  const myChars = useMemo(() => {
+    const seen = new Map<string, string>()
+    for (const battle of battles) {
+      const isP1 = battle.player1_info.player.short_id === sid
+      const me = isP1 ? battle.player1_info : battle.player2_info
+      if (me.playing_character_tool_name) {
+        seen.set(me.playing_character_tool_name, me.playing_character_name)
+      }
+    }
+    return [...seen.entries()].map(([slug, name]) => ({ slug, name }))
+  }, [battles, sid])
+
+  const displayed = charFilter
+    ? battles.filter((battle) => {
+        const isP1 = battle.player1_info.player.short_id === sid
+        const me = isP1 ? battle.player1_info : battle.player2_info
+        return me.playing_character_tool_name === charFilter
+      })
+    : battles
 
   return (
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">
@@ -84,11 +106,43 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
         </div>
       </div>
 
+      {/* Character filter */}
+      {myChars.length > 1 && (
+        <div className="px-4 pt-2.5 pb-0 flex items-center gap-1.5 flex-wrap">
+          <button
+            onClick={() => setCharFilter(null)}
+            className={cn(
+              'text-xs px-2.5 py-0.5 rounded border transition-colors cursor-pointer',
+              charFilter === null
+                ? 'bg-zinc-700 border-zinc-600 text-white'
+                : 'bg-zinc-900 border-zinc-700 text-zinc-500 hover:text-zinc-300'
+            )}
+          >
+            All
+          </button>
+          {myChars.map(({ slug, name }) => (
+            <button
+              key={slug}
+              onClick={() => setCharFilter(charFilter === slug ? null : slug)}
+              title={name}
+              className={cn(
+                'relative w-7 h-7 rounded overflow-hidden border transition-all cursor-pointer flex-shrink-0',
+                charFilter === slug ? 'border-zinc-400 opacity-100' : 'border-zinc-700 opacity-50 hover:opacity-90'
+              )}
+            >
+              <Image src={getCharacterImageUrl(slug)} alt={name} fill className="object-cover object-top" unoptimized />
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Battles */}
       <div className={cn('mt-3 divide-y divide-zinc-800/60 transition-opacity', pending && 'opacity-40')}>
-        {battles.length === 0 ? (
-          <div className="px-4 py-6 text-sm text-zinc-600">No matches found.</div>
-        ) : battles.map((battle) => {
+        {displayed.length === 0 ? (
+          <div className="px-4 py-6 text-sm text-zinc-600">
+            {charFilter ? 'No matches with this character on this page.' : 'No matches found.'}
+          </div>
+        ) : displayed.map((battle) => {
           const isP1 = battle.player1_info.player.short_id === sid
           const me   = isP1 ? battle.player1_info : battle.player2_info
           const opp  = isP1 ? battle.player2_info : battle.player1_info
