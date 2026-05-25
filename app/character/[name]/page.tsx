@@ -1,6 +1,10 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { BookOpen, Swords, FileSpreadsheet, CirclePlay, MessagesSquare, ExternalLink, Tv2 } from 'lucide-react'
+import { BookOpen, Swords, FileSpreadsheet, CirclePlay, MessagesSquare, ExternalLink, Trophy } from 'lucide-react'
+import type { TechSection } from '@/lib/constants/character-links'
+
+const TECH_ORDER = ['guides', 'combos', 'pressure', 'setups', 'techs'] as const
+const TECH_LABELS: Record<string, string> = { guides: 'Guides', combos: 'Combos', pressure: 'Pressure', setups: 'Setups', techs: 'Techs' }
 import { CHARACTERS, getCharacterImageUrl } from '@/lib/constants/characters'
 import { CHARACTER_LINKS } from '@/lib/constants/character-links'
 
@@ -92,22 +96,27 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
   // Collect all YouTube URLs and fetch thumbnails in parallel
   const watchItems = [
-    links.playlist    && { title: 'SF6 High Level Replays', url: links.playlist },
-    links.misterCrimson && { title: 'Matchup Guide — Mister Crimson', url: links.misterCrimson },
+    links.playlist && { title: 'SF6 High Level Replays', url: links.playlist },
   ].filter(Boolean) as { title: string; url: string }[]
 
-  const guideItems = links.videoGuides ?? []
+  const allTechs: TechSection = { ...links.techs }
+  if (links.misterCrimson) allTechs.guides = [...(allTechs.guides ?? []), { title: 'Matchup Guide — Mister Crimson', url: links.misterCrimson }]
+  if (links.videoGuides?.length) allTechs.guides = [...(allTechs.guides ?? []), ...links.videoGuides]
+  if (links.techVideos?.length) allTechs.guides = [...(allTechs.guides ?? []), ...links.techVideos]
 
-  const allYtItems = [...watchItems, ...guideItems]
+  const allTechVideos = TECH_ORDER.flatMap(cat => allTechs[cat] ?? [])
+  const hasTechs = allTechVideos.length > 0
+
+  const allYtItems = [...watchItems, ...allTechVideos]
   const thumbnails = await Promise.all(allYtItems.map((item) => getYoutubeThumbnail(item.url)))
   const thumbMap = Object.fromEntries(allYtItems.map((item, i) => [item.url, thumbnails[i]]))
 
   const hasGuides = !!(links.supercombo || links.ufd || links.raidhyn)
   const hasCommunity = !!(links.discords?.length)
-  const hasPlayersToWatch = !!(links.playersToWatch?.length)
+  const players = links.players ?? []
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="max-w-5xl mx-auto space-y-8">
       <div className="relative w-full h-64 rounded-xl overflow-hidden border border-zinc-800">
         <Image
           src={getCharacterImageUrl(char.slug)}
@@ -146,8 +155,8 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
         {watchItems.length > 0 && (
           <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Watch</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Replays</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {watchItems.map((item) => (
                 <VideoCard key={item.url} href={item.url} title={item.title} thumbnail={thumbMap[item.url]} />
               ))}
@@ -155,34 +164,52 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           </section>
         )}
 
-        {guideItems.length > 0 && (
-          <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Video Guides</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {guideItems.map((guide) => (
-                <VideoCard key={guide.url} href={guide.url} title={guide.title} thumbnail={thumbMap[guide.url]} />
-              ))}
+        {hasTechs && (
+          <section className="space-y-4">
+            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Techs</h2>
+            <div className="space-y-4">
+              {TECH_ORDER.map(cat => {
+                const items = allTechs[cat]
+                if (!items?.length) return null
+                return (
+                  <div key={cat} className="space-y-2">
+                    <h3 className="text-xs font-medium text-zinc-600 uppercase tracking-wider">{TECH_LABELS[cat]}</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {items.map((item) => (
+                        <VideoCard key={item.url} href={item.url} title={item.title} thumbnail={thumbMap[item.url]} />
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </section>
         )}
 
-        {hasPlayersToWatch && (
+        {players.length > 0 && (
           <section className="space-y-2">
             <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Players to Watch</h2>
+            {links.playersNote && <p className="text-sm italic text-zinc-500">{links.playersNote}</p>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {links.playersToWatch!.map((player) => (
-                <a
-                  key={player.name}
-                  href={`https://twitch.tv/${player.twitch}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-purple-700/60 hover:bg-zinc-800/60 transition-colors"
-                >
-                  <Tv2 size={15} className="shrink-0 text-purple-400" />
-                  <span className="text-sm font-medium text-zinc-100 group-hover:text-white transition-colors truncate">{player.name}</span>
-                  <ExternalLink size={13} className="shrink-0 ml-auto text-zinc-600 group-hover:text-zinc-400 transition-colors" />
-                </a>
-              ))}
+              {players.map((player) => {
+                const inner = (
+                  <>
+                    <Trophy size={15} className="shrink-0 text-amber-500" />
+                    <span className="text-sm font-medium text-zinc-100 group-hover:text-white transition-colors truncate">{player.name}</span>
+                    {player.liquipedia && <ExternalLink size={13} className="shrink-0 ml-auto text-zinc-600 group-hover:text-zinc-400 transition-colors" />}
+                  </>
+                )
+                return player.liquipedia ? (
+                  <a key={player.name} href={player.liquipedia} target="_blank" rel="noopener noreferrer"
+                    className="group flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-amber-700/60 hover:bg-zinc-800/60 transition-colors">
+                    {inner}
+                  </a>
+                ) : (
+                  <div key={player.name} className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3">
+                    {inner}
+                  </div>
+                )
+              })}
             </div>
           </section>
         )}
