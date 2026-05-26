@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shoryu
 
-## Getting Started
+Street Fighter 6 stats site. Player profiles, matchup charts, LP/MR history, rankings, and tournament results.
 
-First, run the development server:
+**Live at [shoryu.vercel.app](https://shoryu.vercel.app)**
+
+## Stack
+
+- Next.js 16, TypeScript, Tailwind CSS v4
+- shadcn/ui, Recharts
+- Data scraped from [Buckler](https://www.streetfighter.com/6/buckler) (Capcom's official SF6 platform)
+
+## Running locally
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Set up environment variables
+
+Create a `.env.local` file at the root:
+
+```env
+BUCKLER_COOKIE=your_buckler_id_cookie_here
+```
+
+To get your cookie: log into [streetfighter.com/6/buckler](https://www.streetfighter.com/6/buckler), open DevTools, go to **Application > Cookies > www.streetfighter.com**, and copy the value of `buckler_id`.
+
+> Note: this cookie expires periodically and will need to be refreshed. Without it, player data will return empty.
+
+### 3. Start the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Notes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Buckler has no public API. All data is parsed from the `__NEXT_DATA__` JSON embedded in Buckler's page HTML.
