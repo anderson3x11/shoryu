@@ -138,6 +138,7 @@ export interface BucklerSearchPage {
   fighter_banner_list: BucklerFighterBanner[]
   search_params: Record<string, unknown>
   page: number
+  total_page?: number
 }
 
 // One entry in the ranking list

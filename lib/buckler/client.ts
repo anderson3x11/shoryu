@@ -46,10 +46,16 @@ async function fetchPageData<T = unknown>(path: string, revalidate = 60): Promis
   }
 }
 
-export async function searchPlayers(query: string): Promise<BucklerFighterBanner[]> {
-  const params = new URLSearchParams({ fighter_id: query, page: '1' })
+export async function searchPlayers(
+  query: string,
+  page = 1
+): Promise<{ results: BucklerFighterBanner[]; totalPages: number }> {
+  const params = new URLSearchParams({ fighter_id: query, page: String(page) })
   const data = await fetchPageData<BucklerSearchPage>(`/en/fighterslist/search/result?${params}`)
-  return data?.fighter_banner_list ?? []
+  return {
+    results: data?.fighter_banner_list ?? [],
+    totalPages: data?.total_page ?? 1,
+  }
 }
 
 export async function getPlayerProfile(shortId: string | number): Promise<BucklerProfilePage | null> {

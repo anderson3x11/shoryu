@@ -142,6 +142,13 @@ export const PRO_PLAYERS: ProPlayer[] = [
     twitch: "Broskifgc",
     twitter: "broskiFGC",
   },
+  {
+    short_id: "1674774367",
+    name: "Maximilian Dood",
+    category: "creator",
+    twitch: "maximilian_dood",
+    twitter: "maximilian_",
+  },
 ];
 
 export function getProPlayer(short_id: string | number): ProPlayer | undefined {

@@ -63,13 +63,14 @@ export function NavSearch() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const trimmed = query.trim()
-    if (/^\d+$/.test(trimmed) && trimmed.length > 0) {
+    if (!trimmed) return
+    if (/^\d+$/.test(trimmed)) {
       router.push(`/player/${trimmed}`)
-      setQuery('')
-      setOpen(false)
-      return
+    } else {
+      router.push(`/search?q=${encodeURIComponent(trimmed)}`)
     }
-    if (results.length === 1) handleSelect(results[0])
+    setQuery('')
+    setOpen(false)
   }
 
   const isNumericQuery = /^\d+$/.test(query) && query.length >= 2
@@ -146,6 +147,13 @@ export function NavSearch() {
               </button>
             )
           })}
+          <a
+            href={`/search?q=${encodeURIComponent(query)}`}
+            onClick={() => setOpen(false)}
+            className="flex items-center justify-center gap-1 px-3 py-2 text-xs text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 transition-colors border-t border-zinc-800"
+          >
+            Show all results →
+          </a>
         </div>
       )}
     </div>
