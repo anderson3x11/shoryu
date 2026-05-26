@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer,
+  ReferenceLine, ResponsiveContainer,
 } from 'recharts'
 import { Card, CardTitle } from '@/components/ui/card'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
@@ -52,11 +52,21 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
 
   const char = characters?.find(c => c.charId === selected)
 
-  // Deduplicate by timestamp (keep last LP for each second)
+  // Deduplicate by timestamp, filter zeros (pre-placement MR)
   const points = char
-    ? char.points.reduce<Array<{ at: number; lp: number }>>((acc, p) => {
-        const last = acc[acc.length - 1]
-        if (last && last.at === p.at) { last.lp = p.lp } else { acc.push({ ...p }) }
+    ? char.points
+        .reduce<Array<{ at: number; lp: number }>>((acc, p) => {
+          const last = acc[acc.length - 1]
+          if (last && last.at === p.at) { last.lp = p.lp } else { acc.push({ ...p }) }
+          return acc
+        }, [])
+        .filter(p => p.lp > 0)
+    : []
+
+  // First non-zero point after each zero-sequence = season reset
+  const resetMarkers = char
+    ? char.points.reduce<number[]>((acc, p, i, arr) => {
+        if (p.lp > 0 && i > 0 && arr[i - 1].lp === 0) acc.push(p.at)
         return acc
       }, [])
     : []
@@ -105,7 +115,7 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
 
       {!error && points.length > 0 && (
         <div className="px-4 pb-4">
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={400}>
             <LineChart data={points} margin={{ top: 4, right: 8, bottom: 0, left: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(63,63,70,0.5)" />
               <XAxis
@@ -117,7 +127,7 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
                 minTickGap={60}
               />
               <YAxis
-                domain={char?.isMaster ? [1300, 2500] : ['auto', 'auto']}
+                domain={char?.isMaster ? [1000, 2500] : ['auto', 'auto']}
                 tick={{ fill: '#71717a', fontSize: 10 }}
                 axisLine={false}
                 tickLine={false}
@@ -125,6 +135,11 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
                 width={56}
               />
               <Tooltip content={<CustomTooltip isMaster={char?.isMaster ?? false} />} />
+              {resetMarkers.map(ts => (
+                <ReferenceLine key={ts} x={ts} stroke="#f59e0b" strokeDasharray="4 3" strokeWidth={1.5}
+                  label={{ value: 'Reset', position: 'insideTopRight', fill: '#f59e0b', fontSize: 9 }}
+                />
+              ))}
               <Line
                 type="monotone"
                 dataKey="lp"
@@ -135,7 +150,7 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
               />
             </LineChart>
           </ResponsiveContainer>
-          <p className="text-[10px] text-zinc-700 text-right mt-1">Based on last {char?.points.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
+          <p className="text-[10px] text-zinc-700 text-right mt-1">Showing {points.length} of {char?.points.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
         </div>
       )}
     </Card>
