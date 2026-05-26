@@ -80,19 +80,35 @@ export default async function ProsPage() {
     PRO_PLAYERS.map((p) => getPlayerProfile(p.short_id))
   )
 
+  const withProfiles = PRO_PLAYERS.map((player, i) => ({
+    player,
+    banner: profiles[i]?.fighter_banner_info ?? null,
+  }))
+
+  const pros     = withProfiles.filter(({ player }) => player.category === 'pro')
+  const creators = withProfiles.filter(({ player }) => player.category === 'creator')
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <h1 className="font-display text-4xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {PRO_PLAYERS.map((player, i) => (
-          <ProCard
-            key={player.short_id}
-            player={player}
-            banner={profiles[i]?.fighter_banner_info ?? null}
-          />
-        ))}
-      </div>
+      <section className="space-y-3">
+        <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Pro Players</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {pros.map(({ player, banner }) => (
+            <ProCard key={player.short_id} player={player} banner={banner} />
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Content Creators</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {creators.map(({ player, banner }) => (
+            <ProCard key={player.short_id} player={player} banner={banner} />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

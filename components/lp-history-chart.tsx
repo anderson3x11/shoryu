@@ -127,7 +127,7 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
                 minTickGap={60}
               />
               <YAxis
-                domain={char?.isMaster ? [1000, 2500] : ['auto', 'auto']}
+                domain={char?.isMaster ? [1000, 2500] : [0, 25000]}
                 tick={{ fill: '#71717a', fontSize: 10 }}
                 axisLine={false}
                 tickLine={false}

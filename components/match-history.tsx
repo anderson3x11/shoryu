@@ -88,7 +88,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
       {/* Header + tabs */}
       <div className="px-4 pt-4 pb-0 flex items-center justify-between gap-4 flex-wrap">
         <CardTitle className="text-sm text-zinc-400 uppercase tracking-wider">Match History</CardTitle>
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap justify-end">
           {MODES.map((m) => (
             <button
               key={m.id}
@@ -164,7 +164,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
           return (
             <div
               key={battle.replay_id}
-              className="relative flex items-center gap-4 px-4 py-3.5 hover:bg-zinc-800/40 transition-colors"
+              className="relative flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-3.5 hover:bg-zinc-800/40 transition-colors"
             >
               <div className={cn('absolute left-0 top-0 bottom-0 w-1', won ? 'bg-emerald-500' : 'bg-red-500')} />
 
@@ -207,8 +207,8 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
                 </p>
               </div>
 
-              <div className="self-stretch flex-shrink-0 flex items-center justify-end" style={{ width: 80 }}>
-                <div className="relative" style={{ width: 80, height: 50 }}>
+              <div className="self-stretch flex-shrink-0 flex items-center justify-end w-14 sm:w-20">
+                <div className="relative w-14 h-[35px] sm:w-20 sm:h-[50px]">
                   <Image src={getRankImageUrl(oppRankId)} alt="" fill className="object-contain" unoptimized />
                 </div>
               </div>

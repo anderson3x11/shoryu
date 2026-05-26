@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Bebas_Neue, Barlow } from 'next/font/google'
 import Image from 'next/image'
 import { NavSearch } from '@/components/nav-search'
+import { NavMenu } from '@/components/nav-menu'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
@@ -18,23 +19,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${barlow.variable} ${bebasNeue.variable}`}>
       <body className="antialiased min-h-screen bg-zinc-950 text-zinc-100" suppressHydrationWarning>
         <nav className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-6 h-14 flex items-center gap-8">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center gap-2 sm:gap-8">
             <a href="/" className="flex items-center gap-2 flex-shrink-0">
               <span className="font-display text-2xl tracking-wider leading-none text-zinc-100">Shoryu</span>
               <Image src="/logo.png" alt="Shoryu" width={36} height={36} className="object-contain" />
             </a>
-            <div className="h-5 w-px bg-zinc-700 shrink-0" />
+            <div className="h-5 w-px bg-zinc-700 shrink-0 hidden sm:block" />
             <NavSearch />
-            <div className="h-5 w-px bg-zinc-700 shrink-0" />
-            <a href="/pros" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0">
+            <div className="h-5 w-px bg-zinc-700 shrink-0 hidden sm:block" />
+            <a href="/pros" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">
               Pros
             </a>
-            <a href="/tournaments" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0">
+            <a href="/tournaments" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">
               Tournaments
             </a>
-            <a href="/ranking" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0">
+            <a href="/ranking" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">
               Ranking
             </a>
+            <NavMenu />
           </div>
         </nav>
         <main className="max-w-7xl mx-auto px-6 py-8">

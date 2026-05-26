@@ -55,10 +55,10 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
 
   return (
     <Card className="bg-zinc-900 py-0 gap-0">
-      <div className="flex items-center gap-4 px-5 py-4">
+      <div className="flex items-center gap-3 sm:gap-4 px-3 sm:px-5 py-3 sm:py-4">
 
         {/* Character art — crops to face, no bg, no border */}
-        <div className="relative w-[88px] h-[88px] flex-shrink-0">
+        <div className="relative w-16 h-16 sm:w-[88px] sm:h-[88px] flex-shrink-0">
           {charSlug && (
             <Image
               src={getCharacterImageUrl(charSlug)}
@@ -123,7 +123,7 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
 
         {/* Rank — landscape container kills the transparent bottom padding in the PNG */}
         <div className="flex-shrink-0 flex flex-col items-center justify-center gap-1">
-          <div className="relative" style={{ width: 160, height: 100 }}>
+          <div className="relative w-24 h-[60px] sm:w-40 sm:h-[100px]">
             <Image
               src={getRankImageUrl(effectiveRankId)}
               alt={rank.name}

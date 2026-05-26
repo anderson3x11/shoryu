@@ -31,15 +31,16 @@ export async function GET(req: Request) {
     ...rest.flatMap(p => p?.replay_list ?? []),
   ].sort((a, b) => a.uploaded_at - b.uploaded_at)
 
-  const byChar: Record<number, { slug: string; name: string; isMaster: boolean; points: LpPoint[] }> = {}
+  type RawPoint = { at: number; lp: number; isMasterMatch: boolean }
+  const byChar: Record<number, { slug: string; name: string; isMaster: boolean; points: RawPoint[] }> = {}
 
   for (const battle of battles) {
     const isP1 = battle.player1_info.player.short_id === sid
     const me = isP1 ? battle.player1_info : battle.player2_info
     if (!me.playing_character_id) continue
 
-    const master = me.league_point >= 25000
-    const lp = master ? me.master_rating : me.league_point
+    const isMasterMatch = me.league_point >= 25000
+    const lp = isMasterMatch ? me.master_rating : me.league_point
     const charId = me.playing_character_id
 
     if (!byChar[charId]) {
@@ -47,22 +48,27 @@ export async function GET(req: Request) {
       byChar[charId] = {
         slug: char?.slug ?? me.playing_character_tool_name,
         name: char?.name ?? me.playing_character_name,
-        isMaster: master,
+        isMaster: isMasterMatch,
         points: [],
       }
     }
-    if (master) byChar[charId].isMaster = true
-    byChar[charId].points.push({ at: battle.uploaded_at, lp })
+    if (isMasterMatch) byChar[charId].isMaster = true
+    byChar[charId].points.push({ at: battle.uploaded_at, lp, isMasterMatch })
   }
 
   const characters: LpCharacter[] = Object.entries(byChar)
-    .map(([idStr, data]) => ({
-      charId: Number(idStr),
-      charSlug: data.slug,
-      charName: data.name,
-      isMaster: data.isMaster,
-      points: data.points,
-    }))
+    .map(([idStr, data]) => {
+      const rawPoints = data.isMaster
+        ? data.points.filter(p => p.isMasterMatch)
+        : data.points
+      return {
+        charId: Number(idStr),
+        charSlug: data.slug,
+        charName: data.name,
+        isMaster: data.isMaster,
+        points: rawPoints.map(({ at, lp }) => ({ at, lp })),
+      }
+    })
     .sort((a, b) => b.points.length - a.points.length)
 
   return Response.json({ characters }, {
