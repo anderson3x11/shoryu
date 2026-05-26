@@ -116,7 +116,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   const players = links.players ?? []
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8">
+    <div className="space-y-8">
       <div className="relative w-full h-64 rounded-xl overflow-hidden border border-zinc-800">
         <Image
           src={getCharacterImageUrl(char.slug)}

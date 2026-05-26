@@ -55,7 +55,7 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
     : []
 
   return (
-    <div className="space-y-4 max-w-5xl mx-auto">
+    <div className="space-y-4">
       <PlayerHeader banner={banner} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
