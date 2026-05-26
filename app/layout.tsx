@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Bebas_Neue, Barlow } from 'next/font/google'
 import Image from 'next/image'
 import { NavSearch } from '@/components/nav-search'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const bebasNeue = Bebas_Neue({ weight: '400', variable: '--font-display', subsets: ['latin'] })
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="max-w-7xl mx-auto px-6 py-8">
           {children}
         </main>
+        <Analytics />
       </body>
     </html>
   )
