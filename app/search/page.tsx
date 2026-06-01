@@ -78,7 +78,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h1 className="font-display text-4xl tracking-widest text-zinc-100">Search</h1>
+        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Search</h1>
         {query && (
           <p className="text-sm text-zinc-500">
             {results.length > 0

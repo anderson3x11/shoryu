@@ -132,7 +132,7 @@ export function StreedleGame() {
 
       {/* Title */}
       <div className="text-center space-y-1 pt-4">
-        <h1 className="font-display text-6xl tracking-widest text-zinc-100">STREETDLE</h1>
+        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">STREETDLE</h1>
         <p className="text-zinc-500 text-sm">Guess today's Street Fighter character</p>
       </div>
 

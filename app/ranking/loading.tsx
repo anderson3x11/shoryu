@@ -2,7 +2,7 @@ export default function RankingLoading() {
   return (
     <div className="space-y-6">
       <div className="flex items-baseline justify-between">
-        <h1 className="font-display text-4xl tracking-widest text-zinc-100">Master Ranking</h1>
+        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Master Ranking</h1>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {Array.from({ length: 20 }).map((_, i) => (

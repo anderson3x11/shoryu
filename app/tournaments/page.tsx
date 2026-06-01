@@ -69,7 +69,7 @@ function TournamentRow({ t }: { t: Tournament }) {
 function YearSection({ year, tournaments }: TournamentYear) {
   return (
     <section className="space-y-2">
-      <h2 className="font-display text-2xl tracking-widest text-zinc-100">{year}</h2>
+      <h2 className="font-bebas text-4xl tracking-widest text-zinc-100">{year}</h2>
       <div className="overflow-x-auto rounded-lg border border-zinc-800">
         <table className="w-full text-sm">
           <thead>
@@ -98,7 +98,7 @@ export default async function TournamentsPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="font-display text-4xl tracking-widest text-zinc-100">Tournaments</h1>
+      <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Tournaments</h1>
 
       {data.length === 0 && (
         <p className="text-zinc-500">Tournament data temporarily unavailable.</p>

@@ -90,7 +90,7 @@ export default async function ProsPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="font-display text-4xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
+      <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
 
       <section className="space-y-3">
         <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Pro Players</h2>

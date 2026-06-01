@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { Permanent_Marker, Barlow } from 'next/font/google'
+import { Permanent_Marker, Barlow, Bebas_Neue } from 'next/font/google'
+import localFont from 'next/font/local'
 import Image from 'next/image'
 import { NavSearch } from '@/components/nav-search'
 import { NavMenu } from '@/components/nav-menu'
@@ -7,6 +8,8 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const permanentMarker = Permanent_Marker({ weight: '400', variable: '--font-display', subsets: ['latin'] })
+const titleFont = localFont({ src: '../public/fonts/CityBrawlersBoldCaps.otf', variable: '--font-title' })
+const bebasNeue = Bebas_Neue({ weight: '400', variable: '--font-bebas', subsets: ['latin'] })
 const barlow = Barlow({ weight: ['400', '500', '600', '700'], variable: '--font-sans', subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -16,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${barlow.variable} ${permanentMarker.variable}`}>
+    <html lang="en" className={`${barlow.variable} ${permanentMarker.variable} ${titleFont.variable} ${bebasNeue.variable}`}>
       <body className="antialiased min-h-screen bg-zinc-950 text-zinc-100" suppressHydrationWarning>
         <nav className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center gap-2 sm:gap-8">

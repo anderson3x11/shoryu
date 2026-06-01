@@ -128,8 +128,8 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
         <h1
-          className="absolute bottom-5 left-6 font-display text-5xl tracking-widest leading-none text-white"
-          style={{ textShadow: `0 0 40px ${char.color}60` }}
+          className="absolute bottom-1 left-6 font-title text-9xl leading-none text-white uppercase"
+          style={{ textShadow: `0 0 40px ${char.color}60`, letterSpacing: '0.03em' }}
         >
           {char.name}
         </h1>
