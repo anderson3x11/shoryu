@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
-import { Bebas_Neue, Barlow } from 'next/font/google'
+import { Permanent_Marker, Barlow } from 'next/font/google'
 import Image from 'next/image'
 import { NavSearch } from '@/components/nav-search'
 import { NavMenu } from '@/components/nav-menu'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const bebasNeue = Bebas_Neue({ weight: '400', variable: '--font-display', subsets: ['latin'] })
+const permanentMarker = Permanent_Marker({ weight: '400', variable: '--font-display', subsets: ['latin'] })
 const barlow = Barlow({ weight: ['400', '500', '600', '700'], variable: '--font-sans', subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${barlow.variable} ${bebasNeue.variable}`}>
+    <html lang="en" className={`${barlow.variable} ${permanentMarker.variable}`}>
       <body className="antialiased min-h-screen bg-zinc-950 text-zinc-100" suppressHydrationWarning>
         <nav className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center gap-2 sm:gap-8">
@@ -35,6 +35,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </a>
             <a href="/ranking" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">
               Ranking
+            </a>
+            <a href="/streetdle" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">
+              Streetdle
             </a>
             <NavMenu />
           </div>

@@ -7,6 +7,7 @@ const LINKS = [
   { href: '/pros',        label: 'Pros'         },
   { href: '/tournaments', label: 'Tournaments'  },
   { href: '/ranking',     label: 'Ranking'      },
+  { href: '/streetdle',   label: 'Streetdle'    },
 ]
 
 export function NavMenu() {
