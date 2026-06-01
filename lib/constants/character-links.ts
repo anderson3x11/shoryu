@@ -1903,6 +1903,9 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
   },
 
   ingrid: {
+    supercombo: SC + "Ingrid",
+    ufd: UFD + "ingrid",
+    playlist: YT + "PLvZ5t8JLwU9J-V_RxiT7CvqvfafKK8NKv",
     discords: [
       "https://discord.gg/jEsdJZWswT",
       "https://discord.gg/eUAjKa6VAy",
