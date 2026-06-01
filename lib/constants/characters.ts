@@ -5,6 +5,7 @@ export interface Character {
   bucklerCharId: number // Numeric character_id used in character_league_infos
   color: string       // Signature hex color for UI accents
   comingSoon?: boolean // Not yet released — hide from home grid, no portrait available
+  hidden?: boolean    // Not a real playable character — exclude from grid and static pages
 }
 
 export const CHARACTERS: Character[] = [
@@ -38,6 +39,7 @@ export const CHARACTERS: Character[] = [
   { id: 'cviper',   name: 'C. Viper',  slug: 'cviper',   bucklerCharId: 30, color: '#fb923c' },
   { id: 'alex',     name: 'Alex',      slug: 'alex',     bucklerCharId: 31, color: '#0ea5e9' },
   { id: 'ingrid',   name: 'Ingrid',    slug: 'ingrid',   bucklerCharId: 32, color: '#d4af37' },
+  { id: 'random',   name: 'Random',    slug: 'random',   bucklerCharId: 254, color: '#71717a', hidden: true },
 ]
 
 export const CHARACTER_BY_BUCKLER_ID = new Map<number, Character>(

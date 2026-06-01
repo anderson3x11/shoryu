@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: CharacterPageProps) {
 }
 
 export function generateStaticParams() {
-  return CHARACTERS.map((c) => ({ name: c.id }))
+  return CHARACTERS.filter((c) => !c.hidden).map((c) => ({ name: c.id }))
 }
 
 async function getYoutubeThumbnail(url: string): Promise<string | null> {
