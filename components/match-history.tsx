@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useMemo } from 'react'
+import { useState, useTransition, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -42,6 +42,26 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
   const [charFilter, setCharFilter] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
+  // Player-wide ranked LP/MR series per character, fetched once via /api/lp-history.
+  // Used as a reference for computing per-match deltas — including the oldest match on each page.
+  type LpSeries = { isMaster: boolean; points: { at: number; lp: number }[] }
+  const [lpHistory, setLpHistory] = useState<Map<number, LpSeries>>(new Map())
+
+  useEffect(() => {
+    const ctrl = new AbortController()
+    fetch(`/api/lp-history?id=${playerId}`, { signal: ctrl.signal })
+      .then(r => r.json())
+      .then((data: { characters?: Array<{ charId: number; isMaster: boolean; points: { at: number; lp: number }[] }> }) => {
+        const m = new Map<number, LpSeries>()
+        for (const c of data.characters ?? []) {
+          m.set(c.charId, { isMaster: c.isMaster, points: c.points })
+        }
+        setLpHistory(m)
+      })
+      .catch(() => {})
+    return () => ctrl.abort()
+  }, [playerId])
+
   async function load(nextMode: Mode, nextPage: number) {
     const res  = await fetch(`/api/battles?id=${playerId}&mode=${nextMode}&page=${nextPage}`)
     const json = await res.json()
@@ -74,6 +94,30 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
     }
     return [...seen.entries()].map(([slug, name]) => ({ slug, name }))
   }, [battles, sid])
+
+  // Per-replay LP/MR deltas. For each ranked battle, look up the immediately prior point in the
+  // player-wide history series for that character. Skip when the series mode (LP vs MR) doesn't
+  // match the current battle's mode — i.e. across a Master promotion the metric flips.
+  const deltasByReplay = useMemo(() => {
+    const out = new Map<string, { delta: number; isMaster: boolean }>()
+    for (const battle of battles) {
+      if (battle.replay_battle_type_name !== 'Ranked Match') continue
+      const isP1 = battle.player1_info.player.short_id === sid
+      const me = isP1 ? battle.player1_info : battle.player2_info
+      if (!me.playing_character_id) continue
+      const isMaster = me.league_point >= 25000
+      const series = lpHistory.get(me.playing_character_id)
+      if (!series || series.isMaster !== isMaster) continue
+      const current = isMaster ? me.master_rating : me.league_point
+      let prior: { at: number; lp: number } | null = null
+      for (let i = series.points.length - 1; i >= 0; i--) {
+        if (series.points[i].at < battle.uploaded_at) { prior = series.points[i]; break }
+      }
+      if (!prior) continue
+      out.set(battle.replay_id, { delta: current - prior.lp, isMaster })
+    }
+    return out
+  }, [battles, sid, lpHistory])
 
   const displayed = charFilter
     ? battles.filter((battle) => {
@@ -161,6 +205,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
           }
           const myRankId  = getEffectiveRankId(me.league_rank,  me.master_league,  0, me.master_rating)
           const oppRankId = getEffectiveRankId(opp.league_rank, opp.master_league, 0, opp.master_rating)
+          const lpDelta   = deltasByReplay.get(battle.replay_id)
 
           return (
             <div
@@ -204,8 +249,17 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
                 <div className="flex flex-col items-center gap-0.5 w-[140px] sm:w-[180px]">
                   <span className="text-[11px] text-zinc-500 tabular-nums uppercase tracking-widest whitespace-nowrap">
                     {date && <span>{date}</span>}
-                    {date && matchType && <span className="text-zinc-700 mx-1.5">·</span>}
-                    {matchType && <span>{matchType}</span>}
+                    {date && (lpDelta || matchType) && <span className="text-zinc-700 mx-1.5">·</span>}
+                    {lpDelta ? (
+                      <span className={cn(
+                        'font-semibold',
+                        lpDelta.delta > 0 ? 'text-emerald-400' : lpDelta.delta < 0 ? 'text-red-400' : 'text-zinc-500'
+                      )}>
+                        {lpDelta.delta > 0 ? '+' : ''}{lpDelta.delta} {lpDelta.isMaster ? 'MR' : 'LP'}
+                      </span>
+                    ) : matchType ? (
+                      <span>{matchType}</span>
+                    ) : null}
                   </span>
                   <span className="text-2xl sm:text-3xl font-bold text-zinc-100 tabular-nums leading-none">
                     {rounds.won}
