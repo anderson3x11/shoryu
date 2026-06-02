@@ -159,56 +159,97 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
             won:  me.round_results.filter(r => r > 0).length,
             lost: opp.round_results.filter(r => r > 0).length,
           }
+          const myRankId  = getEffectiveRankId(me.league_rank,  me.master_league,  0, me.master_rating)
           const oppRankId = getEffectiveRankId(opp.league_rank, opp.master_league, 0, opp.master_rating)
 
           return (
             <div
               key={battle.replay_id}
-              className="relative flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-3.5 hover:bg-zinc-800/40 transition-colors"
+              className="relative grid grid-cols-[1fr_auto_1fr] sm:grid-cols-[1fr_380px_1fr] items-center gap-3 sm:gap-6 px-3 sm:px-5 py-4 hover:bg-zinc-800/40 transition-colors"
             >
               <div className={cn('absolute left-0 top-0 bottom-0 w-1', won ? 'bg-emerald-500' : 'bg-red-500')} />
 
-              <span className={cn('text-sm font-bold w-5 text-center flex-shrink-0', won ? 'text-emerald-400' : 'text-red-400')}>
-                {won ? 'W' : 'L'}
-              </span>
+              {/* LEFT — player side: W/L, rank, char name */}
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0 overflow-hidden">
+                <span className={cn('text-sm font-bold w-5 text-center flex-shrink-0', won ? 'text-emerald-400' : 'text-red-400')}>
+                  {won ? 'W' : 'L'}
+                </span>
 
-              <div className="relative w-14 h-14 overflow-hidden flex-shrink-0">
-                {mySlug && (
-                  <Image src={getCharacterImageUrl(mySlug)} alt={me.playing_character_name}
-                    fill className="object-cover object-top" unoptimized />
-                )}
+                <div className="relative w-14 h-[35px] sm:w-20 sm:h-[50px] flex-shrink-0">
+                  <Image src={getRankImageUrl(myRankId)} alt="" fill className="object-contain" unoptimized />
+                </div>
+
+                <div className="hidden md:block min-w-0">
+                  <p className="text-sm font-bold text-zinc-100 truncate leading-tight">
+                    {me.player.fighter_id}
+                  </p>
+                  <p className="text-xs text-zinc-500 truncate mt-0.5">
+                    {me.playing_character_name}
+                  </p>
+                </div>
               </div>
 
-              <div className="flex flex-col items-center gap-0.5 flex-shrink-0 w-10">
-                <span className="text-sm font-bold text-zinc-400 tabular-nums">{rounds.won}–{rounds.lost}</span>
-                {date && <span className="text-[10px] text-zinc-600 tabular-nums">{date}</span>}
+              {/* CENTER — portraits flanking date/match-type/score/replay */}
+              <div className="flex items-center gap-3 sm:gap-5 px-2 sm:px-4 flex-shrink-0">
+                <div className={cn(
+                  'relative w-14 h-14 sm:w-16 sm:h-16 overflow-hidden flex-shrink-0 transition-all',
+                  !won && 'grayscale opacity-50'
+                )}>
+                  {mySlug && (
+                    <Image src={getCharacterImageUrl(mySlug)} alt={me.playing_character_name}
+                      fill className="object-cover object-top" unoptimized />
+                  )}
+                </div>
+
+                <div className="flex flex-col items-center gap-0.5 w-[140px] sm:w-[180px]">
+                  <span className="text-[11px] text-zinc-500 tabular-nums uppercase tracking-widest whitespace-nowrap">
+                    {date && <span>{date}</span>}
+                    {date && matchType && <span className="text-zinc-700 mx-1.5">·</span>}
+                    {matchType && <span>{matchType}</span>}
+                  </span>
+                  <span className="text-2xl sm:text-3xl font-bold text-zinc-100 tabular-nums leading-none">
+                    {rounds.won}
+                    <span className="text-zinc-600 mx-2">–</span>
+                    {rounds.lost}
+                  </span>
+                  <span className="text-[10px] sm:text-xs text-zinc-600 font-mono tabular-nums tracking-wider mt-0.5">
+                    {battle.replay_id}
+                  </span>
+                </div>
+
+                <div className={cn(
+                  'relative w-14 h-14 sm:w-16 sm:h-16 overflow-hidden flex-shrink-0 transition-all',
+                  won && 'grayscale opacity-50'
+                )}>
+                  {oppSlug && (
+                    <Image src={getCharacterImageUrl(oppSlug)} alt={opp.playing_character_name}
+                      fill className="object-cover object-top" unoptimized />
+                  )}
+                </div>
               </div>
 
-              <div className="relative w-14 h-14 overflow-hidden flex-shrink-0">
-                {oppSlug && (
-                  <Image src={getCharacterImageUrl(oppSlug)} alt={opp.playing_character_name}
-                    fill className="object-cover object-top" unoptimized />
-                )}
-              </div>
+              {/* RIGHT — opponent side: name, rank */}
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0 overflow-hidden justify-end">
+                <div className="hidden md:block min-w-0 text-right">
+                  <Link
+                    href={`/player/${opp.player.short_id}`}
+                    className="text-sm font-bold text-zinc-100 hover:text-white truncate block leading-tight"
+                  >
+                    {opp.player.fighter_id}
+                  </Link>
+                  <p className="text-xs text-zinc-500 truncate mt-0.5">
+                    {opp.playing_character_name}
+                  </p>
+                </div>
 
-              <div className="flex-1 min-w-0">
                 <Link
                   href={`/player/${opp.player.short_id}`}
-                  className="text-base font-bold text-zinc-100 hover:text-white truncate block leading-tight"
+                  className="md:hidden text-sm font-bold text-zinc-100 hover:text-white truncate min-w-0"
                 >
                   {opp.player.fighter_id}
                 </Link>
-                <p className="text-xs text-zinc-500 truncate mt-0.5">
-                  {opp.playing_character_name}
-                  {matchType && <span className="text-zinc-600"> · {matchType}</span>}
-                </p>
-                <p className="text-[10px] text-zinc-700 tabular-nums mt-0.5 font-mono">
-                  {battle.replay_id}
-                </p>
-              </div>
 
-              <div className="self-stretch flex-shrink-0 flex items-center justify-end w-14 sm:w-20">
-                <div className="relative w-14 h-[35px] sm:w-20 sm:h-[50px]">
+                <div className="relative w-14 h-[35px] sm:w-20 sm:h-[50px] flex-shrink-0">
                   <Image src={getRankImageUrl(oppRankId)} alt="" fill className="object-contain" unoptimized />
                 </div>
               </div>

@@ -125,7 +125,7 @@ export function SearchBar() {
           <Input
             value={query}
             onChange={handleQueryChange}
-            placeholder="Search by CFN name or paste a player ID..."
+            placeholder="Search by CFN name or ID"
             className="pl-12 pr-4 h-14 text-base bg-zinc-900 border-zinc-700 rounded-xl placeholder:text-zinc-500"
             autoComplete="off"
           />
