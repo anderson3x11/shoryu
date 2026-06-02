@@ -91,7 +91,7 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
               </span>
             )}
           </div>
-          <p className="text-xs text-zinc-600 tabular-nums">#{info.short_id}</p>
+          <p className="text-xs text-zinc-400 tabular-nums">#{info.short_id}</p>
           {proPlayer && (
             <div className="flex items-center gap-2 flex-wrap pt-0.5">
               {proPlayer.twitch && (
@@ -115,7 +115,7 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
             </div>
           )}
           {banner.title_data?.title_data_val && (
-            <p className="text-xs text-zinc-500 italic">
+            <p className="text-xs text-zinc-400 italic">
               &ldquo;{banner.title_data.title_data_val}&rdquo;
             </p>
           )}

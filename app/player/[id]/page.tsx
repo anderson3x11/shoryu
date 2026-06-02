@@ -4,6 +4,7 @@ import { PlayerHeader } from '@/components/player-header'
 import { CharacterStats, type PhaseData } from '@/components/character-stats'
 import { PlayCounts } from '@/components/play-counts'
 import { MatchHistory } from '@/components/match-history'
+import { SessionSummary } from '@/components/session-summary'
 import { MatchupChart } from '@/components/matchup-chart'
 import { LpHistoryChart } from '@/components/lp-history-chart'
 
@@ -68,6 +69,8 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
 
       <LpHistoryChart playerId={String(shortId)} />
       <MatchupChart playerId={String(shortId)} />
+
+      <SessionSummary playerId={String(shortId)} currentShortId={shortId} />
 
       <MatchHistory
         initialBattles={allBattles}

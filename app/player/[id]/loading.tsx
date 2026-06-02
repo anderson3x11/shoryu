@@ -7,7 +7,7 @@ export default function PlayerLoading() {
         <span className="font-display text-5xl tracking-wider leading-none text-zinc-100">Shoryu</span>
         <Image src="/logo.png" alt="Shoryu" width={60} height={60} className="object-contain" />
       </div>
-      <p className="text-zinc-500 text-sm tracking-widest uppercase animate-pulse">Loading...</p>
+      <p className="text-zinc-400 text-sm tracking-widest uppercase animate-pulse">Loading...</p>
     </div>
   )
 }

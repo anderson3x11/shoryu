@@ -109,7 +109,7 @@ export function CharacterStats({ phases }: CharacterStatsProps) {
       <div className="relative flex-1 min-h-0">
       <div className="overflow-y-auto h-full">
         {displayed.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 gap-2 text-zinc-600">
+          <div className="flex flex-col items-center justify-center py-10 gap-2 text-zinc-400">
             <span className="text-2xl">—</span>
             <p className="text-sm">No ranked games this phase</p>
           </div>
@@ -122,7 +122,7 @@ export function CharacterStats({ phases }: CharacterStatsProps) {
                 key={c.character_id}
                 className="flex items-center gap-3 px-4 py-2.5 border-t border-zinc-800"
               >
-                <span className="text-xs text-zinc-600 w-4 tabular-nums flex-shrink-0 text-right">
+                <span className="text-xs text-zinc-400 w-4 tabular-nums flex-shrink-0 text-right">
                   {i + 1}
                 </span>
 

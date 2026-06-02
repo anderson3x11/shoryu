@@ -85,7 +85,7 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
                   'flex items-center gap-1.5 px-2 py-1 rounded border text-xs transition-colors cursor-pointer',
                   selected === c.charId
                     ? 'bg-zinc-700 border-zinc-600 text-white'
-                    : 'bg-zinc-900 border-zinc-700 text-zinc-500 hover:text-zinc-300',
+                    : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-zinc-300',
                 ].join(' ')}
               >
                 <div className="relative w-5 h-5 overflow-hidden rounded-sm flex-shrink-0">
@@ -99,18 +99,18 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
       </div>
 
       {error && (
-        <div className="px-4 pb-4 text-sm text-zinc-600">Failed to load LP history.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-400">Failed to load LP history.</div>
       )}
 
       {!error && characters === null && (
-        <div className="px-4 pb-4 flex items-center gap-2 text-sm text-zinc-600">
+        <div className="px-4 pb-4 flex items-center gap-2 text-sm text-zinc-400">
           <div className="w-3 h-3 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
           Loading history…
         </div>
       )}
 
       {!error && characters !== null && characters.length === 0 && (
-        <div className="px-4 pb-4 text-sm text-zinc-600">No ranked match data found.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-400">No ranked match data found.</div>
       )}
 
       {!error && points.length > 0 && (
@@ -150,7 +150,7 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
               />
             </LineChart>
           </ResponsiveContainer>
-          <p className="text-[10px] text-zinc-700 text-right mt-1">Showing {points.length} of {char?.points.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
+          <p className="text-[10px] text-zinc-500 text-right mt-1">Showing {points.length} of {char?.points.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
         </div>
       )}
     </Card>

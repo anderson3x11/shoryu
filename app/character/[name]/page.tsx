@@ -58,9 +58,9 @@ function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
       <span className="shrink-0" style={color ? { color } : undefined}>{icon}</span>
       <div className="min-w-0 flex-1">
         <div className="text-sm font-medium text-zinc-100 leading-tight">{title}</div>
-        <div className="text-xs text-zinc-500 truncate mt-0.5">{domain}</div>
+        <div className="text-xs text-zinc-400 truncate mt-0.5">{domain}</div>
       </div>
-      <ExternalLink size={14} className="shrink-0 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+      <ExternalLink size={14} className="shrink-0 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
     </a>
   )
 }
@@ -81,7 +81,7 @@ function VideoCard({ href, title, thumbnail }: { href: string; title: string; th
       </div>
       <div className="flex items-center justify-between px-3 py-2 gap-2">
         <span className="text-sm font-medium text-zinc-100 leading-tight truncate">{title}</span>
-        <ExternalLink size={13} className="shrink-0 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+        <ExternalLink size={13} className="shrink-0 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
       </div>
     </a>
   )
@@ -138,7 +138,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
       <div className="space-y-6">
         {hasGuides && (
           <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Guides & Data</h2>
+            <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Guides & Data</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {links.supercombo && (
                 <LinkCard href={links.supercombo} icon={<BookOpen size={16} />} title="Supercombo Wiki" domain="wiki.supercombo.gg" color="#60a5fa" />
@@ -155,7 +155,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
         {watchItems.length > 0 && (
           <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Replays</h2>
+            <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Replays</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {watchItems.map((item) => (
                 <VideoCard key={item.url} href={item.url} title={item.title} thumbnail={thumbMap[item.url]} />
@@ -166,14 +166,14 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
         {hasTechs && (
           <section className="space-y-4">
-            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Techs</h2>
+            <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Techs</h2>
             <div className="space-y-4">
               {TECH_ORDER.map(cat => {
                 const items = allTechs[cat]
                 if (!items?.length) return null
                 return (
                   <div key={cat} className="space-y-2">
-                    <h3 className="text-xs font-medium text-zinc-600 uppercase tracking-wider">{TECH_LABELS[cat]}</h3>
+                    <h3 className="text-xs font-medium text-zinc-400 uppercase tracking-wider">{TECH_LABELS[cat]}</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                       {items.map((item) => (
                         <VideoCard key={item.url} href={item.url} title={item.title} thumbnail={thumbMap[item.url]} />
@@ -188,15 +188,15 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
         {players.length > 0 && (
           <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Players to Watch</h2>
-            {links.playersNote && <p className="text-sm italic text-zinc-500">{links.playersNote}</p>}
+            <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Players to Watch</h2>
+            {links.playersNote && <p className="text-sm italic text-zinc-400">{links.playersNote}</p>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {players.map((player) => {
                 const inner = (
                   <>
                     <Trophy size={15} className="shrink-0 text-amber-500" />
                     <span className="text-sm font-medium text-zinc-100 group-hover:text-white transition-colors truncate">{player.name}</span>
-                    {player.liquipedia && <ExternalLink size={13} className="shrink-0 ml-auto text-zinc-600 group-hover:text-zinc-400 transition-colors" />}
+                    {player.liquipedia && <ExternalLink size={13} className="shrink-0 ml-auto text-zinc-400 group-hover:text-zinc-200 transition-colors" />}
                   </>
                 )
                 return player.liquipedia ? (
@@ -216,7 +216,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
         {hasCommunity && (
           <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Community</h2>
+            <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Community</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {links.discords!.map((url, i) => (
                 <LinkCard

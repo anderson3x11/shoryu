@@ -133,15 +133,15 @@ export function StreedleGame() {
       {/* Title */}
       <div className="text-center space-y-1 pt-4">
         <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">STREETDLE</h1>
-        <p className="text-zinc-500 text-sm">Guess today's Street Fighter character</p>
+        <p className="text-zinc-400 text-sm">Guess today's Street Fighter character</p>
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap justify-center gap-4 text-xs text-zinc-500">
+      <div className="flex flex-wrap justify-center gap-4 text-xs text-zinc-400">
         <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-green-800 border border-green-600 inline-block" /> Correct</span>
         <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-yellow-800 border border-yellow-600 inline-block" /> Partial match</span>
         <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-zinc-800 border border-zinc-700 inline-block" /> Wrong</span>
-        <span className="text-zinc-600">▲▼ = debut era direction</span>
+        <span className="text-zinc-400">▲▼ = debut era direction</span>
       </div>
 
       {/* Win message */}
@@ -172,7 +172,7 @@ export function StreedleGame() {
       {/* Give up */}
       {!gameOver && guessIds.length >= 3 && (
         <div className="flex justify-end">
-          <button onClick={giveUp} className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
+          <button onClick={giveUp} className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors">
             Give up
           </button>
         </div>
@@ -180,7 +180,7 @@ export function StreedleGame() {
 
       {/* Guess count */}
       {guessIds.length > 0 && (
-        <p className="text-xs text-zinc-600 text-center">
+        <p className="text-xs text-zinc-400 text-center">
           {guessIds.length} {guessIds.length === 1 ? 'guess' : 'guesses'}
         </p>
       )}
@@ -191,9 +191,9 @@ export function StreedleGame() {
           <table className="w-full text-xs border-collapse" style={{ minWidth: 780 }}>
             <thead>
               <tr className="border-b border-zinc-800 bg-zinc-900/50">
-                <th className="text-left px-3 py-2.5 text-zinc-500 font-medium w-36">Character</th>
+                <th className="text-left px-3 py-2.5 text-zinc-400 font-medium w-36">Character</th>
                 {COLUMNS.map(col => (
-                  <th key={col.key} className="text-center px-2 py-2.5 text-zinc-500 font-medium">{col.label}</th>
+                  <th key={col.key} className="text-center px-2 py-2.5 text-zinc-400 font-medium">{col.label}</th>
                 ))}
               </tr>
             </thead>
@@ -232,7 +232,7 @@ export function StreedleGame() {
       )}
 
       {guesses.length === 0 && !gameOver && (
-        <div className="text-center py-8 text-zinc-700 text-sm">No guesses yet</div>
+        <div className="text-center py-8 text-zinc-500 text-sm">No guesses yet</div>
       )}
     </div>
   )

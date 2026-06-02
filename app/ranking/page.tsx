@@ -20,7 +20,7 @@ function RankingCard({ entry }: { entry: BucklerRankingEntry }) {
 
   return (
     <div className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors">
-      <span className="text-xl text-zinc-500 w-8 text-right flex-shrink-0">
+      <span className="text-xl text-zinc-400 w-8 text-right flex-shrink-0">
         #{entry.master_rating_ranking}
       </span>
       <div className="relative w-12 h-12 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0">
@@ -72,11 +72,11 @@ export default async function RankingPage({
     <div className="space-y-6">
       <div className="flex items-baseline justify-between">
         <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Master Ranking</h1>
-        <span className="text-sm text-zinc-500">Page {page}</span>
+        <span className="text-sm text-zinc-400">Page {page}</span>
       </div>
 
       {players.length === 0 ? (
-        <p className="text-zinc-500">No ranking data available.</p>
+        <p className="text-zinc-400">No ranking data available.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {players.map((entry) => (
@@ -97,7 +97,7 @@ export default async function RankingPage({
             ← Previous
           </Link>
         ) : (
-          <span className="px-4 py-2 rounded-md border border-zinc-800 text-sm text-zinc-600 cursor-not-allowed">
+          <span className="px-4 py-2 rounded-md border border-zinc-800 text-sm text-zinc-400 cursor-not-allowed">
             ← Previous
           </span>
         )}
@@ -110,7 +110,7 @@ export default async function RankingPage({
             Next →
           </Link>
         ) : (
-          <span className="px-4 py-2 rounded-md border border-zinc-800 text-sm text-zinc-600 cursor-not-allowed">
+          <span className="px-4 py-2 rounded-md border border-zinc-800 text-sm text-zinc-400 cursor-not-allowed">
             Next →
           </span>
         )}

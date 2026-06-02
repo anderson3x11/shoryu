@@ -81,25 +81,25 @@ export function MatchupChart({ playerId }: MatchupChartProps) {
       <div className="px-4 pt-4 pb-3 flex items-center justify-between gap-2 flex-wrap">
         <CardTitle className="text-sm text-zinc-400 uppercase tracking-wider">Matchups</CardTitle>
         {rows !== null && (
-          <span className="text-xs text-zinc-600">
+          <span className="text-xs text-zinc-400">
             Based on last {totalBattles} ranked matches
           </span>
         )}
       </div>
 
       {error && (
-        <div className="px-4 pb-4 text-sm text-zinc-600">Failed to load matchup data.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-400">Failed to load matchup data.</div>
       )}
 
       {!error && rows === null && (
-        <div className="px-4 pb-4 flex items-center gap-2 text-sm text-zinc-600">
+        <div className="px-4 pb-4 flex items-center gap-2 text-sm text-zinc-400">
           <div className="w-3 h-3 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
           Computing matchups…
         </div>
       )}
 
       {!error && rows !== null && rows.length === 0 && (
-        <div className="px-4 pb-4 text-sm text-zinc-600">No ranked match data found.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-400">No ranked match data found.</div>
       )}
 
       {!error && rows !== null && rows.length > 0 && oppCols.length > 0 && (
@@ -122,7 +122,7 @@ export function MatchupChart({ playerId }: MatchupChartProps) {
                           unoptimized
                         />
                       </div>
-                      <span className="text-[9px] text-zinc-500 leading-tight text-center w-14 truncate block">
+                      <span className="text-[9px] text-zinc-400 leading-tight text-center w-14 truncate block">
                         {col.name}
                       </span>
                     </div>
@@ -146,7 +146,7 @@ export function MatchupChart({ playerId }: MatchupChartProps) {
                       </div>
                       <div className="min-w-0">
                         <p className="text-xs font-semibold text-zinc-200 truncate">{row.charName}</p>
-                        <p className="text-[10px] text-zinc-600">{row.totalGames}g</p>
+                        <p className="text-[10px] text-zinc-400">{row.totalGames}g</p>
                       </div>
                     </div>
                   </td>

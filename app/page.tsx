@@ -17,7 +17,7 @@ export default async function HomePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Characters</h2>
+        <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Characters</h2>
         <CharacterGrid />
       </section>
     </div>

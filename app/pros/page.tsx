@@ -93,7 +93,7 @@ export default async function ProsPage() {
       <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
 
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Pro Players</h2>
+        <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Pro Players</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {pros.map(({ player, banner }) => (
             <ProCard key={player.short_id} player={player} banner={banner} />
@@ -102,7 +102,7 @@ export default async function ProsPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Content Creators</h2>
+        <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Content Creators</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {creators.map(({ player, banner }) => (
             <ProCard key={player.short_id} player={player} banner={banner} />

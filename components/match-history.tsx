@@ -43,7 +43,7 @@ function ReplayIdCopy({ replayId }: { replayId: string }) {
       title={copied ? 'Copied!' : 'Click to copy'}
       className={cn(
         'text-[10px] sm:text-xs font-mono tabular-nums tracking-wider mt-0.5 cursor-pointer transition-colors',
-        copied ? 'text-emerald-400' : 'text-zinc-600 hover:text-zinc-300',
+        copied ? 'text-emerald-400' : 'text-zinc-400 hover:text-zinc-300',
       )}
     >
       {copied ? 'COPIED' : replayId}
@@ -65,6 +65,8 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
   const [totalPages, setTotal]    = useState(initialTotalPages)
   const [charFilter, setCharFilter] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
 
   // Player-wide ranked LP/MR series per character, fetched once via /api/lp-history.
   // Used as a reference for computing per-match deltas — including the oldest match on each page.
@@ -194,7 +196,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
                 'text-xs px-3 py-1 rounded border transition-colors cursor-pointer',
                 mode === m.id
                   ? 'bg-zinc-700 border-zinc-600 text-white'
-                  : 'bg-zinc-900 border-zinc-700 text-zinc-500 hover:text-zinc-300'
+                  : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-zinc-300'
               )}
             >
               {m.label}
@@ -212,7 +214,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
               'text-xs px-2.5 py-0.5 rounded border transition-colors cursor-pointer',
               charFilter === null
                 ? 'bg-zinc-700 border-zinc-600 text-white'
-                : 'bg-zinc-900 border-zinc-700 text-zinc-500 hover:text-zinc-300'
+                : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-zinc-300'
             )}
           >
             All
@@ -236,7 +238,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
       {/* Battles */}
       <div className={cn('mt-3 divide-y divide-zinc-800/60 transition-opacity', pending && 'opacity-40')}>
         {battles.length === 0 ? (
-          <div className="px-4 py-6 text-sm text-zinc-600">
+          <div className="px-4 py-6 text-sm text-zinc-400">
             {charFilter ? 'No more matches with this character.' : 'No matches found.'}
           </div>
         ) : battles.map((battle) => {
@@ -281,7 +283,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
                   <p className="text-sm font-bold text-zinc-100 truncate leading-tight">
                     {me.player.fighter_id}
                   </p>
-                  <p className="text-xs text-zinc-500 truncate mt-0.5">
+                  <p className="text-xs text-zinc-400 truncate mt-0.5">
                     {me.playing_character_name}
                   </p>
                 </div>
@@ -300,13 +302,13 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
                 </div>
 
                 <div className="flex flex-col items-center gap-0.5 w-[140px] sm:w-[180px]">
-                  <span className="text-[11px] text-zinc-500 tabular-nums uppercase tracking-widest whitespace-nowrap">
+                  <span className="text-[11px] text-zinc-400 tabular-nums uppercase tracking-widest whitespace-nowrap">
                     {date && <span>{date}</span>}
-                    {date && (lpDelta || matchType) && <span className="text-zinc-700 mx-1.5">·</span>}
+                    {date && (lpDelta || matchType) && <span className="text-zinc-500 mx-1.5">·</span>}
                     {lpDelta ? (
                       <span className={cn(
                         'font-semibold',
-                        lpDelta.delta > 0 ? 'text-emerald-400' : lpDelta.delta < 0 ? 'text-red-400' : 'text-zinc-500'
+                        lpDelta.delta > 0 ? 'text-emerald-400' : lpDelta.delta < 0 ? 'text-red-400' : 'text-zinc-400'
                       )}>
                         {lpDelta.delta > 0 ? '+' : ''}{lpDelta.delta} {lpDelta.isMaster ? 'MR' : 'LP'}
                       </span>
@@ -319,6 +321,19 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
                     <span className="text-zinc-600 mx-2">–</span>
                     {rounds.lost}
                   </span>
+                  {me.round_results.length > 0 && (
+                    <div className="flex items-center gap-1 mt-1" aria-label="Round results">
+                      {me.round_results.map((r, i) => (
+                        <span
+                          key={i}
+                          className={cn(
+                            'w-1.5 h-1.5 rounded-full',
+                            r > 0 ? 'bg-emerald-400' : 'bg-red-400',
+                          )}
+                        />
+                      ))}
+                    </div>
+                  )}
                   <ReplayIdCopy replayId={battle.replay_id} />
                 </div>
 
@@ -342,7 +357,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
                   >
                     {opp.player.fighter_id}
                   </Link>
-                  <p className="text-xs text-zinc-500 truncate mt-0.5">
+                  <p className="text-xs text-zinc-400 truncate mt-0.5">
                     {opp.playing_character_name}
                   </p>
                 </div>
@@ -363,7 +378,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
         })}
       </div>
 
-      {totalPages > 1 && (
+      {mounted && totalPages > 1 && (
         <div className="flex items-center justify-between px-4 py-3 border-t border-zinc-800">
           <button
             onClick={() => goPage(page - 1)}
@@ -372,7 +387,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
           >
             ← Prev
           </button>
-          <span className="text-xs text-zinc-600">
+          <span className="text-xs text-zinc-400">
             Page {page} / {totalPages}
           </span>
           <button

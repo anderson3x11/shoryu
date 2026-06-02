@@ -141,7 +141,7 @@ export function SearchBar() {
             onClick={() => { router.push(`/player/${query}`); setQuery(''); setOpen(false) }}
             className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-zinc-800 transition-colors text-left cursor-pointer"
           >
-            <ArrowRight className="w-4 h-4 text-zinc-500 flex-shrink-0" />
+            <ArrowRight className="w-4 h-4 text-zinc-400 flex-shrink-0" />
             <span className="text-sm text-zinc-300">Go to player <span className="font-mono text-white">#{query}</span></span>
           </button>
         </div>
@@ -199,7 +199,7 @@ export function SearchBar() {
           <a
             href={`/search?q=${encodeURIComponent(query)}`}
             onClick={() => setOpen(false)}
-            className="flex items-center justify-center gap-1 px-4 py-3 text-sm text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 transition-colors border-t border-zinc-800"
+            className="flex items-center justify-center gap-1 px-4 py-3 text-sm text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800 transition-colors border-t border-zinc-800"
           >
             Show all results →
           </a>
@@ -207,14 +207,14 @@ export function SearchBar() {
       )}
 
       {open && !isNumericQuery && query.length >= 2 && results.length === 0 && !loading && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 px-4 py-6 text-center text-zinc-500 text-sm">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 px-4 py-6 text-center text-zinc-400 text-sm">
           No players found for &quot;{query}&quot;
         </div>
       )}
 
       {query === '' && recent.length > 0 && (
         <div className="mt-3">
-          <p className="text-xs text-zinc-600 mb-2 flex items-center gap-1.5">
+          <p className="text-xs text-zinc-400 mb-2 flex items-center gap-1.5">
             <Clock className="w-3 h-3" />
             Recent
           </p>
