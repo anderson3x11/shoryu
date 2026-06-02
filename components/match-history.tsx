@@ -27,6 +27,30 @@ const MODES: { id: Mode; label: string }[] = [
   { id: 'custom', label: 'Custom Room'},
 ]
 
+function ReplayIdCopy({ replayId }: { replayId: string }) {
+  const [copied, setCopied] = useState(false)
+  return (
+    <button
+      type="button"
+      onClick={async (e) => {
+        e.stopPropagation()
+        try {
+          await navigator.clipboard.writeText(replayId)
+          setCopied(true)
+          setTimeout(() => setCopied(false), 1200)
+        } catch {}
+      }}
+      title={copied ? 'Copied!' : 'Click to copy'}
+      className={cn(
+        'text-[10px] sm:text-xs font-mono tabular-nums tracking-wider mt-0.5 cursor-pointer transition-colors',
+        copied ? 'text-emerald-400' : 'text-zinc-600 hover:text-zinc-300',
+      )}
+    >
+      {copied ? 'COPIED' : replayId}
+    </button>
+  )
+}
+
 const MATCH_TYPE_LABELS: Record<string, string> = {
   'Ranked Match':      'Ranked',
   'Casual Match':      'Casual',
@@ -295,9 +319,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
                     <span className="text-zinc-600 mx-2">–</span>
                     {rounds.lost}
                   </span>
-                  <span className="text-[10px] sm:text-xs text-zinc-600 font-mono tabular-nums tracking-wider mt-0.5">
-                    {battle.replay_id}
-                  </span>
+                  <ReplayIdCopy replayId={battle.replay_id} />
                 </div>
 
                 <div className={cn(
