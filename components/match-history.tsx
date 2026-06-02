@@ -62,8 +62,15 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
     return () => ctrl.abort()
   }, [playerId])
 
-  async function load(nextMode: Mode, nextPage: number) {
-    const res  = await fetch(`/api/battles?id=${playerId}&mode=${nextMode}&page=${nextPage}`)
+  const sid = Number(currentShortId)
+
+  async function load(nextMode: Mode, nextPage: number, filter: string | null = charFilter) {
+    const params = new URLSearchParams({ id: playerId, mode: nextMode, page: String(nextPage) })
+    if (filter) {
+      params.set('char', filter)
+      params.set('sid', String(sid))
+    }
+    const res  = await fetch(`/api/battles?${params}`)
     const json = await res.json()
     setBattles(json.battles ?? [])
     setTotal(json.totalPages ?? 1)
@@ -74,26 +81,56 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
   function switchMode(m: Mode) {
     if (m === mode) return
     setCharFilter(null)
-    startTransition(() => { load(m, 1) })
+    startTransition(() => { load(m, 1, null) })
+  }
+
+  function selectChar(slug: string | null) {
+    const next = slug === null ? null : (charFilter === slug ? null : slug)
+    setCharFilter(next)
+    startTransition(() => { load(mode, 1, next) })
   }
 
   function goPage(p: number) {
     startTransition(() => { load(mode, p) })
   }
 
-  const sid = Number(currentShortId)
-
-  const myChars = useMemo(() => {
-    const seen = new Map<string, string>()
-    for (const battle of battles) {
-      const isP1 = battle.player1_info.player.short_id === sid
+  // Accumulated set of characters this player has been seen using across loaded pages. Keeping it
+  // stable means filtering by a character (which collapses the visible roster to that one char) does
+  // not erase the other character buttons from the toolbar.
+  const [knownChars, setKnownChars] = useState<Map<string, string>>(() => {
+    const m = new Map<string, string>()
+    const seedSid = Number(currentShortId)
+    for (const battle of initialBattles) {
+      const isP1 = battle.player1_info.player.short_id === seedSid
       const me = isP1 ? battle.player1_info : battle.player2_info
       if (me.playing_character_tool_name) {
-        seen.set(me.playing_character_tool_name, me.playing_character_name)
+        m.set(me.playing_character_tool_name, me.playing_character_name)
       }
     }
-    return [...seen.entries()].map(([slug, name]) => ({ slug, name }))
-  }, [battles, sid])
+    return m
+  })
+
+  useEffect(() => {
+    if (charFilter) return // a filtered page can't reveal new characters — skip
+    setKnownChars(prev => {
+      let added = false
+      const next = new Map(prev)
+      for (const battle of battles) {
+        const isP1 = battle.player1_info.player.short_id === sid
+        const me = isP1 ? battle.player1_info : battle.player2_info
+        if (me.playing_character_tool_name && !next.has(me.playing_character_tool_name)) {
+          next.set(me.playing_character_tool_name, me.playing_character_name)
+          added = true
+        }
+      }
+      return added ? next : prev
+    })
+  }, [battles, sid, charFilter])
+
+  const myChars = useMemo(
+    () => [...knownChars.entries()].map(([slug, name]) => ({ slug, name })),
+    [knownChars],
+  )
 
   // Per-replay LP/MR deltas. For each ranked battle, look up the immediately prior point in the
   // player-wide history series for that character. Skip when the series mode (LP vs MR) doesn't
@@ -118,14 +155,6 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
     }
     return out
   }, [battles, sid, lpHistory])
-
-  const displayed = charFilter
-    ? battles.filter((battle) => {
-        const isP1 = battle.player1_info.player.short_id === sid
-        const me = isP1 ? battle.player1_info : battle.player2_info
-        return me.playing_character_tool_name === charFilter
-      })
-    : battles
 
   return (
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">
@@ -154,7 +183,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
       {myChars.length > 1 && (
         <div className="px-4 pt-2.5 pb-0 flex items-center gap-1.5 flex-wrap">
           <button
-            onClick={() => setCharFilter(null)}
+            onClick={() => selectChar(null)}
             className={cn(
               'text-xs px-2.5 py-0.5 rounded border transition-colors cursor-pointer',
               charFilter === null
@@ -167,7 +196,7 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
           {myChars.map(({ slug, name }) => (
             <button
               key={slug}
-              onClick={() => setCharFilter(charFilter === slug ? null : slug)}
+              onClick={() => selectChar(slug)}
               title={name}
               className={cn(
                 'relative w-7 h-7 rounded overflow-hidden border transition-all cursor-pointer flex-shrink-0',
@@ -182,11 +211,11 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
 
       {/* Battles */}
       <div className={cn('mt-3 divide-y divide-zinc-800/60 transition-opacity', pending && 'opacity-40')}>
-        {displayed.length === 0 ? (
+        {battles.length === 0 ? (
           <div className="px-4 py-6 text-sm text-zinc-600">
-            {charFilter ? 'No matches with this character on this page.' : 'No matches found.'}
+            {charFilter ? 'No more matches with this character.' : 'No matches found.'}
           </div>
-        ) : displayed.map((battle) => {
+        ) : battles.map((battle) => {
           const isP1 = battle.player1_info.player.short_id === sid
           const me   = isP1 ? battle.player1_info : battle.player2_info
           const opp  = isP1 ? battle.player2_info : battle.player1_info
