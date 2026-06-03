@@ -5,7 +5,10 @@ import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
 import type { BucklerRankingEntry } from '@/lib/buckler/types'
 
-export const metadata = { title: 'Master Ranking - Shoryu' }
+export const metadata = {
+  title: 'Master Ranking',
+  description: 'Top Street Fighter 6 players ranked by Master Rating. Live global leaderboard.',
+}
 
 function RankingCard({ entry }: { entry: BucklerRankingEntry }) {
   const banner = entry.fighter_banner_info

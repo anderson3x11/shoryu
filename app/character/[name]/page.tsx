@@ -15,7 +15,15 @@ interface CharacterPageProps {
 export async function generateMetadata({ params }: CharacterPageProps) {
   const { name } = await params
   const char = CHARACTERS.find((c) => c.id === name)
-  return { title: char ? `${char.name} - Shoryu` : 'Character - Shoryu' }
+  if (!char) return { title: 'Character | Shoryu' }
+  return {
+    title: char.name,
+    description: `${char.name} guides, frame data, combos, tech videos, and top players in Street Fighter 6.`,
+    openGraph: {
+      title: `${char.name} — SF6 | Shoryu`,
+      description: `${char.name} guides, frame data, combos, tech videos, and top players in Street Fighter 6.`,
+    },
+  }
 }
 
 export function generateStaticParams() {

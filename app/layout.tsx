@@ -13,9 +13,30 @@ const titleFont = localFont({ src: '../public/fonts/CityBrawlersBoldCaps.otf', v
 const bebasNeue = Bebas_Neue({ weight: '400', variable: '--font-bebas', subsets: ['latin'] })
 const barlow = Barlow({ weight: ['400', '500', '600', '700'], variable: '--font-sans', subsets: ['latin'] })
 
+const BASE = 'https://shoryu.vercel.app'
+
 export const metadata: Metadata = {
-  title: 'Shoryu - Street Fighter 6 Stats',
-  description: 'Street Fighter 6 player stats, rankings, and character data',
+  title: {
+    default: 'Shoryu — SF6 Stats',
+    template: '%s | Shoryu',
+  },
+  description: 'Street Fighter 6 player profiles, Master ranking, matchup charts, match history, and character guides.',
+  metadataBase: new URL(BASE),
+  openGraph: {
+    siteName: 'Shoryu',
+    type: 'website',
+    locale: 'en_US',
+    title: 'Shoryu — SF6 Stats',
+    description: 'Street Fighter 6 player profiles, Master ranking, matchup charts, match history, and character guides.',
+    url: BASE,
+    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Shoryu — SF6 Stats' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Shoryu — SF6 Stats',
+    description: 'Street Fighter 6 player profiles, Master ranking, matchup charts, match history, and character guides.',
+    images: ['/logo.png'],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

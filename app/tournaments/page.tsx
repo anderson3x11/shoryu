@@ -2,7 +2,10 @@ import { ExternalLink } from 'lucide-react'
 import { getTournaments } from '@/lib/liquipedia'
 import type { Player, Tournament, TournamentYear } from '@/lib/liquipedia'
 
-export const metadata = { title: 'Tournaments - Shoryu' }
+export const metadata = {
+  title: 'Tournaments',
+  description: 'Street Fighter 6 Tier 1 tournament results, prize pools, and top players.',
+}
 
 function proxy(url: string) {
   return `/api/lp-icon?url=${encodeURIComponent(url)}`

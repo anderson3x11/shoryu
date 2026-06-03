@@ -6,7 +6,10 @@ import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
 import type { BucklerFighterBanner } from '@/lib/buckler'
 
-export const metadata = { title: 'Pro Players & Creators - Shoryu' }
+export const metadata = {
+  title: 'Pro Players & Creators',
+  description: 'Top Street Fighter 6 pro players and content creators with their Buckler profiles.',
+}
 
 function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighterBanner | null }) {
   const charSlug = banner?.favorite_character_tool_name
