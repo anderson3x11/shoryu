@@ -4,6 +4,7 @@ import localFont from 'next/font/local'
 import Image from 'next/image'
 import { NavSearch } from '@/components/nav-search'
 import { NavMenu } from '@/components/nav-menu'
+import { SiteFooter } from '@/components/site-footer'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${barlow.variable} ${permanentMarker.variable} ${titleFont.variable} ${bebasNeue.variable}`}>
-      <body className="antialiased min-h-screen bg-zinc-950 text-zinc-100" suppressHydrationWarning>
+      <body className="antialiased min-h-screen flex flex-col bg-zinc-950 text-zinc-100" suppressHydrationWarning>
         <nav className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center gap-2 sm:gap-8">
             <a href="/" className="flex items-center gap-2 flex-shrink-0">
@@ -45,9 +46,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <NavMenu />
           </div>
         </nav>
-        <main className="max-w-7xl mx-auto px-6 py-8">
+        <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-8">
           {children}
         </main>
+        <SiteFooter />
         <Analytics />
       </body>
     </html>

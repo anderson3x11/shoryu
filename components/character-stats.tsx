@@ -51,7 +51,7 @@ function RankBadge({ li }: { li: BucklerLeagueInfo }) {
   } else if (li.league_point > 0) {
     subText = `${li.league_point.toLocaleString()} LP`
   } else {
-    subText = '—'
+    subText = 'N/A'
   }
 
   const w = 88
@@ -110,7 +110,7 @@ export function CharacterStats({ phases }: CharacterStatsProps) {
       <div className="overflow-y-auto h-full">
         {displayed.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 gap-2 text-zinc-400">
-            <span className="text-2xl">—</span>
+            <span className="text-2xl text-zinc-600">?</span>
             <p className="text-sm">No ranked games this phase</p>
           </div>
         ) : (

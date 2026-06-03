@@ -144,7 +144,7 @@ export function compareCharacters(guess: StreedleCharacter, target: StreedleChar
     debut = { status: 'correct' }
   } else {
     const diff = ti - gi
-    debut = { status: Math.abs(diff) === 1 ? 'partial' : 'wrong', arrow: diff > 0 ? 'up' : 'down' }
+    debut = { status: 'wrong', arrow: diff > 0 ? 'up' : 'down' }
   }
 
   let playableDebut: CompareResult
@@ -154,7 +154,7 @@ export function compareCharacters(guess: StreedleCharacter, target: StreedleChar
     playableDebut = { status: 'correct' }
   } else {
     const diff = pti - pgi
-    playableDebut = { status: Math.abs(diff) === 1 ? 'partial' : 'wrong', arrow: diff > 0 ? 'up' : 'down' }
+    playableDebut = { status: 'wrong', arrow: diff > 0 ? 'up' : 'down' }
   }
 
   const style: CompareResult    = { status: guess.style     === target.style     ? 'correct' : 'wrong' }

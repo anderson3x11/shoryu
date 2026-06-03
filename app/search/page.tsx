@@ -11,7 +11,7 @@ interface SearchPageProps {
 
 export async function generateMetadata({ searchParams }: SearchPageProps) {
   const { q } = await searchParams
-  return { title: q ? `"${q}" — Shoryu` : 'Search — Shoryu' }
+  return { title: q ? `"${q}" on Shoryu` : 'Search | Shoryu' }
 }
 
 function PlayerCard({ banner }: { banner: BucklerFighterBanner }) {
@@ -82,7 +82,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         {query && (
           <p className="text-sm text-zinc-400">
             {results.length > 0
-              ? `Results for "${query}"${totalPages > 1 ? ` — page ${page} of ${totalPages}` : ''}`
+              ? `Results for "${query}"${totalPages > 1 ? ` (page ${page} of ${totalPages})` : ''}`
               : `No results for "${query}"`}
           </p>
         )}

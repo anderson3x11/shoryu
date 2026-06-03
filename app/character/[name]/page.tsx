@@ -100,7 +100,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   ].filter(Boolean) as { title: string; url: string }[]
 
   const allTechs: TechSection = { ...links.techs }
-  if (links.misterCrimson) allTechs.guides = [...(allTechs.guides ?? []), { title: 'Matchup Guide — Mister Crimson', url: links.misterCrimson }]
+  if (links.misterCrimson) allTechs.guides = [...(allTechs.guides ?? []), { title: 'Matchup Guide by Mister Crimson', url: links.misterCrimson }]
   if (links.videoGuides?.length) allTechs.guides = [...(allTechs.guides ?? []), ...links.videoGuides]
   if (links.techVideos?.length) allTechs.guides = [...(allTechs.guides ?? []), ...links.techVideos]
 

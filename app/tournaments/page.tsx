@@ -51,10 +51,10 @@ function TournamentRow({ t }: { t: Tournament }) {
       </td>
       <td className="py-2.5 pr-4 text-zinc-400 whitespace-nowrap text-sm">{t.date}</td>
       <td className="py-2.5 pr-4 text-zinc-300 whitespace-nowrap text-sm">
-        {t.prizePool ?? <span className="text-zinc-400">—</span>}
+        {t.prizePool ?? <span className="text-zinc-600">N/A</span>}
       </td>
       <td className="py-2.5 pr-4 text-zinc-400 whitespace-nowrap text-sm">
-        {t.location ?? <span className="text-zinc-400">—</span>}
+        {t.location ?? <span className="text-zinc-600">N/A</span>}
       </td>
       <td className="py-2.5 pr-4 whitespace-nowrap text-sm">
         {t.winner && <PlayerCell player={t.winner} className="text-amber-400" />}
