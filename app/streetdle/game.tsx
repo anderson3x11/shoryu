@@ -12,14 +12,13 @@ import {
 } from '@/lib/data/streetdle-data'
 
 type SavedState = { guessIds: string[]; won: boolean; gaveUp: boolean }
-type AttributeKey = 'gender' | 'country' | 'debut' | 'playableDebut' | 'style' | 'archetype' | 'inputType'
+type AttributeKey = 'gender' | 'country' | 'debut' | 'playableDebut' | 'archetype' | 'inputType'
 
 const COLUMNS: { key: AttributeKey; label: string }[] = [
   { key: 'gender',        label: 'Gender'         },
   { key: 'country',       label: 'Country'        },
   { key: 'debut',         label: 'Debut'          },
   { key: 'playableDebut', label: 'Playable Debut' },
-  { key: 'style',         label: 'Style'          },
   { key: 'archetype',     label: 'Archetype'      },
   { key: 'inputType',     label: 'Input'          },
 ]
@@ -219,7 +218,8 @@ export function StreedleGame() {
                     </td>
                     {COLUMNS.map(col => {
                       const r = results[col.key]
-                      const value = g[col.key] as string
+                      const raw = g[col.key]
+                      const value = Array.isArray(raw) ? raw.join(' / ') : raw as string
                       return (
                         <td key={col.key} className="px-2 py-2">
                           <div className={`rounded px-2 py-1.5 text-center ${cellClass(r.status)}`}>

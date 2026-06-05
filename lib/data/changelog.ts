@@ -5,6 +5,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-06-05",
+    items: [
+      "Started adding Ingrid stuff on her page",
+      "Fixed some issues with Streetdle data",
+    ],
+  },
+  {
     date: "2026-06-03",
     items: [
       "Added this Changelog page so you always know what's new",

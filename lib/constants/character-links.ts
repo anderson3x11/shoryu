@@ -1910,5 +1910,26 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
       "https://discord.gg/jEsdJZWswT",
       "https://discord.gg/eUAjKa6VAy",
     ],
+    techs: {
+      guides: [
+        { title: "Ingrid Guide", url: "https://www.youtube.com/watch?v=CemqJ5giO88"},
+        { title: "Anti Ingrid Guide", url: "https://www.youtube.com/watch?v=6kOWXT6fol0"},
+      ],
+      combos: [
+        { title: "Combos", url: "https://www.youtube.com/watch?v=Fb566Gy3YcU" },
+        {
+          title: "Combos & Setups",
+          url: "https://www.youtube.com/watch?v=QmUwizYjJNc",
+        },
+      ],
+      setups: [
+        {
+          title: "Safejump Shimmy setup",
+          url: "https://www.youtube.com/watch?v=zx9p4cTrKh8",
+        },
+      ],
+    },
+    players: [
+    ],
   },
 };
