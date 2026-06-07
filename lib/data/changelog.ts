@@ -5,6 +5,14 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-06-08",
+    items: [
+      "New Stats page: character usage rates by league and control type",
+      "Player profiles now show win/loss record and win rate per character",
+      "Streetdle: archetypes reworked (shoto, rushdown, zoner, grappler, footsies), some characters have dual archetypes",
+    ],
+  },
+  {
     date: "2026-06-05",
     items: [
       "Started adding Ingrid stuff on her page",

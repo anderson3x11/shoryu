@@ -7,8 +7,23 @@ import type { BucklerUsageRateData } from '@/lib/buckler/types'
 
 const CHAR_MAP = new Map(CHARACTERS.map(c => [c.slug, c]))
 
-const LEAGUE_LABELS = ['All', 'Rookie', 'Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master']
-const CONTROL_LABELS = ['Total', 'Modern', 'Classic']
+const LEAGUES = [
+  { label: 'All',      rankId: null },
+  { label: 'Rookie',   rankId: 3    },
+  { label: 'Iron',     rankId: 8    },
+  { label: 'Bronze',   rankId: 13   },
+  { label: 'Silver',   rankId: 18   },
+  { label: 'Gold',     rankId: 23   },
+  { label: 'Platinum', rankId: 28   },
+  { label: 'Diamond',  rankId: 33   },
+  { label: 'Master',   rankId: 36   },
+]
+
+const CONTROLS = [
+  { label: 'Total',   icon: null },
+  { label: 'Classic', icon: 'https://www.streetfighter.com/6/buckler/assets/images/stats/icon_controltype0.png' },
+  { label: 'Modern',  icon: 'https://www.streetfighter.com/6/buckler/assets/images/stats/icon_controltype1.png' },
+]
 
 function formatMonth(yyyymm: string): string {
   const year = parseInt(yyyymm.slice(0, 4))
@@ -37,40 +52,48 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
       </div>
 
       <div className="space-y-3">
-        <div className="flex gap-1.5">
-          {CONTROL_LABELS.map((label, i) => (
+        <div className="flex gap-2">
+          {CONTROLS.map(({ label, icon }, i) => (
             <button
               key={i}
               onClick={() => setControl(i)}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
                 control === i
                   ? 'bg-zinc-100 text-zinc-900'
                   : 'bg-zinc-800 text-zinc-400 hover:text-zinc-200'
               }`}
             >
+              {icon && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={icon} alt={label} className="h-5 w-auto" />
+              )}
               {label}
             </button>
           ))}
         </div>
 
         <div className="flex gap-1.5 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {LEAGUE_LABELS.map((label, i) => (
+          {LEAGUES.map(({ label, rankId }, i) => (
             <button
               key={i}
               onClick={() => setLeague(i)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 transition-colors cursor-pointer ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors cursor-pointer ${
                 league === i
                   ? 'bg-zinc-100 text-zinc-900'
                   : 'bg-zinc-800 text-zinc-400 hover:text-zinc-200'
               }`}
             >
+              {rankId && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={`/ranks/rank${rankId}.png`} alt={label} className="h-5 w-auto" />
+              )}
               {label}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
+      <div className="flex flex-col divide-y divide-zinc-800/60">
         {chars.map((char, rank) => {
           const character = CHAR_MAP.get(char.character_tool_name)
           const delta = char.play_rate - char.previous_rate
@@ -79,16 +102,14 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
           const color = character?.color ?? '#71717a'
 
           return (
-            <div
-              key={char.character_tool_name}
-              className="bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800/60 hover:border-zinc-700 transition-colors"
-            >
+            <div key={char.character_tool_name} className="flex items-center gap-3 sm:gap-4 py-2.5">
+              {/* Rank */}
+              <span className="text-sm text-zinc-500 tabular-nums w-6 text-right flex-shrink-0">
+                {rank + 1}
+              </span>
+
               {/* Portrait */}
-              <div className="relative aspect-square" style={{ backgroundColor: `${color}18` }}>
-                <div
-                  className="absolute inset-0"
-                  style={{ background: `radial-gradient(ellipse at 50% 80%, ${color}35 0%, transparent 65%)` }}
-                />
+              <div className="relative w-10 h-10 flex-shrink-0 rounded-md overflow-hidden" style={{ backgroundColor: `${color}20` }}>
                 <Image
                   src={`/characters/${char.character_tool_name}.png`}
                   alt={name}
@@ -96,32 +117,23 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
                   className="object-cover"
                   unoptimized
                 />
-                <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-zinc-900 to-transparent" />
-                <span className="absolute top-1.5 left-2 text-xs font-bold text-white/50 tabular-nums">
-                  #{rank + 1}
-                </span>
               </div>
 
-              {/* Info */}
-              <div className="px-2.5 pb-2.5 pt-1.5 space-y-1">
-                <div className="flex items-center justify-between gap-1">
-                  <span className="text-xs font-semibold text-zinc-200 truncate leading-tight">{name}</span>
-                  <span
-                    className={`text-[10px] flex-shrink-0 tabular-nums font-medium leading-tight ${
-                      delta > 0.05 ? 'text-emerald-400' : delta < -0.05 ? 'text-red-400' : 'text-zinc-600'
-                    }`}
-                  >
+              {/* Name + bar */}
+              <div className="flex-1 min-w-0 space-y-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-sm font-semibold text-zinc-100 uppercase tracking-wide truncate">{name}</span>
+                  <span className={`text-xs tabular-nums flex-shrink-0 ${delta > 0.05 ? 'text-emerald-400' : delta < -0.05 ? 'text-red-400' : 'text-zinc-600'}`}>
                     {delta > 0.05 ? '▲' : delta < -0.05 ? '▼' : '='}{Math.abs(delta).toFixed(2)}
                   </span>
                 </div>
-                <div className="text-lg font-bold text-white leading-none">
-                  {char.play_rate.toFixed(1)}<span className="text-xs font-normal text-zinc-500 ml-0.5">%</span>
-                </div>
-                <div className="h-0.5 bg-zinc-800 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full"
-                    style={{ width: `${barWidth}%`, backgroundColor: color }}
-                  />
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 h-2 bg-zinc-800 overflow-hidden" style={{ clipPath: 'polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%)' }}>
+                    <div className="h-full bg-emerald-500" style={{ width: `${barWidth}%` }} />
+                  </div>
+                  <span className="text-sm font-bold text-white tabular-nums w-10 text-right flex-shrink-0">
+                    {char.play_rate.toFixed(1)}<span className="text-xs font-normal text-zinc-500">%</span>
+                  </span>
                 </div>
               </div>
             </div>
