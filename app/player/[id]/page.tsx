@@ -62,7 +62,7 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Relative wrapper: min-height on mobile (absolute child has no intrinsic height), desktop row height = PlayCounts height */}
         <div className="relative min-h-[360px] md:min-h-0">
-          <CharacterStats phases={phases} />
+          <CharacterStats phases={phases} winRates={profile.play?.character_win_rates} />
         </div>
         {profile.play && <PlayCounts playData={profile.play} />}
       </div>

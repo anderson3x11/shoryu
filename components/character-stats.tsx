@@ -19,20 +19,32 @@ export interface PhaseData {
   chars: PhaseCharInfo[]
 }
 
+export interface WinRateEntry {
+  character_id: number
+  win_count: number
+  battle_count: number
+}
+
 interface CharacterStatsProps {
   phases: PhaseData[]
+  winRates?: WinRateEntry[]
 }
 
 const VISIBLE_ROWS = 5
 
-function sortByBest(chars: PhaseCharInfo[]): PhaseCharInfo[] {
+function sortByBest(chars: PhaseCharInfo[], winRateMap: Map<number, WinRateEntry>): PhaseCharInfo[] {
   return [...chars]
     .filter((c) => c.is_played)
     .sort((a, b) => {
       const aMR = a.league_info.master_rating
       const bMR = b.league_info.master_rating
       if (bMR !== aMR) return bMR - aMR
-      return b.league_info.league_point - a.league_info.league_point
+      const aLP = a.league_info.league_point
+      const bLP = b.league_info.league_point
+      if (bLP !== aLP) return bLP - aLP
+      const aBattles = winRateMap.get(a.character_id)?.battle_count ?? 0
+      const bBattles = winRateMap.get(b.character_id)?.battle_count ?? 0
+      return bBattles - aBattles
     })
 }
 
@@ -74,11 +86,12 @@ function RankBadge({ li }: { li: BucklerLeagueInfo }) {
   )
 }
 
-export function CharacterStats({ phases }: CharacterStatsProps) {
+export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
+  const winRateMap = new Map(winRates?.map(w => [w.character_id, w]) ?? [])
   const [activePhaseId, setActivePhaseId] = useState(phases[0]?.id ?? '')
 
   const activePhase = phases.find((p) => p.id === activePhaseId) ?? phases[0]
-  const displayed = activePhase ? sortByBest(activePhase.chars) : []
+  const displayed = activePhase ? sortByBest(activePhase.chars, winRateMap) : []
 
   return (
     <Card className="absolute inset-0 bg-zinc-900 border-zinc-800 flex flex-col py-0 gap-0">
@@ -138,13 +151,32 @@ export function CharacterStats({ phases }: CharacterStatsProps) {
                   )}
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-zinc-200 truncate">
+                <div className="flex-1 grid grid-cols-3 items-center min-w-0">
+                  <p className="text-base font-semibold text-zinc-200 truncate uppercase tracking-wide">
                     {char?.name ?? `Character ${c.character_id}`}
                   </p>
-                </div>
 
-                <RankBadge li={c.league_info} />
+                  {(() => {
+                    const wr = winRateMap.get(c.character_id)
+                    if (!wr || wr.battle_count === 0) return <div />
+                    const losses = wr.battle_count - wr.win_count
+                    const rate = (wr.win_count / wr.battle_count) * 100
+                    return (
+                      <div className="flex flex-col items-center justify-center">
+                        <p className="text-sm font-semibold tabular-nums whitespace-nowrap">
+                          <span className="text-emerald-400">{wr.win_count}W</span>
+                          <span className="text-zinc-500"> / </span>
+                          <span className="text-red-400">{losses}L</span>
+                        </p>
+                        <p className="text-sm font-semibold tabular-nums text-zinc-100">{rate.toFixed(1)}%</p>
+                      </div>
+                    )
+                  })()}
+
+                  <div className="flex justify-end">
+                    <RankBadge li={c.league_info} />
+                  </div>
+                </div>
               </div>
             )
           })

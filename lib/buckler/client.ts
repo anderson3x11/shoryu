@@ -6,6 +6,7 @@ import type {
   BucklerSearchPage,
   BucklerRankingPage,
   BucklerRankingData,
+  BucklerUsageRateData,
 } from './types'
 
 const BUCKLER_BASE = 'https://www.streetfighter.com/6/buckler'
@@ -68,6 +69,49 @@ export async function getRanking(page = 1): Promise<BucklerRankingData | null> {
     300
   )
   return data?.master_rating_ranking ?? null
+}
+
+async function fetchBucklerJson<T = unknown>(path: string, revalidate = 3600): Promise<T | null> {
+  const cookie = getSessionCookie()
+  if (!cookie) {
+    console.warn('[buckler] No session cookie — set BUCKLER_COOKIE in .env.local')
+    return null
+  }
+
+  const res = await fetch(`${BUCKLER_BASE}${path}`, {
+    headers: {
+      'User-Agent': UA,
+      Accept: 'application/json, */*',
+      'Accept-Language': 'en-US,en;q=0.9',
+      Cookie: cookie,
+    },
+    next: { revalidate },
+  })
+
+  if (!res.ok) return null
+
+  try {
+    return await res.json() as T
+  } catch {
+    return null
+  }
+}
+
+function getYYYYMM(monthOffset = 0): string {
+  const d = new Date()
+  d.setUTCMonth(d.getUTCMonth() - monthOffset)
+  return `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, '0')}`
+}
+
+export async function getUsageRate(): Promise<{ data: BucklerUsageRateData; month: string } | null> {
+  for (const offset of [0, 1, 2]) {
+    const month = getYYYYMM(offset)
+    for (const path of [`/api/en/stats/usagerate/${month}`, `/api/fr/stats/usagerate/${month}`]) {
+      const data = await fetchBucklerJson<BucklerUsageRateData>(path, 3600)
+      if (data?.usagerateData) return { data, month }
+    }
+  }
+  return null
 }
 
 export async function getBattleLog(

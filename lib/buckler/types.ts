@@ -168,6 +168,32 @@ export interface BucklerRankingPage {
   master_rating_ranking: BucklerRankingData
 }
 
+// Usage rate data from /stats/usagerate/YYYYMM
+export interface BucklerUsageRateEntry {
+  character_tool_name: string
+  character_alpha: string
+  play_rate: number
+  count: number
+  play_cnt: number
+  total_cnt: number
+  previous_rate: number
+}
+
+export interface BucklerUsageRateLeague {
+  league_rank: number  // 0=ALL, 1=Rookie, 2=Iron, 3=Bronze, 4=Silver, 5=Gold, 6=Platinum, 7=Diamond, 8=Master
+  league_alpha: string
+  val: BucklerUsageRateEntry[]
+}
+
+export interface BucklerUsageRateGroup {
+  operation_type: number  // 0=Total, 1=Modern, 2=Classic
+  val: BucklerUsageRateLeague[]
+}
+
+export interface BucklerUsageRateData {
+  usagerateData: BucklerUsageRateGroup[]
+}
+
 // Determine who won a battle
 export function getBattleWinner(battle: BucklerBattle): 1 | 2 | null {
   const p1wins = battle.player1_info.round_results.filter(r => r > 0).length

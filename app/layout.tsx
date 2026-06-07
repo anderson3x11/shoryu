@@ -64,6 +64,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="/streetdle" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">
               Streetdle
             </a>
+            <a href="/stats" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">
+              Stats
+            </a>
             <NavMenu />
           </div>
         </nav>
