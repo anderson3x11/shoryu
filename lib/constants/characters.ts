@@ -38,7 +38,7 @@ export const CHARACTERS: Character[] = [
   { id: 'sagat',    name: 'Sagat',     slug: 'sagat',    bucklerCharId: 25, color: '#ea580c' },
   { id: 'cviper',   name: 'C. Viper',  slug: 'cviper',   bucklerCharId: 30, color: '#fb923c' },
   { id: 'alex',     name: 'Alex',      slug: 'alex',     bucklerCharId: 31, color: '#0ea5e9' },
-  { id: 'ingrid',   name: 'Ingrid',    slug: 'ingrid',   bucklerCharId: 32, color: '#d4af37' },
+  { id: 'ingrid',   name: 'Ingrid',    slug: 'ingrid',   bucklerCharId: 32, color: '#c4b5fd' },
   { id: 'random',   name: 'Random',    slug: 'random',   bucklerCharId: 254, color: '#71717a', hidden: true },
 ]
 

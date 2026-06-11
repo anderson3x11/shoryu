@@ -1899,6 +1899,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
     players: [
       { name: "Hotdog29", liquipedia: LP + "HotDog29" },
       { name: "Nemo", liquipedia: LP + "Nemo" },
+      { name: "Problem X", liquipedia: LP + "Problem_X" },
     ],
   },
 
