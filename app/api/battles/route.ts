@@ -6,7 +6,7 @@ const PAGE_SIZE = 10
 // Cap how many Buckler pages we'll scan when a character filter is active. Each "page" of the
 // filtered view corresponds to up to MAX_BUCKLER_PAGES of underlying Buckler data, so a sparsely
 // played character may surface fewer results past the cap.
-const MAX_BUCKLER_PAGES = 15
+const MAX_BUCKLER_PAGES = 10
 
 async function loadPage(
   id: string,
@@ -76,16 +76,16 @@ export async function GET(req: Request) {
       battles: slice,
       totalPages: page + (hasMore ? 1 : 0),
       currentPage: page,
-    })
+    }, { headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=300' } })
   }
 
   // Unfiltered: original behavior — 'all' mode takes top-PAGE_SIZE most recent across all 4 sub-modes.
   if (mode === 'all') {
     const { battles, maxTotalPage } = await loadPage(id, page, 'all')
     const sliced = battles.sort((a, b) => b.uploaded_at - a.uploaded_at).slice(0, PAGE_SIZE)
-    return Response.json({ battles: sliced, totalPages: maxTotalPage, currentPage: page })
+    return Response.json({ battles: sliced, totalPages: maxTotalPage, currentPage: page }, { headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=300' } })
   }
 
   const { battles, maxTotalPage } = await loadPage(id, page, mode)
-  return Response.json({ battles, totalPages: maxTotalPage, currentPage: page })
+  return Response.json({ battles, totalPages: maxTotalPage, currentPage: page }, { headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=300' } })
 }

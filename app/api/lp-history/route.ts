@@ -21,7 +21,7 @@ export async function GET(req: Request) {
   const sid = Number(id)
 
   const first = await getBattleLog(id, 1, 'rank')
-  const totalPages = Math.min(first?.total_page ?? 1, 20)
+  const totalPages = Math.min(first?.total_page ?? 1, 10)
   const rest = totalPages > 1
     ? await Promise.all(Array.from({ length: totalPages - 1 }, (_, i) => getBattleLog(id, i + 2, 'rank')))
     : []

@@ -52,7 +52,7 @@ export async function searchPlayers(
   page = 1
 ): Promise<{ results: BucklerFighterBanner[]; totalPages: number }> {
   const params = new URLSearchParams({ fighter_id: query, page: String(page) })
-  const data = await fetchPageData<BucklerSearchPage>(`/en/fighterslist/search/result?${params}`)
+  const data = await fetchPageData<BucklerSearchPage>(`/en/fighterslist/search/result?${params}`, 120)
   return {
     results: data?.fighter_banner_list ?? [],
     totalPages: data?.total_page ?? 1,
@@ -60,7 +60,7 @@ export async function searchPlayers(
 }
 
 export async function getPlayerProfile(shortId: string | number): Promise<BucklerProfilePage | null> {
-  return fetchPageData<BucklerProfilePage>(`/en/profile/${shortId}`)
+  return fetchPageData<BucklerProfilePage>(`/en/profile/${shortId}`, 300)
 }
 
 export async function getRanking(page = 1): Promise<BucklerRankingData | null> {
@@ -121,6 +121,6 @@ export async function getBattleLog(
 ): Promise<BucklerBattleLogPage | null> {
   return fetchPageData<BucklerBattleLogPage>(
     `/en/profile/${shortId}/battlelog/${mode}?page=${page}`,
-    30
+    300
   )
 }
