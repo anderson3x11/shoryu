@@ -2,15 +2,17 @@ import type { MetadataRoute } from 'next'
 import { CHARACTERS } from '@/lib/constants/characters'
 import { PRO_PLAYERS } from '@/lib/data/pro-players'
 
-const BASE = 'https://shoryu.vercel.app'
+const BASE = 'https://shoryu.site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
     { url: BASE,                   priority: 1.0,  changeFrequency: 'daily'   },
     { url: `${BASE}/ranking`,      priority: 0.9,  changeFrequency: 'hourly'  },
     { url: `${BASE}/tournaments`,  priority: 0.8,  changeFrequency: 'weekly'  },
+    { url: `${BASE}/stats`,         priority: 0.8,  changeFrequency: 'monthly' },
     { url: `${BASE}/pros`,         priority: 0.7,  changeFrequency: 'weekly'  },
     { url: `${BASE}/streetdle`,    priority: 0.7,  changeFrequency: 'daily'   },
+    { url: `${BASE}/guides`,       priority: 0.6,  changeFrequency: 'weekly'  },
     { url: `${BASE}/about`,        priority: 0.3,  changeFrequency: 'monthly' },
     { url: `${BASE}/changelog`,    priority: 0.3,  changeFrequency: 'weekly'  },
   ] satisfies MetadataRoute.Sitemap
