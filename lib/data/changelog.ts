@@ -5,6 +5,12 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-06-13",
+    items: [
+      "Shoryu has a new home: shoryu.site",
+    ],
+  },
+  {
     date: "2026-06-08",
     items: [
       "New Stats page: character usage rates by league and control type",
