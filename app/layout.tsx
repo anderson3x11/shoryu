@@ -5,7 +5,6 @@ import Image from 'next/image'
 import { NavSearch } from '@/components/nav-search'
 import { NavMenu } from '@/components/nav-menu'
 import { SiteFooter } from '@/components/site-footer'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const permanentMarker = Permanent_Marker({ weight: '400', variable: '--font-display', subsets: ['latin'] })
@@ -13,7 +12,7 @@ const titleFont = localFont({ src: '../public/fonts/CityBrawlersBoldCaps.otf', v
 const bebasNeue = Bebas_Neue({ weight: '400', variable: '--font-bebas', subsets: ['latin'] })
 const barlow = Barlow({ weight: ['400', '500', '600', '700'], variable: '--font-sans', subsets: ['latin'] })
 
-const BASE = 'https://shoryu.vercel.app'
+const BASE = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://shoryu.site'
 
 export const metadata: Metadata = {
   title: {
@@ -74,7 +73,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <SiteFooter />
-        <Analytics />
       </body>
     </html>
   )
