@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { NavSearch } from '@/components/nav-search'
 import { NavMenu } from '@/components/nav-menu'
 import { SiteFooter } from '@/components/site-footer'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const permanentMarker = Permanent_Marker({ weight: '400', variable: '--font-display', subsets: ['latin'] })
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <SiteFooter />
+        <Analytics />
       </body>
     </html>
   )
