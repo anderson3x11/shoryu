@@ -5,6 +5,8 @@ import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
 import type { BucklerRankingEntry } from '@/lib/buckler/types'
 
+export const revalidate = 300
+
 export const metadata = {
   title: 'Master Ranking',
   description: 'Top Street Fighter 6 players ranked by Master Rating. Live global leaderboard.',
@@ -38,6 +40,7 @@ function RankingCard({ entry }: { entry: BucklerRankingEntry }) {
       <div className="flex-1 min-w-0 space-y-0.5">
         <Link
           href={`/player/${banner.personal_info.short_id}`}
+          prefetch={false}
           className="font-semibold text-zinc-100 hover:text-white transition-colors leading-tight truncate block"
         >
           {banner.personal_info.fighter_id}

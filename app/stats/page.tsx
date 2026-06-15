@@ -1,6 +1,8 @@
 import { getUsageRate } from '@/lib/buckler/client'
 import { StatsClient } from './stats-client'
 
+export const revalidate = 3600
+
 export const metadata = {
   title: 'Stats',
   description: 'Street Fighter 6 character usage rates across all rank tiers.',

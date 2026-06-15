@@ -6,6 +6,8 @@ import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
 import type { BucklerFighterBanner } from '@/lib/buckler'
 
+export const revalidate = 300
+
 export const metadata = {
   title: 'Pro Players & Creators',
   description: 'Top Street Fighter 6 pro players and content creators with their Buckler profiles.',
@@ -23,7 +25,7 @@ function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighter
     <div className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors">
 
       {/* Character portrait — links to profile */}
-      <Link href={`/player/${player.short_id}`} className="relative w-12 h-12 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0 block">
+      <Link href={`/player/${player.short_id}`} prefetch={false} className="relative w-12 h-12 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0 block">
         {charSlug && (
           <Image
             src={getCharacterImageUrl(charSlug)}
@@ -37,7 +39,7 @@ function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighter
 
       {/* Name + socials */}
       <div className="flex-1 min-w-0 space-y-1">
-        <Link href={`/player/${player.short_id}`} className="font-semibold text-zinc-100 hover:text-white transition-colors leading-tight truncate block">
+        <Link href={`/player/${player.short_id}`} prefetch={false} className="font-semibold text-zinc-100 hover:text-white transition-colors leading-tight truncate block">
           {player.name}
         </Link>
         <div className="flex items-center gap-1.5 flex-wrap">

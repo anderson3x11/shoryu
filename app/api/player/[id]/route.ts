@@ -14,5 +14,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: 'Player not found' }, { status: 404 })
   }
 
-  return NextResponse.json({ profile, battles: battleLog?.replay_list ?? [] })
+  return NextResponse.json({ profile, battles: battleLog?.replay_list ?? [] }, {
+    headers: { 'Cache-Control': 's-maxage=300, stale-while-revalidate=600' },
+  })
 }

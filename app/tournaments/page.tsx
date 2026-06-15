@@ -2,6 +2,8 @@ import { ExternalLink } from 'lucide-react'
 import { getTournaments } from '@/lib/liquipedia'
 import type { Player, Tournament, TournamentYear } from '@/lib/liquipedia'
 
+export const revalidate = 86400
+
 export const metadata = {
   title: 'Tournaments',
   description: 'Street Fighter 6 Tier 1 tournament results, prize pools, and top players.',

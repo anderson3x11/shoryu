@@ -6,7 +6,7 @@ const CLIP = 'polygon(0% 0%, 84% 0%, 100% 16%, 100% 100%, 16% 100%, 0% 84%)'
 
 function Tile({ href, src, alt, color }: { href: string; src: string; alt: string; color?: string }) {
   return (
-    <Link href={href} className="group relative aspect-square block" title={alt}>
+    <Link href={href} prefetch={false} className="group relative aspect-square block" title={alt}>
       {/* Border — grise au repos, couleur du perso au hover */}
       <div
         className="absolute inset-0 bg-zinc-700 transition-colors duration-300 group-hover:bg-[var(--char-color,#fbbf24)]"

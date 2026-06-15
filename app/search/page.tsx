@@ -28,6 +28,7 @@ function PlayerCard({ banner }: { banner: BucklerFighterBanner }) {
   return (
     <Link
       href={`/player/${info.short_id}`}
+      prefetch={false}
       className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors"
     >
       <div className="relative w-12 h-12 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0">
