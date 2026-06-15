@@ -1,9 +1,9 @@
-import { getBattleLog } from '@/lib/buckler'
+import { syncAndGetRankedBattles } from '@/lib/supabase/battles'
 import { getCharacterByBucklerId } from '@/lib/constants/characters'
 
 export interface LpPoint {
   at: number   // unix timestamp
-  lp: number   // master_rating if master+, else league_point
+  lp: number   // master_rating if master, else league_point
 }
 
 export interface LpCharacter {
@@ -20,58 +20,46 @@ export async function GET(req: Request) {
   if (!id) return Response.json({ error: 'id required' }, { status: 400 })
   const sid = Number(id)
 
-  const first = await getBattleLog(id, 1, 'rank')
-  const totalPages = Math.min(first?.total_page ?? 1, 10)
-  const rest = totalPages > 1
-    ? await Promise.all(Array.from({ length: totalPages - 1 }, (_, i) => getBattleLog(id, i + 2, 'rank')))
-    : []
+  const battles = await syncAndGetRankedBattles(id, sid)
 
-  const battles = [
-    ...(first?.replay_list ?? []),
-    ...rest.flatMap(p => p?.replay_list ?? []),
-  ].sort((a, b) => a.uploaded_at - b.uploaded_at)
-
-  type RawPoint = { at: number; lp: number; isMasterMatch: boolean }
+  type RawPoint = LpPoint & { isMasterMatch: boolean }
   const byChar: Record<number, { slug: string; name: string; isMaster: boolean; points: RawPoint[] }> = {}
 
-  for (const battle of battles) {
-    const isP1 = battle.player1_info.player.short_id === sid
-    const me = isP1 ? battle.player1_info : battle.player2_info
-    if (!me.playing_character_id) continue
+  for (const b of battles) {
+    if (!b.char_id) continue
+    const isMasterMatch = b.lp_after >= 25000
+    const lp = isMasterMatch ? b.mr_after : b.lp_after
+    if (lp <= 0) continue
 
-    const isMasterMatch = me.league_point >= 25000
-    const lp = isMasterMatch ? me.master_rating : me.league_point
-    const charId = me.playing_character_id
-
-    if (!byChar[charId]) {
-      const char = getCharacterByBucklerId(charId)
-      byChar[charId] = {
-        slug: char?.slug ?? me.playing_character_tool_name,
-        name: char?.name ?? me.playing_character_name,
-        isMaster: isMasterMatch,
-        points: [],
+    if (!byChar[b.char_id]) {
+      const char = getCharacterByBucklerId(b.char_id)
+      byChar[b.char_id] = {
+        slug:     char?.slug ?? String(b.char_id),
+        name:     char?.name ?? String(b.char_id),
+        isMaster: false,
+        points:   [],
       }
     }
-    if (isMasterMatch) byChar[charId].isMaster = true
-    byChar[charId].points.push({ at: battle.uploaded_at, lp, isMasterMatch })
+    if (isMasterMatch) byChar[b.char_id].isMaster = true
+    byChar[b.char_id].points.push({
+      at: Math.floor(new Date(b.played_at).getTime() / 1000),
+      lp,
+      isMasterMatch,
+    })
   }
 
   const characters: LpCharacter[] = Object.entries(byChar)
-    .map(([idStr, data]) => {
-      const rawPoints = data.isMaster
-        ? data.points.filter(p => p.isMasterMatch)
-        : data.points
-      return {
-        charId: Number(idStr),
-        charSlug: data.slug,
-        charName: data.name,
-        isMaster: data.isMaster,
-        points: rawPoints.map(({ at, lp }) => ({ at, lp })),
-      }
-    })
+    .map(([idStr, data]) => ({
+      charId:   Number(idStr),
+      charSlug: data.slug,
+      charName: data.name,
+      isMaster: data.isMaster,
+      points:   (data.isMaster ? data.points.filter(p => p.isMasterMatch) : data.points)
+                  .map(({ at, lp }) => ({ at, lp })),
+    }))
     .sort((a, b) => b.points.length - a.points.length)
 
   return Response.json({ characters }, {
-    headers: { 'Cache-Control': 's-maxage=300, stale-while-revalidate' },
+    headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=300' },
   })
 }

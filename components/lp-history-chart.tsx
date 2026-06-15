@@ -113,7 +113,15 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
         <div className="px-4 pb-4 text-sm text-zinc-400">No ranked match data found.</div>
       )}
 
-      {!error && points.length > 0 && (
+      {!error && points.length > 0 && (() => {
+        const vals = points.map(p => p.lp)
+        const minVal = Math.min(...vals)
+        const maxVal = Math.max(...vals)
+        const pad = char?.isMaster ? Math.max(50, Math.round((maxVal - minVal) * 0.1)) : Math.max(500, Math.round((maxVal - minVal) * 0.1))
+        const domainMin = char?.isMaster ? Math.max(1000, minVal - pad) : Math.max(0, minVal - pad)
+        const domainMax = char?.isMaster ? Math.min(2500, maxVal + pad) : Math.min(25000, maxVal + pad)
+
+        return (
         <div className="px-4 pb-4">
           <ResponsiveContainer width="100%" height={400}>
             <LineChart data={points} margin={{ top: 4, right: 8, bottom: 0, left: 8 }}>
@@ -121,14 +129,14 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
               <XAxis
                 dataKey="at"
                 tickFormatter={fmt}
-                tick={{ fill: '#71717a', fontSize: 10 }}
+                tick={{ fill: '#d4d4d8', fontSize: 10 }}
                 axisLine={{ stroke: '#3f3f46' }}
                 tickLine={false}
                 minTickGap={60}
               />
               <YAxis
-                domain={char?.isMaster ? [1000, 2500] : [0, 25000]}
-                tick={{ fill: '#71717a', fontSize: 10 }}
+                domain={[domainMin, domainMax]}
+                tick={{ fill: '#d4d4d8', fontSize: 10 }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={v => v.toLocaleString()}
@@ -145,14 +153,15 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
                 dataKey="lp"
                 stroke="#38bdf8"
                 strokeWidth={2}
-                dot={false}
+                dot={{ r: 3, fill: '#38bdf8', strokeWidth: 0 }}
                 activeDot={{ r: 4, fill: '#38bdf8', strokeWidth: 0 }}
               />
             </LineChart>
           </ResponsiveContainer>
           <p className="text-[10px] text-zinc-500 text-right mt-1">Showing {points.length} of {char?.points.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
         </div>
-      )}
+        )
+      })()}
     </Card>
   )
 }

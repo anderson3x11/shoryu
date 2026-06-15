@@ -7,9 +7,19 @@ export function SiteFooter() {
       <div className="max-w-7xl mx-auto px-6 h-12 flex items-center justify-between">
         <ChangelogLink />
         <p className="text-xs text-zinc-700">Not affiliated with Capcom</p>
-        <Link href="/about" prefetch={false} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
-          About
-        </Link>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://x.com/shoryuapp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            @shoryuapp
+          </a>
+          <Link href="/about" prefetch={false} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
+            About
+          </Link>
+        </div>
       </div>
     </footer>
   )

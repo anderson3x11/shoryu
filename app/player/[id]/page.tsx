@@ -8,6 +8,8 @@ import { SessionSummary } from '@/components/session-summary'
 import { MatchupChart } from '@/components/matchup-chart'
 import { LpHistoryChart } from '@/components/lp-history-chart'
 
+export const revalidate = 300
+
 interface PlayerPageProps {
   params: Promise<{ id: string }>
 }

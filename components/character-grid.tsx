@@ -15,10 +15,6 @@ function Tile({ href, src, alt, color }: { href: string; src: string; alt: strin
       {/* Background zinc-950 + portrait */}
       <div className="absolute inset-[2px] overflow-hidden bg-zinc-950" style={{ clipPath: CLIP }}>
         <Image src={src} alt={alt} fill className="object-cover object-top" unoptimized />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        <span className="absolute bottom-0 left-0 right-0 text-center text-[10px] font-bold text-white px-1 py-1 opacity-0 group-hover:opacity-100 transition-opacity truncate">
-          {alt}
-        </span>
       </div>
     </Link>
   )

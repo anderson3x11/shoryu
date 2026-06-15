@@ -109,7 +109,17 @@ export default function AboutPage() {
         <Link href="/" className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors">
           ← Back to Shoryu
         </Link>
-        <p className="text-sm text-zinc-600">Made with love by anderson.</p>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://x.com/shoryuapp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            Follow updates on X →
+          </a>
+          <p className="text-sm text-zinc-600">Made with love by anderson.</p>
+        </div>
       </div>
 
     </div>

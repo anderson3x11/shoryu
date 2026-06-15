@@ -5,6 +5,14 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-06-16",
+    items: [
+      "Battle history now stored in a database, matchup chart and LP/MR history get faster on every visit",
+      "LP/MR chart now zooms in on your actual range instead of a fixed scale",
+      "Follow updates on X: @shoryuapp",
+    ],
+  },
+  {
     date: "2026-06-13",
     items: [
       "Shoryu has a new home: shoryu.site",
