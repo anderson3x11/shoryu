@@ -10,6 +10,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Block bot that passes player ID as nxtPid query param
+  if (request.nextUrl.searchParams.has('nxtPid')) {
+    return new NextResponse(null, { status: 403 })
+  }
+
   const ua = request.headers.get('user-agent') ?? ''
 
   // Block known programmatic clients
