@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/legend-snapshot",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
