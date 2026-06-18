@@ -26,6 +26,8 @@ export function middleware(request: NextRequest) {
   // Programmatic HTTP clients (requests, curl, etc.) never do
   const secFetchMode = request.headers.get('sec-fetch-mode')
   if (!secFetchMode) {
+    const ip = request.headers.get('x-forwarded-for') ?? request.ip ?? 'unknown'
+    console.log(`[bot-block] ${ip} → ${request.nextUrl.pathname}`)
     return new NextResponse(null, { status: 403 })
   }
 
