@@ -44,8 +44,12 @@ export function SessionSummary({ playerId, currentShortId }: SessionSummaryProps
   const session = useMemo(() => {
     if (sessionBattles.length === 0) return null
 
-    // Server already returns just the session window, newest-first.
-    const chain = sessionBattles
+    // Defensive: only keep battles that actually involve the viewed player. A stale/mis-served
+    // /api/session response could otherwise surface another player's data (wrong character + age).
+    const chain = sessionBattles.filter(
+      b => b.player1_info.player.short_id === sid || b.player2_info.player.short_id === sid,
+    )
+    if (chain.length === 0) return null
 
     type CharStat = {
       slug: string

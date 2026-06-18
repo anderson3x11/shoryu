@@ -11,8 +11,8 @@ import { getBattleWinner } from '@/lib/buckler'
 import { cn } from '@/lib/utils'
 
 interface MatchHistoryProps {
-  initialBattles: BucklerBattle[]
-  initialTotalPages: number
+  initialBattles?: BucklerBattle[]
+  initialTotalPages?: number
   currentShortId: number | string
   playerId: string
 }
@@ -58,7 +58,7 @@ const MATCH_TYPE_LABELS: Record<string, string> = {
   'Custom Room Match': 'Custom Room',
 }
 
-export function MatchHistory({ initialBattles, initialTotalPages, currentShortId, playerId }: MatchHistoryProps) {
+export function MatchHistory({ initialBattles = [], initialTotalPages = 1, currentShortId, playerId }: MatchHistoryProps) {
   const [mode, setMode]           = useState<Mode>('all')
   const [page, setPage]           = useState(1)
   const [battles, setBattles]     = useState<BucklerBattle[]>(initialBattles)
@@ -67,6 +67,25 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
   const [pending, startTransition] = useTransition()
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
+
+  // True while the lazy first-page fetch is in flight (no server-provided battles).
+  const [initialLoading, setInitialLoading] = useState(initialBattles.length === 0)
+
+  // When mounted without server-provided battles (lazy tab open), fetch the first 'all' page.
+  useEffect(() => {
+    if (initialBattles.length > 0) return
+    const ctrl = new AbortController()
+    fetch(`/api/battles?id=${playerId}&mode=all&page=1`, { signal: ctrl.signal })
+      .then(r => r.json())
+      .then((json: { battles?: BucklerBattle[]; totalPages?: number }) => {
+        setBattles(json.battles ?? [])
+        setTotal(json.totalPages ?? 1)
+        setInitialLoading(false)
+      })
+      .catch(() => { if (!ctrl.signal.aborted) setInitialLoading(false) })
+    return () => ctrl.abort()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerId])
 
   // Player-wide ranked LP/MR series per character, fetched once via /api/lp-history.
   // Used as a reference for computing per-match deltas — including the oldest match on each page.
@@ -237,7 +256,12 @@ export function MatchHistory({ initialBattles, initialTotalPages, currentShortId
 
       {/* Battles */}
       <div className={cn('mt-3 divide-y divide-zinc-800/60 transition-opacity', pending && 'opacity-40')}>
-        {battles.length === 0 ? (
+        {initialLoading ? (
+          <div className="px-4 py-10 flex items-center justify-center gap-2 text-sm text-zinc-400">
+            <span className="w-4 h-4 rounded-full border-2 border-zinc-600 border-t-sky-400 animate-spin" />
+            Loading matches…
+          </div>
+        ) : battles.length === 0 ? (
           <div className="px-4 py-6 text-sm text-zinc-400">
             {charFilter ? 'No more matches with this character.' : 'No matches found.'}
           </div>

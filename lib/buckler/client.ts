@@ -121,6 +121,6 @@ export async function getBattleLog(
 ): Promise<BucklerBattleLogPage | null> {
   return fetchPageData<BucklerBattleLogPage>(
     `/en/profile/${shortId}/battlelog/${mode}?page=${page}`,
-    300
+    60
   )
 }

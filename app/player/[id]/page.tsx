@@ -1,12 +1,9 @@
 import { notFound } from 'next/navigation'
-import { getPlayerProfile, getBattleLog } from '@/lib/buckler'
+import { getPlayerProfile } from '@/lib/buckler'
 import { PlayerHeader } from '@/components/player-header'
 import { CharacterStats, type PhaseData } from '@/components/character-stats'
 import { PlayCounts } from '@/components/play-counts'
-import { MatchHistory } from '@/components/match-history'
-import { SessionSummary } from '@/components/session-summary'
-import { MatchupChart } from '@/components/matchup-chart'
-import { LpHistoryChart } from '@/components/lp-history-chart'
+import { PlayerTabs } from '@/components/player-tabs'
 
 export const revalidate = 300
 
@@ -24,27 +21,9 @@ export async function generateMetadata({ params }: PlayerPageProps) {
 export default async function PlayerPage({ params }: PlayerPageProps) {
   const { id } = await params
 
-  const [profile, rankLog, casualLog, hubLog, customLog] = await Promise.all([
-    getPlayerProfile(id),
-    getBattleLog(id, 1, 'rank'),
-    getBattleLog(id, 1, 'casual'),
-    getBattleLog(id, 1, 'hub'),
-    getBattleLog(id, 1, 'custom'),
-  ])
-
-  const allBattles = [
-    ...(rankLog?.replay_list ?? []),
-    ...(casualLog?.replay_list ?? []),
-    ...(hubLog?.replay_list ?? []),
-    ...(customLog?.replay_list ?? []),
-  ].sort((a, b) => b.uploaded_at - a.uploaded_at).slice(0, 10)
-
-  const allTotalPages = Math.max(
-    rankLog?.total_page ?? 1,
-    casualLog?.total_page ?? 1,
-    hubLog?.total_page ?? 1,
-    customLog?.total_page ?? 1,
-  )
+  // Overview only needs the profile. Battle logs / LP-MR history / matchups are fetched
+  // client-side, lazily, when the Recent Battles or Stats tab is first opened.
+  const profile = await getPlayerProfile(id)
 
   if (!profile) notFound()
 
@@ -59,26 +38,19 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
 
   return (
     <div className="space-y-4">
-      <PlayerHeader banner={banner} />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Relative wrapper: min-height on mobile (absolute child has no intrinsic height), desktop row height = PlayCounts height */}
-        <div className="relative min-h-[360px] md:min-h-0">
-          <CharacterStats phases={phases} winRates={profile.play?.character_win_rates} />
-        </div>
-        {profile.play && <PlayCounts playData={profile.play} />}
-      </div>
-
-      <LpHistoryChart playerId={String(shortId)} />
-      <MatchupChart playerId={String(shortId)} />
-
-      <SessionSummary playerId={String(shortId)} currentShortId={shortId} />
-
-      <MatchHistory
-        initialBattles={allBattles}
-        initialTotalPages={allTotalPages}
-        currentShortId={shortId}
+      <PlayerTabs
         playerId={String(shortId)}
+        shortId={shortId}
+        header={<PlayerHeader banner={banner} />}
+        overview={
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Relative wrapper: min-height on mobile (absolute child has no intrinsic height), desktop row height = PlayCounts height */}
+            <div className="relative min-h-[360px] md:min-h-0">
+              <CharacterStats phases={phases} winRates={profile.play?.character_win_rates} />
+            </div>
+            {profile.play && <PlayCounts playData={profile.play} />}
+          </div>
+        }
       />
     </div>
   )
