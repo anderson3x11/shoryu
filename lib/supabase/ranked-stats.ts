@@ -33,6 +33,26 @@ export interface MatchupRow {
   vs: Record<number, MatchupVs>
 }
 
+export interface SessionChar {
+  slug: string
+  name: string
+  count: number
+  rankedCount: number
+  delta: number
+  deltaCount: number
+  isMaster: boolean | null
+}
+
+export interface SessionData {
+  wins: number
+  losses: number
+  total: number
+  winRate: number
+  durationSec: number
+  newestAt: number   // unix seconds; the client computes "ended X ago" from this (avoids cache staleness)
+  chars: SessionChar[]
+}
+
 export function buildLpCharacters(battles: DBBattle[]): LpCharacter[] {
   type RawPoint = LpPoint & { isMasterMatch: boolean }
   const byChar: Record<number, { slug: string; name: string; isMaster: boolean; points: RawPoint[] }> = {}
@@ -70,6 +90,74 @@ export function buildLpCharacters(battles: DBBattle[]): LpCharacter[] {
                   .map(({ at, lp }) => ({ at, lp })),
     }))
     .sort((a, b) => b.points.length - a.points.length)
+}
+
+const SESSION_GAP_SEC = 4 * 3600
+
+// Most-recent ranked "session": the run of battles whose consecutive gaps stay within 4h.
+// Computed from synced DB battles (ranked-only), so no extra Buckler fetch is needed.
+// Pass the lpCharacters series so per-match MR/LP deltas match the chart exactly.
+export function buildSession(battles: DBBattle[], lpCharacters: LpCharacter[]): SessionData | null {
+  if (battles.length < 2) return null
+
+  const toSec = (iso: string) => Math.floor(new Date(iso).getTime() / 1000)
+  const sorted = [...battles].sort((a, b) => toSec(b.played_at) - toSec(a.played_at))
+
+  const session: DBBattle[] = [sorted[0]]
+  for (let i = 1; i < sorted.length; i++) {
+    if (toSec(sorted[i - 1].played_at) - toSec(sorted[i].played_at) > SESSION_GAP_SEC) break
+    session.push(sorted[i])
+  }
+  if (session.length < 2) return null
+
+  const seriesByChar = new Map<number, { isMaster: boolean; points: LpPoint[] }>()
+  for (const c of lpCharacters) seriesByChar.set(c.charId, { isMaster: c.isMaster, points: c.points })
+
+  let wins = 0, losses = 0
+  const charStats = new Map<number, SessionChar>()
+
+  for (const b of session) {
+    if (b.result === 1) wins++; else losses++
+    if (!b.char_id) continue
+
+    let cs = charStats.get(b.char_id)
+    if (!cs) {
+      const char = getCharacterByBucklerId(b.char_id)
+      cs = {
+        slug: char?.slug ?? String(b.char_id),
+        name: char?.name ?? String(b.char_id),
+        count: 0, rankedCount: 0, delta: 0, deltaCount: 0, isMaster: null,
+      }
+      charStats.set(b.char_id, cs)
+    }
+    cs.count++
+    cs.rankedCount++
+
+    const isMaster = b.lp_after >= 25000
+    const series = seriesByChar.get(b.char_id)
+    if (!series || series.isMaster !== isMaster) continue
+    const current = isMaster ? b.mr_after : b.lp_after
+    const at = toSec(b.played_at)
+    let prior: LpPoint | null = null
+    for (let i = series.points.length - 1; i >= 0; i--) {
+      if (series.points[i].at < at) { prior = series.points[i]; break }
+    }
+    if (!prior) continue
+    cs.delta += current - prior.lp
+    cs.deltaCount++
+    cs.isMaster = isMaster
+  }
+
+  const total = session.length
+  const newestAt = toSec(session[0].played_at)
+  const oldestAt = toSec(session[session.length - 1].played_at)
+  return {
+    wins, losses, total,
+    winRate: total ? Math.round((wins / total) * 100) : 0,
+    durationSec: newestAt - oldestAt,
+    newestAt,
+    chars: [...charStats.values()].sort((a, b) => b.count - a.count),
+  }
 }
 
 export function buildMatchupRows(battles: DBBattle[]): { rows: MatchupRow[]; totalBattles: number } {
