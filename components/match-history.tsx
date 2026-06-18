@@ -8,6 +8,7 @@ import { getRankImageUrl, getEffectiveRankId } from '@/lib/constants/ranks'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import type { BucklerBattle } from '@/lib/buckler'
 import { getBattleWinner } from '@/lib/buckler'
+import type { LpCharacter } from '@/lib/supabase/ranked-stats'
 import { cn } from '@/lib/utils'
 
 interface MatchHistoryProps {
@@ -15,6 +16,7 @@ interface MatchHistoryProps {
   initialTotalPages?: number
   currentShortId: number | string
   playerId: string
+  lpCharacters: LpCharacter[] | null   // shared ranked-stats data (for per-match deltas)
 }
 
 type Mode = 'all' | 'rank' | 'casual' | 'hub' | 'custom'
@@ -58,7 +60,7 @@ const MATCH_TYPE_LABELS: Record<string, string> = {
   'Custom Room Match': 'Custom Room',
 }
 
-export function MatchHistory({ initialBattles = [], initialTotalPages = 1, currentShortId, playerId }: MatchHistoryProps) {
+export function MatchHistory({ initialBattles = [], initialTotalPages = 1, currentShortId, playerId, lpCharacters }: MatchHistoryProps) {
   const [mode, setMode]           = useState<Mode>('all')
   const [page, setPage]           = useState(1)
   const [battles, setBattles]     = useState<BucklerBattle[]>(initialBattles)
@@ -87,25 +89,15 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerId])
 
-  // Player-wide ranked LP/MR series per character, fetched once via /api/lp-history.
+  // Player-wide ranked LP/MR series per character, from the shared ranked-stats fetch.
   // Used as a reference for computing per-match deltas — including the oldest match on each page.
   type LpSeries = { isMaster: boolean; points: { at: number; lp: number }[] }
-  const [lpHistory, setLpHistory] = useState<Map<number, LpSeries>>(new Map())
-
-  useEffect(() => {
-    const ctrl = new AbortController()
-    fetch(`/api/lp-history?id=${playerId}`, { signal: ctrl.signal })
-      .then(r => r.json())
-      .then((data: { characters?: Array<{ charId: number; isMaster: boolean; points: { at: number; lp: number }[] }> }) => {
-        const m = new Map<number, LpSeries>()
-        for (const c of data.characters ?? []) {
-          m.set(c.charId, { isMaster: c.isMaster, points: c.points })
-        }
-        setLpHistory(m)
-      })
-      .catch(() => {})
-    return () => ctrl.abort()
-  }, [playerId])
+  const lpHistory = useMemo(() => {
+    const m = new Map<number, LpSeries>()
+    for (const c of lpCharacters ?? []) m.set(c.charId, { isMaster: c.isMaster, points: c.points })
+    return m
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lpCharacters])
 
   const sid = Number(currentShortId)
 

@@ -1,8 +1,8 @@
 import { syncAndGetRankedBattles } from '@/lib/supabase/battles'
-import { buildLpCharacters } from '@/lib/supabase/ranked-stats'
+import { buildLpCharacters, buildMatchupRows } from '@/lib/supabase/ranked-stats'
 
-export type { LpPoint, LpCharacter } from '@/lib/supabase/ranked-stats'
-
+// Single sync feeding both LP/MR history and the matchup matrix. The player profile's History
+// and Stats tabs share this one call instead of hitting /api/lp-history (3x) + /api/matchups.
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
@@ -10,8 +10,9 @@ export async function GET(req: Request) {
 
   const battles = await syncAndGetRankedBattles(id, Number(id))
   const characters = buildLpCharacters(battles)
+  const { rows, totalBattles } = buildMatchupRows(battles)
 
-  return Response.json({ characters }, {
+  return Response.json({ characters, rows, totalBattles }, {
     headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=300' },
   })
 }

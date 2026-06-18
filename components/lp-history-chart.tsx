@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -8,10 +8,11 @@ import {
 } from 'recharts'
 import { Card, CardTitle } from '@/components/ui/card'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
-import type { LpCharacter } from '@/app/api/lp-history/route'
+import type { LpCharacter } from '@/lib/supabase/ranked-stats'
 
 interface LpHistoryChartProps {
-  playerId: string
+  characters: LpCharacter[] | null   // null = still loading
+  error?: boolean
 }
 
 function fmt(ts: number) {
@@ -34,23 +35,12 @@ function CustomTooltip({ active, payload, isMaster }: { active?: boolean; payloa
   )
 }
 
-export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
-  const [characters, setCharacters] = useState<LpCharacter[] | null>(null)
-  const [selected, setSelected]     = useState<number | null>(null)
-  const [error, setError]           = useState(false)
+export function LpHistoryChart({ characters, error = false }: LpHistoryChartProps) {
+  const [selected, setSelected] = useState<number | null>(null)
+  // Default to the most-played character until the user picks one.
+  const sel = selected ?? characters?.[0]?.charId ?? null
 
-  useEffect(() => {
-    fetch(`/api/lp-history?id=${playerId}`)
-      .then(r => r.json())
-      .then(data => {
-        const chars: LpCharacter[] = data.characters ?? []
-        setCharacters(chars)
-        if (chars.length > 0) setSelected(chars[0].charId)
-      })
-      .catch(() => setError(true))
-  }, [playerId])
-
-  const char = characters?.find(c => c.charId === selected)
+  const char = characters?.find(c => c.charId === sel)
 
   // Deduplicate by timestamp, filter zeros (pre-placement MR)
   const points = char
@@ -83,7 +73,7 @@ export function LpHistoryChart({ playerId }: LpHistoryChartProps) {
                 onClick={() => setSelected(c.charId)}
                 className={[
                   'flex items-center gap-1.5 px-2 py-1 rounded border text-xs transition-colors cursor-pointer',
-                  selected === c.charId
+                  sel === c.charId
                     ? 'bg-zinc-700 border-zinc-600 text-white'
                     : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-zinc-300',
                 ].join(' ')}

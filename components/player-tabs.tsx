@@ -1,13 +1,24 @@
 'use client'
 
-import { useState, type ReactNode } from 'react'
-import { MatchHistory } from '@/components/match-history'
-import { SessionSummary } from '@/components/session-summary'
-import { LpHistoryChart } from '@/components/lp-history-chart'
-import { MatchupChart } from '@/components/matchup-chart'
+import { useState, useEffect, type ReactNode } from 'react'
+import dynamic from 'next/dynamic'
 import { cn } from '@/lib/utils'
+import type { LpCharacter, MatchupRow } from '@/lib/supabase/ranked-stats'
+
+// Code-split the tab panels: their JS (incl. recharts) loads only when a tab is first opened,
+// keeping the overview-only path light.
+const MatchHistory   = dynamic(() => import('@/components/match-history').then(m => m.MatchHistory))
+const SessionSummary = dynamic(() => import('@/components/session-summary').then(m => m.SessionSummary))
+const LpHistoryChart = dynamic(() => import('@/components/lp-history-chart').then(m => m.LpHistoryChart))
+const MatchupChart   = dynamic(() => import('@/components/matchup-chart').then(m => m.MatchupChart))
 
 type Tab = 'overview' | 'history' | 'stats'
+
+interface RankedStats {
+  characters: LpCharacter[]
+  rows: MatchupRow[]
+  totalBattles: number
+}
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'overview', label: 'Overview' },
@@ -26,11 +37,26 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
   const [tab, setTab] = useState<Tab>('overview')
   // Tabs mount on first activation and stay mounted afterward, so switching back doesn't refetch.
   const [activated, setActivated] = useState<Set<Tab>>(() => new Set<Tab>(['overview']))
+  const [stats, setStats] = useState<RankedStats | null>(null)   // null = not loaded yet
+  const [statsError, setStatsError] = useState(false)
 
   function select(t: Tab) {
     setTab(t)
     setActivated((prev) => (prev.has(t) ? prev : new Set(prev).add(t)))
   }
+
+  // Single ranked-stats fetch shared by both History (deltas) and Stats (charts + matchups).
+  // Runs once, when either tab is first opened.
+  const needStats = activated.has('history') || activated.has('stats')
+  useEffect(() => {
+    if (!needStats) return
+    const ctrl = new AbortController()
+    fetch(`/api/ranked-stats?id=${playerId}`, { signal: ctrl.signal })
+      .then(r => r.json())
+      .then((d: RankedStats) => setStats(d))
+      .catch(() => { if (!ctrl.signal.aborted) setStatsError(true) })
+    return () => ctrl.abort()
+  }, [needStats, playerId])
 
   return (
     <div className="space-y-4">
@@ -63,15 +89,15 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
 
       {activated.has('history') && (
         <div className={cn('space-y-4', tab !== 'history' && 'hidden')}>
-          <SessionSummary playerId={playerId} currentShortId={shortId} />
-          <MatchHistory playerId={playerId} currentShortId={shortId} />
+          <SessionSummary playerId={playerId} currentShortId={shortId} lpCharacters={stats?.characters ?? null} />
+          <MatchHistory playerId={playerId} currentShortId={shortId} lpCharacters={stats?.characters ?? null} />
         </div>
       )}
 
       {activated.has('stats') && (
         <div className={cn('space-y-4', tab !== 'stats' && 'hidden')}>
-          <LpHistoryChart playerId={playerId} />
-          <MatchupChart playerId={playerId} />
+          <LpHistoryChart characters={stats?.characters ?? null} error={statsError} />
+          <MatchupChart rows={stats?.rows ?? null} totalBattles={stats?.totalBattles ?? 0} error={statsError} />
         </div>
       )}
     </div>

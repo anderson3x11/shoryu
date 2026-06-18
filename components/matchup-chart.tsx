@@ -1,13 +1,15 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { Card, CardTitle } from '@/components/ui/card'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
-import type { MatchupRow, MatchupVs } from '@/app/api/matchups/route'
+import type { MatchupRow, MatchupVs } from '@/lib/supabase/ranked-stats'
 
 interface MatchupChartProps {
-  playerId: string
+  rows: MatchupRow[] | null   // null = still loading
+  totalBattles: number
+  error?: boolean
 }
 
 function cellStyle(wins: number, total: number): React.CSSProperties {
@@ -47,21 +49,7 @@ function Cell({ vs }: { vs: MatchupVs | undefined }) {
   )
 }
 
-export function MatchupChart({ playerId }: MatchupChartProps) {
-  const [rows, setRows]         = useState<MatchupRow[] | null>(null)
-  const [totalBattles, setTotal] = useState(0)
-  const [error, setError]       = useState(false)
-
-  useEffect(() => {
-    fetch(`/api/matchups?id=${playerId}`)
-      .then(r => r.json())
-      .then(data => {
-        setRows(data.rows ?? [])
-        setTotal(data.totalBattles ?? 0)
-      })
-      .catch(() => setError(true))
-  }, [playerId])
-
+export function MatchupChart({ rows, totalBattles, error = false }: MatchupChartProps) {
   // Build the union of all opponent characters, sorted by total encounters
   const oppTotals: Record<number, { slug: string; name: string; total: number }> = {}
   if (rows) {

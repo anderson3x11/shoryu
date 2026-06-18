@@ -6,40 +6,37 @@ import { Card, CardTitle } from '@/components/ui/card'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import type { BucklerBattle } from '@/lib/buckler'
 import { getBattleWinner } from '@/lib/buckler'
+import type { LpCharacter } from '@/lib/supabase/ranked-stats'
 import { cn } from '@/lib/utils'
 
 interface SessionSummaryProps {
   playerId: string
   currentShortId: number | string
+  lpCharacters: LpCharacter[] | null   // shared ranked-stats data (for per-match deltas)
 }
 
 type LpSeries = { isMaster: boolean; points: { at: number; lp: number }[] }
 
-export function SessionSummary({ playerId, currentShortId }: SessionSummaryProps) {
+export function SessionSummary({ playerId, currentShortId, lpCharacters }: SessionSummaryProps) {
   const sid = Number(currentShortId)
   const [sessionBattles, setSessionBattles] = useState<BucklerBattle[]>([])
-  const [lpHistory, setLpHistory] = useState<Map<number, LpSeries>>(new Map())
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     const ctrl = new AbortController()
-    Promise.all([
-      fetch(`/api/session?id=${playerId}`, { signal: ctrl.signal }).then(r => r.json()),
-      fetch(`/api/lp-history?id=${playerId}`, { signal: ctrl.signal }).then(r => r.json()),
-    ])
-      .then(([s, lp]: [
-        { battles?: BucklerBattle[] },
-        { characters?: Array<{ charId: number; isMaster: boolean; points: { at: number; lp: number }[] }> },
-      ]) => {
-        setSessionBattles(s.battles ?? [])
-        const m = new Map<number, LpSeries>()
-        for (const c of lp.characters ?? []) m.set(c.charId, { isMaster: c.isMaster, points: c.points })
-        setLpHistory(m)
-      })
+    fetch(`/api/session?id=${playerId}`, { signal: ctrl.signal })
+      .then(r => r.json())
+      .then((s: { battles?: BucklerBattle[] }) => setSessionBattles(s.battles ?? []))
       .catch(() => {})
       .finally(() => setLoaded(true))
     return () => ctrl.abort()
   }, [playerId])
+
+  const lpHistory = useMemo(() => {
+    const m = new Map<number, LpSeries>()
+    for (const c of lpCharacters ?? []) m.set(c.charId, { isMaster: c.isMaster, points: c.points })
+    return m
+  }, [lpCharacters])
 
   const session = useMemo(() => {
     if (sessionBattles.length === 0) return null
