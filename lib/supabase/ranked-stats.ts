@@ -53,6 +53,26 @@ export interface SessionData {
   chars: SessionChar[]
 }
 
+// Current (post-latest-game) LP/MR per character, from the live profile. Buckler stores the
+// PRE-match value on each battle, so a game's delta = (next game's stored value) - (this value);
+// for a character's newest game there is no "next", so we fall back to this live value.
+export type CurrentByChar = Record<number, { lp: number; mr: number }>
+
+// Resolve the value immediately AFTER battle `atSec` for a character: the first series point newer
+// than it, or the live current value when this is the character's newest game.
+export function valueAfter(
+  series: { isMaster: boolean; points: LpPoint[] },
+  atSec: number,
+  isMaster: boolean,
+  current?: { lp: number; mr: number },
+): number | null {
+  for (let i = 0; i < series.points.length; i++) {
+    if (series.points[i].at > atSec) return series.points[i].lp
+  }
+  if (current) return isMaster ? current.mr : current.lp
+  return null
+}
+
 export function buildLpCharacters(battles: DBBattle[]): LpCharacter[] {
   type RawPoint = LpPoint & { isMasterMatch: boolean }
   const byChar: Record<number, { slug: string; name: string; isMaster: boolean; points: RawPoint[] }> = {}
@@ -97,7 +117,11 @@ const SESSION_GAP_SEC = 4 * 3600
 // Most-recent ranked "session": the run of battles whose consecutive gaps stay within 4h.
 // Computed from synced DB battles (ranked-only), so no extra Buckler fetch is needed.
 // Pass the lpCharacters series so per-match MR/LP deltas match the chart exactly.
-export function buildSession(battles: DBBattle[], lpCharacters: LpCharacter[]): SessionData | null {
+export function buildSession(
+  battles: DBBattle[],
+  lpCharacters: LpCharacter[],
+  currentByChar: CurrentByChar = {},
+): SessionData | null {
   if (battles.length < 2) return null
 
   const toSec = (iso: string) => Math.floor(new Date(iso).getTime() / 1000)
@@ -136,14 +160,10 @@ export function buildSession(battles: DBBattle[], lpCharacters: LpCharacter[]): 
     const isMaster = b.lp_after >= 25000
     const series = seriesByChar.get(b.char_id)
     if (!series || series.isMaster !== isMaster) continue
-    const current = isMaster ? b.mr_after : b.lp_after
-    const at = toSec(b.played_at)
-    let prior: LpPoint | null = null
-    for (let i = series.points.length - 1; i >= 0; i--) {
-      if (series.points[i].at < at) { prior = series.points[i]; break }
-    }
-    if (!prior) continue
-    cs.delta += current - prior.lp
+    const before = isMaster ? b.mr_after : b.lp_after   // Buckler stores the pre-match value
+    const after = valueAfter(series, toSec(b.played_at), isMaster, currentByChar[b.char_id])
+    if (after === null) continue
+    cs.delta += after - before
     cs.deltaCount++
     cs.isMaster = isMaster
   }

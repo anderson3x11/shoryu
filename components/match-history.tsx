@@ -8,7 +8,8 @@ import { getRankImageUrl, getEffectiveRankId } from '@/lib/constants/ranks'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import type { BucklerBattle } from '@/lib/buckler'
 import { getBattleWinner } from '@/lib/buckler'
-import type { LpCharacter } from '@/lib/supabase/ranked-stats'
+import { valueAfter } from '@/lib/supabase/ranked-stats'
+import type { LpCharacter, CurrentByChar } from '@/lib/supabase/ranked-stats'
 import { cn } from '@/lib/utils'
 
 interface MatchHistoryProps {
@@ -17,6 +18,7 @@ interface MatchHistoryProps {
   currentShortId: number | string
   playerId: string
   lpCharacters: LpCharacter[] | null   // shared ranked-stats data (for per-match deltas)
+  currentByChar?: CurrentByChar        // live LP/MR per character (for the newest game's delta)
 }
 
 type Mode = 'all' | 'rank' | 'casual' | 'hub' | 'custom'
@@ -60,7 +62,7 @@ const MATCH_TYPE_LABELS: Record<string, string> = {
   'Custom Room Match': 'Custom Room',
 }
 
-export function MatchHistory({ initialBattles = [], initialTotalPages = 1, currentShortId, playerId, lpCharacters }: MatchHistoryProps) {
+export function MatchHistory({ initialBattles = [], initialTotalPages = 1, currentShortId, playerId, lpCharacters, currentByChar }: MatchHistoryProps) {
   const [mode, setMode]           = useState<Mode>('all')
   const [page, setPage]           = useState(1)
   const [battles, setBattles]     = useState<BucklerBattle[]>(initialBattles)
@@ -169,9 +171,10 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
     [knownChars],
   )
 
-  // Per-replay LP/MR deltas. For each ranked battle, look up the immediately prior point in the
-  // player-wide history series for that character. Skip when the series mode (LP vs MR) doesn't
-  // match the current battle's mode — i.e. across a Master promotion the metric flips.
+  // Per-replay LP/MR deltas. Buckler stores the PRE-match value on each battle, so a game's change
+  // is (value after) - (value before) where "after" is the next-newer point in the player-wide
+  // series, or the live current value for the character's newest game. Skip across a Master
+  // promotion, where the metric flips between LP and MR.
   const deltasByReplay = useMemo(() => {
     const out = new Map<string, { delta: number; isMaster: boolean }>()
     for (const battle of battles) {
@@ -182,16 +185,13 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
       const isMaster = me.league_point >= 25000
       const series = lpHistory.get(me.playing_character_id)
       if (!series || series.isMaster !== isMaster) continue
-      const current = isMaster ? me.master_rating : me.league_point
-      let prior: { at: number; lp: number } | null = null
-      for (let i = series.points.length - 1; i >= 0; i--) {
-        if (series.points[i].at < battle.uploaded_at) { prior = series.points[i]; break }
-      }
-      if (!prior) continue
-      out.set(battle.replay_id, { delta: current - prior.lp, isMaster })
+      const before = isMaster ? me.master_rating : me.league_point
+      const after = valueAfter(series, battle.uploaded_at, isMaster, currentByChar?.[me.playing_character_id])
+      if (after === null) continue
+      out.set(battle.replay_id, { delta: after - before, isMaster })
     }
     return out
-  }, [battles, sid, lpHistory])
+  }, [battles, sid, lpHistory, currentByChar])
 
   return (
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">

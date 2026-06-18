@@ -3,7 +3,7 @@
 import { useState, useEffect, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import { cn } from '@/lib/utils'
-import type { LpCharacter, MatchupRow, SessionData } from '@/lib/supabase/ranked-stats'
+import type { LpCharacter, MatchupRow, SessionData, CurrentByChar } from '@/lib/supabase/ranked-stats'
 
 // Code-split the tab panels: their JS (incl. recharts) loads only when a tab is first opened,
 // keeping the overview-only path light.
@@ -19,6 +19,7 @@ interface RankedStats {
   rows: MatchupRow[]
   totalBattles: number
   session: SessionData | null
+  currentByChar: CurrentByChar
 }
 
 const TABS: { id: Tab; label: string }[] = [
@@ -91,7 +92,7 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
       {activated.has('history') && (
         <div className={cn('space-y-4', tab !== 'history' && 'hidden')}>
           <SessionSummary session={stats?.session ?? null} />
-          <MatchHistory playerId={playerId} currentShortId={shortId} lpCharacters={stats?.characters ?? null} />
+          <MatchHistory playerId={playerId} currentShortId={shortId} lpCharacters={stats?.characters ?? null} currentByChar={stats?.currentByChar} />
         </div>
       )}
 
