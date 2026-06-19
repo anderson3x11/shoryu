@@ -1463,6 +1463,10 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Advanced Strategy",
           url: "https://www.youtube.com/watch?v=cgEv-DY8fOU",
         },
+        {
+          title: "Oki Guide",
+          url: "https://www.youtube.com/watch?v=YMWoGKgd_0U",
+        },
       ],
       combos: [
         { title: "Combos", url: "https://www.youtube.com/watch?v=zNoEkB5Ql9I" },
@@ -1489,6 +1493,14 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
         {
           title: "Sideswitch",
           url: "https://www.youtube.com/watch?v=FhbKdJ_G5N8",
+        },
+        {
+          title: "Techs",
+          url: "https://www.youtube.com/watch?v=rOdtgZ4FSdE",
+        },
+        {
+          title: "Tips and tricks",
+          url: "https://www.youtube.com/watch?v=NU7Kvi3jOds",
         },
       ],
     },
