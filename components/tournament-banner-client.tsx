@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Trophy, ExternalLink, X } from 'lucide-react'
 
 type Props = {
@@ -13,13 +13,21 @@ type Props = {
 
 export function TournamentBannerClient({ name, url, date, location, label }: Props) {
   const [hidden, setHidden] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  // Expose the banner height so sticky chrome below the navbar (e.g. the profile
+  // tab bar) can offset itself, and collapse to 0 when dismissed.
+  useEffect(() => {
+    const h = hidden ? 0 : (ref.current?.offsetHeight ?? 0)
+    document.documentElement.style.setProperty('--banner-h', `${h}px`)
+  }, [hidden])
 
   if (hidden) return null
 
   const dismiss = () => setHidden(true)
 
   return (
-    <div className="relative overflow-hidden border-b-2 border-amber-500/60 bg-zinc-950">
+    <div ref={ref} className="sticky top-[57px] z-30 overflow-hidden border-b-2 border-amber-500/60 bg-zinc-950">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center gap-3 sm:gap-4">
         {/* Skewed countdown tag — echoes the beveled character tiles */}
         <div className="-skew-x-12 bg-amber-400 px-3 sm:px-4 py-1.5 flex items-center shrink-0">

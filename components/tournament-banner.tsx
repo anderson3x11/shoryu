@@ -4,7 +4,7 @@ import { TournamentBannerClient } from '@/components/tournament-banner-client'
 // How many weeks ahead the banner appears.
 // 0 = only during the tournament's own week (Monday onward) — production behavior.
 // 2 = show up to 2 weeks early — handy for testing so an upcoming event shows now.
-const BANNER_LEAD_WEEKS = 2
+const BANNER_LEAD_WEEKS = 0
 
 // Longer events (online leagues, group stages) aren't "weekend tournament" banners.
 const MAX_EVENT_DAYS = 10

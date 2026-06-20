@@ -61,7 +61,7 @@ function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors"
+      className="group flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors"
     >
       <span className="shrink-0" style={color ? { color } : undefined}>{icon}</span>
       <div className="min-w-0 flex-1">
@@ -79,7 +79,7 @@ function VideoCard({ href, title, thumbnail }: { href: string; title: string; th
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden hover:border-zinc-600 transition-colors"
+      className="group rounded-none border border-zinc-800 bg-zinc-900 overflow-hidden hover:border-zinc-600 transition-colors"
     >
       <div className="relative w-full aspect-video bg-zinc-800">
         {thumbnail && <Image src={thumbnail} alt={title} fill className="object-cover" unoptimized />}
@@ -125,7 +125,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
   return (
     <div className="space-y-8">
-      <div className="relative w-full h-64 rounded-xl overflow-hidden border border-zinc-800">
+      <div className="relative w-full h-64 rounded-none overflow-hidden border border-zinc-800">
         <Image
           src={getCharacterImageUrl(char.slug)}
           alt={char.name}
@@ -137,7 +137,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
         <h1
           className="absolute bottom-1 left-6 font-title text-9xl leading-none text-white uppercase"
-          style={{ textShadow: `0 0 40px ${char.color}60`, letterSpacing: '0.03em' }}
+          style={{ letterSpacing: '0.03em' }}
         >
           {char.name}
         </h1>
@@ -209,11 +209,11 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
                 )
                 return player.liquipedia ? (
                   <a key={player.name} href={player.liquipedia} target="_blank" rel="noopener noreferrer"
-                    className="group flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-amber-700/60 hover:bg-zinc-800/60 transition-colors">
+                    className="group flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-amber-700/60 hover:bg-zinc-800/60 transition-colors">
                     {inner}
                   </a>
                 ) : (
-                  <div key={player.name} className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3">
+                  <div key={player.name} className="flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3">
                     {inner}
                   </div>
                 )

@@ -29,9 +29,9 @@ function PlayerCard({ banner }: { banner: BucklerFighterBanner }) {
     <Link
       href={`/player/${info.short_id}`}
       prefetch={false}
-      className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors"
+      className="flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors"
     >
-      <div className="relative w-12 h-12 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0">
+      <div className="relative w-12 h-12 rounded-none overflow-hidden bg-zinc-800 flex-shrink-0">
         {charSlug && (
           <Image
             src={getCharacterImageUrl(charSlug)}
@@ -79,7 +79,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Search</h1>
+        <div className="flex items-center gap-3">
+          <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
+          <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Search</h1>
+        </div>
         {query && (
           <p className="text-sm text-zinc-300">
             {results.length > 0
@@ -106,7 +109,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           {page > 1 ? (
             <Link
               href={`/search?q=${encodeURIComponent(query)}&page=${page - 1}`}
-              className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-zinc-200 transition-colors"
+              className="text-xs px-3 py-1.5 rounded-none border border-zinc-700 text-zinc-300 hover:text-zinc-200 transition-colors"
             >
               ← Prev
             </Link>
@@ -115,7 +118,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           {page < totalPages ? (
             <Link
               href={`/search?q=${encodeURIComponent(query)}&page=${page + 1}`}
-              className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-zinc-200 transition-colors"
+              className="text-xs px-3 py-1.5 rounded-none border border-zinc-700 text-zinc-300 hover:text-zinc-200 transition-colors"
             >
               Next →
             </Link>

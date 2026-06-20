@@ -27,7 +27,7 @@ function PlayerCell({ player, className }: { player: Player; className?: string 
       )}
       {player.charUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={proxy(player.charUrl)} alt={player.charAlt ?? ''} className="h-5 w-5 object-contain rounded-sm shrink-0" />
+        <img src={proxy(player.charUrl)} alt={player.charAlt ?? ''} className="h-5 w-5 object-contain rounded-none shrink-0" />
       )}
       {player.name}
     </a>
@@ -75,7 +75,7 @@ function YearSection({ year, tournaments }: TournamentYear) {
   return (
     <section className="space-y-2">
       <h2 className="font-bebas text-4xl tracking-widest text-zinc-100">{year}</h2>
-      <div className="overflow-x-auto rounded-lg border border-zinc-800">
+      <div className="overflow-x-auto rounded-none border border-zinc-800">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-zinc-800 bg-zinc-900">
@@ -103,7 +103,10 @@ export default async function TournamentsPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Tournaments</h1>
+      <div className="flex items-center gap-3">
+        <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
+        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Tournaments</h1>
+      </div>
 
       {data.length === 0 && (
         <p className="text-zinc-300">Tournament data temporarily unavailable.</p>

@@ -24,11 +24,11 @@ function RankingCard({ entry }: { entry: BucklerRankingEntry }) {
   const rank = getRank(rankId)
 
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors">
+    <div className="flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors">
       <span className="text-xl text-zinc-300 w-8 text-right flex-shrink-0">
         #{entry.master_rating_ranking}
       </span>
-      <div className="relative w-12 h-12 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0">
+      <div className="relative w-12 h-12 rounded-none overflow-hidden bg-zinc-800 flex-shrink-0">
         <Image
           src={getCharacterImageUrl(charSlug)}
           alt={entry.character_name}
@@ -77,7 +77,10 @@ export default async function RankingPage({
   return (
     <div className="space-y-6">
       <div className="flex items-baseline justify-between">
-        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Master Ranking</h1>
+        <div className="flex items-center gap-3">
+          <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
+          <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Master Ranking</h1>
+        </div>
         <span className="text-sm text-zinc-300">Page {page}</span>
       </div>
 
@@ -98,12 +101,12 @@ export default async function RankingPage({
         {page > 1 ? (
           <Link
             href={`/ranking?page=${page - 1}`}
-            className="px-4 py-2 rounded-md border border-zinc-700 text-sm text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
+            className="px-4 py-2 rounded-none border border-zinc-700 text-sm text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
           >
             ← Previous
           </Link>
         ) : (
-          <span className="px-4 py-2 rounded-md border border-zinc-800 text-sm text-zinc-300 cursor-not-allowed">
+          <span className="px-4 py-2 rounded-none border border-zinc-800 text-sm text-zinc-300 cursor-not-allowed">
             ← Previous
           </span>
         )}
@@ -111,12 +114,12 @@ export default async function RankingPage({
         {page < totalPages ? (
           <Link
             href={`/ranking?page=${page + 1}`}
-            className="px-4 py-2 rounded-md border border-zinc-700 text-sm text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
+            className="px-4 py-2 rounded-none border border-zinc-700 text-sm text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
           >
             Next →
           </Link>
         ) : (
-          <span className="px-4 py-2 rounded-md border border-zinc-800 text-sm text-zinc-300 cursor-not-allowed">
+          <span className="px-4 py-2 rounded-none border border-zinc-800 text-sm text-zinc-300 cursor-not-allowed">
             Next →
           </span>
         )}

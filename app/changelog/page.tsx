@@ -11,7 +11,10 @@ export default function ChangelogPage() {
   return (
     <div className="max-w-2xl mx-auto py-8 space-y-10">
       <ChangelogSeen />
-      <h1 className="font-bebas text-7xl">Changelog</h1>
+      <div className="flex items-center gap-3">
+        <span className="block w-2 h-11 sm:h-14 -skew-x-12 bg-amber-400 shrink-0" />
+        <h1 className="font-bebas text-7xl">Changelog</h1>
+      </div>
 
       <div className="space-y-8">
         {CHANGELOG.map((entry) => (

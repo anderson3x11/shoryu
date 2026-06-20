@@ -22,10 +22,10 @@ function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighter
   const rank = rankId != null ? getRank(rankId) : null
 
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors">
+    <div className="flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors">
 
       {/* Character portrait — links to profile */}
-      <Link href={`/player/${player.short_id}`} prefetch={false} className="relative w-12 h-12 rounded-md overflow-hidden bg-zinc-800 flex-shrink-0 block">
+      <Link href={`/player/${player.short_id}`} prefetch={false} className="relative w-12 h-12 rounded-none overflow-hidden bg-zinc-800 flex-shrink-0 block">
         {charSlug && (
           <Image
             src={getCharacterImageUrl(charSlug)}
@@ -45,19 +45,19 @@ function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighter
         <div className="flex items-center gap-1.5 flex-wrap">
           {player.twitch && (
             <a href={`https://twitch.tv/${player.twitch}`} target="_blank" rel="noopener noreferrer"
-              className="text-xs px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 hover:bg-purple-800/60 transition-colors">
+              className="text-xs px-2 py-0.5 rounded-none bg-purple-900/60 text-purple-300 hover:bg-purple-800/60 transition-colors">
               Twitch
             </a>
           )}
           {player.twitter && (
             <a href={`https://x.com/${player.twitter}`} target="_blank" rel="noopener noreferrer"
-              className="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 hover:bg-sky-500/30 transition-colors">
+              className="text-xs px-2 py-0.5 rounded-none bg-sky-500/20 text-sky-400 hover:bg-sky-500/30 transition-colors">
               Twitter
             </a>
           )}
           {player.youtube && (
             <a href={`https://youtube.com/@${player.youtube}`} target="_blank" rel="noopener noreferrer"
-              className="text-xs px-2 py-0.5 rounded bg-red-900/60 text-red-300 hover:bg-red-800/60 transition-colors">
+              className="text-xs px-2 py-0.5 rounded-none bg-red-900/60 text-red-300 hover:bg-red-800/60 transition-colors">
               YouTube
             </a>
           )}
@@ -95,7 +95,10 @@ export default async function ProsPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
+      <div className="flex items-center gap-3">
+        <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
+        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
+      </div>
 
       <section className="space-y-3">
         <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Pro Players</h2>

@@ -37,7 +37,7 @@ function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors"
+      className="group flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors"
     >
       <span className="shrink-0" style={color ? { color } : undefined}>{icon}</span>
       <div className="min-w-0 flex-1">
@@ -55,7 +55,7 @@ function VideoCard({ href, title, thumbnail }: { href: string; title: string; th
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group rounded-lg border border-zinc-800 bg-zinc-900 overflow-hidden hover:border-zinc-600 transition-colors"
+      className="group rounded-none border border-zinc-800 bg-zinc-900 overflow-hidden hover:border-zinc-600 transition-colors"
     >
       <div className="relative w-full aspect-video bg-zinc-800">
         {thumbnail && <Image src={thumbnail} alt={title} fill className="object-cover" unoptimized />}
@@ -81,7 +81,10 @@ export default async function GuidesPage() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
-      <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Guides</h1>
+      <div className="flex items-center gap-3">
+        <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
+        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Guides</h1>
+      </div>
 
       <div className="space-y-6">
         <section className="space-y-2">

@@ -11,7 +11,10 @@ export default function AboutPage() {
     <div className="max-w-2xl mx-auto py-8 space-y-12">
 
       <div>
-        <h1 className="font-bebas text-7xl mb-3">About Shoryu</h1>
+        <div className="flex items-center gap-3 mb-3">
+          <span className="block w-2 h-11 sm:h-14 -skew-x-12 bg-amber-400 shrink-0" />
+          <h1 className="font-bebas text-7xl">About Shoryu</h1>
+        </div>
         <p className="text-zinc-300 leading-relaxed">
           Shoryu is a fan-made stats site for Street Fighter 6. It tracks player rankings,
           match history, character data, and tournament results. The kind of site I wished

@@ -36,7 +36,7 @@ function SearchItem({ char, onSelect }: { char: StreedleCharacter; onSelect: () 
       onMouseDown={onSelect}
       className="w-full flex items-center gap-4 px-4 py-3 hover:bg-zinc-700 text-left transition-colors"
     >
-      <div className="relative w-12 h-12 rounded overflow-hidden flex-shrink-0 bg-zinc-700">
+      <div className="relative w-12 h-12 rounded-none overflow-hidden flex-shrink-0 bg-zinc-700">
         {!imgErr ? (
           <Image src={`/characters/${char.id}.png`} alt={char.name} fill className="object-cover object-top" unoptimized onError={() => setImgErr(true)} />
         ) : (
@@ -77,10 +77,10 @@ function CharacterSearch({ guessedIds, onGuess }: {
         onFocus={() => setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
         placeholder="Type a character name..."
-        className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-5 py-3.5 text-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
+        className="w-full bg-zinc-800 border border-zinc-700 rounded-none px-5 py-3.5 text-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
       />
       {open && filtered.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-zinc-800 border border-zinc-700 rounded-lg overflow-hidden shadow-xl max-h-80 overflow-y-auto">
+        <div className="absolute z-50 w-full mt-1 bg-zinc-800 border border-zinc-700 rounded-none overflow-hidden shadow-xl max-h-80 overflow-y-auto">
           {filtered.map(char => (
             <SearchItem key={char.id} char={char} onSelect={() => select(char)} />
           ))}
@@ -138,9 +138,9 @@ export function StreedleGame() {
       {/* Legend */}
       <div className="flex flex-col items-center gap-3 text-base text-zinc-300">
         <div className="flex flex-wrap justify-center gap-6">
-          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-sm bg-green-800 border border-green-600 inline-block" /> Correct</span>
-          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-sm bg-yellow-800 border border-yellow-600 inline-block" /> Partial match</span>
-          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-sm bg-red-900/40 border border-red-800 inline-block" /> Wrong</span>
+          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-none bg-green-800 border border-green-600 inline-block" /> Correct</span>
+          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-none bg-yellow-800 border border-yellow-600 inline-block" /> Partial match</span>
+          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-none bg-red-900/40 border border-red-800 inline-block" /> Wrong</span>
         </div>
         <div className="flex flex-wrap justify-center gap-6 text-zinc-400 text-sm">
           <span>Yellow on Country: same continent</span>
@@ -150,7 +150,7 @@ export function StreedleGame() {
 
       {/* Win message */}
       {won && (
-        <div className="bg-green-900/30 border border-green-700 rounded-lg px-5 py-4 text-center">
+        <div className="bg-green-900/30 border border-green-700 rounded-none px-5 py-4 text-center">
           <p className="text-green-400 font-semibold text-lg">
             Correct! You got it in {guessIds.length} {guessIds.length === 1 ? 'guess' : 'guesses'}.
           </p>
@@ -159,8 +159,8 @@ export function StreedleGame() {
 
       {/* Give-up reveal */}
       {gaveUp && (
-        <div className="bg-zinc-800 border border-zinc-700 rounded-lg px-5 py-4 flex items-center gap-5">
-          <div className="relative w-20 h-20 overflow-hidden rounded flex-shrink-0">
+        <div className="bg-zinc-800 border border-zinc-700 rounded-none px-5 py-4 flex items-center gap-5">
+          <div className="relative w-20 h-20 overflow-hidden rounded-none flex-shrink-0">
             <Image src={`/characters/${target.id}.png`} alt={target.name} fill className="object-cover object-top" unoptimized />
           </div>
           <div>
@@ -191,7 +191,7 @@ export function StreedleGame() {
 
       {/* Guesses table */}
       {guesses.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border border-zinc-800">
+        <div className="overflow-x-auto rounded-none border border-zinc-800">
           <table className="w-full text-sm border-collapse" style={{ minWidth: 820 }}>
             <thead>
               <tr className="border-b border-zinc-800 bg-zinc-900/50">
@@ -208,7 +208,7 @@ export function StreedleGame() {
                   <tr key={g.id + guessIds.indexOf(g.id)} className="border-b border-zinc-800 last:border-0">
                     <td className="px-3 py-2">
                       <div className="flex items-center gap-2">
-                        <div className="relative w-10 h-10 overflow-hidden rounded flex-shrink-0 bg-zinc-800">
+                        <div className="relative w-10 h-10 overflow-hidden rounded-none flex-shrink-0 bg-zinc-800">
                           <Image src={`/characters/${g.id}.png`} alt={g.name} fill className="object-cover object-top" unoptimized />
                         </div>
                         <span className={`font-medium truncate ${g.id === target.id ? 'text-green-400' : 'text-zinc-200'}`}>
@@ -222,7 +222,7 @@ export function StreedleGame() {
                       const value = Array.isArray(raw) ? raw.join(' / ') : raw as string
                       return (
                         <td key={col.key} className="px-2 py-2">
-                          <div className={`rounded px-2 py-1.5 text-center ${cellClass(r.status)}`}>
+                          <div className={`rounded-none px-2 py-1.5 text-center ${cellClass(r.status)}`}>
                             {value}{r.arrow && <span className="ml-1 text-xs opacity-80">{r.arrow === 'up' ? '▲' : '▼'}</span>}
                           </div>
                         </td>

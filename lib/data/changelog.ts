@@ -5,6 +5,15 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-06-20",
+    items: [
+      "Fresh new look across the whole site: a sharper fighting-game style with a bold new accent color",
+      "New tournament banner: a heads up at the top of the site when a big tournament is happening that week",
+      "Revamped the matchups section with clearer, easier-to-read win rates per character",
+      "Redesigned the profile header, and fixed missing country flags (Monaco and more)",
+    ],
+  },
+  {
     date: "2026-06-16",
     items: [
       "Battle history now stored in a database, matchup chart and LP/MR history get faster on every visit",

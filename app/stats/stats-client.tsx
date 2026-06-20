@@ -47,7 +47,10 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Stats</h1>
+        <div className="flex items-center gap-3">
+          <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
+          <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Stats</h1>
+        </div>
         <p className="text-zinc-300 text-sm mt-1">Character Usage - {formatMonth(month)}</p>
       </div>
 
@@ -57,7 +60,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
             <button
               key={i}
               onClick={() => setControl(i)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                 control === i
                   ? 'bg-zinc-100 text-zinc-900'
                   : 'bg-zinc-800 text-zinc-300 hover:text-zinc-200'
@@ -77,7 +80,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
             <button
               key={i}
               onClick={() => setLeague(i)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors cursor-pointer ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-none text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors cursor-pointer ${
                 league === i
                   ? 'bg-zinc-100 text-zinc-900'
                   : 'bg-zinc-800 text-zinc-300 hover:text-zinc-200'
@@ -109,7 +112,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
               </span>
 
               {/* Portrait */}
-              <div className="relative w-10 h-10 flex-shrink-0 rounded-md overflow-hidden" style={{ backgroundColor: `${color}20` }}>
+              <div className="relative w-10 h-10 flex-shrink-0 rounded-none overflow-hidden" style={{ backgroundColor: `${color}20` }}>
                 <Image
                   src={`/characters/${char.character_tool_name}.png`}
                   alt={name}
