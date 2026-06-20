@@ -34,7 +34,7 @@ export function PlayCounts({ playData }: PlayCountsProps) {
 
   const modes = [
     { label: 'Ranked',      count: stats.rank_match_play_count ?? 0,        color: '#ef4444' },
-    { label: 'Casual',      count: stats.casual_match_play_count ?? 0,      color: '#60a5fa' },
+    { label: 'Casual',      count: stats.casual_match_play_count ?? 0,      color: '#fbbf24' },
     { label: 'Battle Hub',  count: stats.battle_hub_match_play_count ?? 0,  color: '#a78bfa' },
     { label: 'Custom Room', count: stats.custom_room_match_play_count ?? 0, color: '#34d399' },
   ]
@@ -44,7 +44,10 @@ export function PlayCounts({ playData }: PlayCountsProps) {
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0 flex flex-col">
       {/* Total */}
       <div className="px-4 pt-4 pb-3 border-b border-zinc-800 flex-shrink-0">
-        <p className="text-[11px] text-zinc-300 uppercase tracking-wider mb-1">Matches Played</p>
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="block w-1.5 h-5 -skew-x-12 bg-amber-400" />
+          <p className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">Matches Played</p>
+        </div>
         <p className="text-4xl font-bold text-white tabular-nums">{total.toLocaleString()}</p>
       </div>
 
@@ -57,7 +60,7 @@ export function PlayCounts({ playData }: PlayCountsProps) {
               key={label}
               className="flex items-center gap-3 px-4 py-3 border-b border-zinc-800"
             >
-              <div className="w-0.5 self-stretch rounded-full flex-shrink-0" style={{ background: color }} />
+              <div className="w-0.5 self-stretch flex-shrink-0" style={{ background: color }} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline justify-between mb-1.5">
                   <span className="text-xs text-zinc-300">{label}</span>
@@ -65,9 +68,9 @@ export function PlayCounts({ playData }: PlayCountsProps) {
                     {count.toLocaleString()}
                   </span>
                 </div>
-                <div className="h-0.5 bg-zinc-800 rounded-full overflow-hidden">
+                <div className="h-0.5 bg-zinc-800 overflow-hidden">
                   <div
-                    className="h-full rounded-full"
+                    className="h-full"
                     style={{ width: `${pct}%`, background: color }}
                   />
                 </div>
@@ -83,7 +86,10 @@ export function PlayCounts({ playData }: PlayCountsProps) {
       {/* Time played */}
       {playtimes.length > 0 && (
         <div className="px-4 py-3 flex-shrink-0">
-          <p className="text-[11px] text-zinc-300 uppercase tracking-wider mb-2.5">Time Played</p>
+          <div className="flex items-center gap-2 mb-2.5">
+            <span className="block w-1.5 h-4 -skew-x-12 bg-amber-400" />
+            <p className="font-bebas text-lg tracking-widest text-zinc-100 leading-none">Time Played</p>
+          </div>
           <div className="space-y-1.5">
             {playtimes.map((pt) => (
               <div key={pt.content_type} className="flex justify-between text-xs">

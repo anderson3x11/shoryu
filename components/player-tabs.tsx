@@ -66,15 +66,15 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
           the main container's px-6 so scrolled content doesn't peek around the edges. */}
       <div className="sticky top-14 z-30 -mx-6 px-6 py-2 bg-zinc-950/85 backdrop-blur-sm">
         <div className="flex justify-center">
-          <div className="inline-flex gap-1 rounded-lg bg-zinc-900 border border-zinc-800 p-1">
+          <div className="inline-flex gap-1 rounded-none bg-zinc-900 border border-zinc-800 p-1">
             {TABS.map((t) => (
               <button
                 key={t.id}
                 onClick={() => select(t.id)}
                 className={cn(
-                  'text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1.5 rounded-md transition-colors cursor-pointer whitespace-nowrap',
+                  'text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1.5 rounded-none transition-colors cursor-pointer whitespace-nowrap',
                   tab === t.id
-                    ? 'bg-sky-500 text-white'
+                    ? 'bg-amber-400 text-zinc-950'
                     : 'text-zinc-300 hover:text-zinc-200',
                 )}
               >

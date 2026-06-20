@@ -204,7 +204,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
               key={m.id}
               onClick={() => switchMode(m.id)}
               className={cn(
-                'text-xs px-3 py-1 rounded border transition-colors cursor-pointer',
+                'text-xs px-3 py-1 rounded-none border transition-colors cursor-pointer',
                 mode === m.id
                   ? 'bg-zinc-700 border-zinc-600 text-white'
                   : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-zinc-300'
@@ -222,7 +222,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
           <button
             onClick={() => selectChar(null)}
             className={cn(
-              'text-xs px-2.5 py-0.5 rounded border transition-colors cursor-pointer',
+              'text-xs px-2.5 py-0.5 rounded-none border transition-colors cursor-pointer',
               charFilter === null
                 ? 'bg-zinc-700 border-zinc-600 text-white'
                 : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-zinc-300'
@@ -236,7 +236,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
               onClick={() => selectChar(slug)}
               title={name}
               className={cn(
-                'relative w-7 h-7 rounded overflow-hidden border transition-all cursor-pointer flex-shrink-0',
+                'relative w-7 h-7 rounded-none overflow-hidden border transition-all cursor-pointer flex-shrink-0',
                 charFilter === slug ? 'border-zinc-400 opacity-100' : 'border-zinc-700 opacity-50 hover:opacity-90'
               )}
             >
@@ -250,7 +250,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
       <div className={cn('mt-3 divide-y divide-zinc-800/60 transition-opacity', pending && 'opacity-40')}>
         {initialLoading ? (
           <div className="px-4 py-10 flex items-center justify-center gap-2 text-sm text-zinc-300">
-            <span className="w-4 h-4 rounded-full border-2 border-zinc-600 border-t-sky-400 animate-spin" />
+            <span className="w-4 h-4 rounded-full border-2 border-zinc-600 border-t-amber-400 animate-spin" />
             Loading matches…
           </div>
         ) : battles.length === 0 ? (
@@ -399,7 +399,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
           <button
             onClick={() => goPage(page - 1)}
             disabled={page <= 1 || pending}
-            className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+            className="text-xs px-3 py-1.5 rounded-none border border-zinc-700 text-zinc-300 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
             ← Prev
           </button>
@@ -409,7 +409,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
           <button
             onClick={() => goPage(page + 1)}
             disabled={page >= totalPages || pending}
-            className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+            className="text-xs px-3 py-1.5 rounded-none border border-zinc-700 text-zinc-300 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
             Next →
           </button>

@@ -97,7 +97,10 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
     <Card className="absolute inset-0 bg-zinc-900 border-zinc-800 flex flex-col py-0 gap-0">
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-4 pb-3 flex-shrink-0">
-        <CardTitle className="text-zinc-300 uppercase tracking-wider">Characters</CardTitle>
+        <div className="flex items-center gap-2">
+          <span className="block w-1.5 h-5 -skew-x-12 bg-amber-400" />
+          <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">Characters</CardTitle>
+        </div>
 
         {phases.length > 1 && (
           <div className="flex gap-1 flex-wrap justify-end">
@@ -105,7 +108,7 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
               <button
                 key={p.id}
                 onClick={() => setActivePhaseId(p.id)}
-                className={`text-[11px] px-2 py-0.5 rounded border border-zinc-700 transition-colors ${
+                className={`text-[11px] px-2 py-0.5 rounded-none border border-zinc-700 transition-colors ${
                   activePhaseId === p.id
                     ? 'bg-zinc-600 text-white'
                     : 'bg-zinc-900 text-zinc-300 hover:text-zinc-200'

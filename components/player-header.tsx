@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Card } from '@/components/ui/card'
 import { getRankImageUrl, getRank, TIER_COLORS, showsMasterRating, getEffectiveRankId } from '@/lib/constants/ranks'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
+import { countryFlag } from '@/lib/constants/flags'
 import { getProPlayer } from '@/lib/data/pro-players'
 import type { BucklerFighterBanner } from '@/lib/buckler'
 
@@ -18,22 +19,6 @@ const PLATFORM_ICONS: Record<string, string> = {
   cross:      'Cross',
 }
 
-const FLAG: Record<string, string> = {
-  'Japan': '🇯🇵', 'France': '🇫🇷', 'United States': '🇺🇸', 'Germany': '🇩🇪',
-  'United Kingdom': '🇬🇧', 'South Korea': '🇰🇷', 'Brazil': '🇧🇷', 'Canada': '🇨🇦',
-  'Australia': '🇦🇺', 'Italy': '🇮🇹', 'Spain': '🇪🇸', 'Mexico': '🇲🇽',
-  'China': '🇨🇳', 'Taiwan': '🇹🇼', 'Russia': '🇷🇺', 'Netherlands': '🇳🇱',
-  'Sweden': '🇸🇪', 'Portugal': '🇵🇹', 'Argentina': '🇦🇷', 'Chile': '🇨🇱',
-  'Colombia': '🇨🇴', 'Saudi Arabia': '🇸🇦', 'Thailand': '🇹🇭', 'Philippines': '🇵🇭',
-  'Indonesia': '🇮🇩', 'Singapore': '🇸🇬', 'Malaysia': '🇲🇾', 'Vietnam': '🇻🇳',
-  'Hong Kong': '🇭🇰', 'New Zealand': '🇳🇿', 'South Africa': '🇿🇦', 'Poland': '🇵🇱',
-  'Ukraine': '🇺🇦', 'Belgium': '🇧🇪', 'Switzerland': '🇨🇭', 'Austria': '🇦🇹',
-  'Turkey': '🇹🇷', 'India': '🇮🇳', 'Morocco': '🇲🇦', 'Egypt': '🇪🇬',
-  'Finland': '🇫🇮', 'Denmark': '🇩🇰', 'Norway': '🇳🇴', 'Czech Republic': '🇨🇿',
-  'Romania': '🇷🇴', 'Hungary': '🇭🇺', 'Greece': '🇬🇷', 'Peru': '🇵🇪',
-  'Venezuela': '🇻🇪', 'Pakistan': '🇵🇰', 'Algeria': '🇩🇿', 'Tunisia': '🇹🇳',
-}
-
 export function PlayerHeader({ banner }: PlayerHeaderProps) {
   const info = banner.personal_info
   const proPlayer = getProPlayer(info.short_id)
@@ -41,7 +26,7 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
   const leagueInfo = banner.favorite_character_league_info
   const mr = leagueInfo?.master_rating ?? 0
   const lp = leagueInfo?.league_point ?? 0
-  const flag = banner.home_name ? (FLAG[banner.home_name] ?? '') : ''
+  const flag = countryFlag(banner.home_name)
   const effectiveRankId = getEffectiveRankId(
     leagueInfo?.league_rank ?? 39,
     leagueInfo?.master_league ?? 0,
@@ -54,11 +39,11 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
   const hasMR = showsMasterRating(leagueInfo?.league_rank ?? 39) && mr > 0
 
   return (
-    <Card className="bg-zinc-900 py-0 gap-0">
-      <div className="flex items-center gap-3 sm:gap-4 px-3 sm:px-5 py-3 sm:py-4">
+    <Card className="bg-zinc-900 py-0 gap-0 overflow-hidden">
+      <div className="flex items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5">
 
         {/* Character art — crops to face, no bg, no border */}
-        <div className="relative w-16 h-16 sm:w-[88px] sm:h-[88px] flex-shrink-0">
+        <div className="relative w-20 h-20 sm:w-28 sm:h-28 flex-shrink-0">
           {charSlug && (
             <Image
               src={getCharacterImageUrl(charSlug)}
@@ -70,13 +55,13 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
           )}
         </div>
 
-        {/* Player info */}
-        <div className="flex-1 min-w-0 space-y-1">
+        {/* Identity */}
+        <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
           <a
             href={`https://www.streetfighter.com/6/buckler/profile/${info.short_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-2xl font-bold text-white leading-none hover:text-zinc-300 transition-colors"
+            className="text-2xl sm:text-3xl font-bold text-white leading-none hover:text-zinc-300 transition-colors w-fit"
           >
             {info.fighter_id}
           </a>
@@ -86,29 +71,29 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
               <span className="text-sm text-zinc-300">{banner.home_name}</span>
             )}
             {info.platform_tool_name && (
-              <span className="text-xs bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded">
+              <span className="text-xs bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded-none">
                 {PLATFORM_ICONS[info.platform_tool_name] ?? info.platform_name}
               </span>
             )}
+            <span className="text-xs text-zinc-500 tabular-nums">#{info.short_id}</span>
           </div>
-          <p className="text-xs text-zinc-300 tabular-nums">#{info.short_id}</p>
           {proPlayer && (
             <div className="flex items-center gap-2 flex-wrap pt-0.5">
               {proPlayer.twitch && (
                 <a href={`https://twitch.tv/${proPlayer.twitch}`} target="_blank" rel="noopener noreferrer"
-                  className="text-xs px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 hover:bg-purple-800/60 transition-colors">
+                  className="text-xs px-2 py-0.5 rounded-none bg-purple-900/60 text-purple-300 hover:bg-purple-800/60 transition-colors">
                   Twitch
                 </a>
               )}
               {proPlayer.twitter && (
                 <a href={`https://x.com/${proPlayer.twitter}`} target="_blank" rel="noopener noreferrer"
-                  className="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 hover:bg-sky-500/30 transition-colors">
+                  className="text-xs px-2 py-0.5 rounded-none bg-sky-500/20 text-sky-400 hover:bg-sky-500/30 transition-colors">
                   Twitter
                 </a>
               )}
               {proPlayer.youtube && (
                 <a href={`https://youtube.com/@${proPlayer.youtube}`} target="_blank" rel="noopener noreferrer"
-                  className="text-xs px-2 py-0.5 rounded bg-red-900/60 text-red-300 hover:bg-red-800/60 transition-colors">
+                  className="text-xs px-2 py-0.5 rounded-none bg-red-900/60 text-red-300 hover:bg-red-800/60 transition-colors">
                   YouTube
                 </a>
               )}
@@ -121,30 +106,33 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
           )}
         </div>
 
-        {/* Rank — landscape container kills the transparent bottom padding in the PNG */}
-        <div className="flex-shrink-0 flex flex-col items-center justify-center gap-1">
-          <div className="relative w-24 h-[60px] sm:w-40 sm:h-[100px]">
-            <Image
-              src={getRankImageUrl(effectiveRankId)}
-              alt={rank.name}
-              fill
-              className="object-contain drop-shadow-md"
-              unoptimized
-            />
+        {/* Rank */}
+        <div className="flex items-center gap-4 sm:gap-5 flex-shrink-0">
+          <div className="w-px self-stretch bg-zinc-800 hidden sm:block" />
+          <div className="flex flex-col items-center justify-center gap-1">
+            <div className="relative w-24 h-[60px] sm:w-44 sm:h-[110px]">
+              <Image
+                src={getRankImageUrl(effectiveRankId)}
+                alt={rank.name}
+                fill
+                className="object-contain drop-shadow-md"
+                unoptimized
+              />
+            </div>
+            {isLegend && (leagueInfo?.master_rating_ranking ?? 0) > 0 ? (
+              <span className="text-lg font-bold tabular-nums" style={{ color: rankColor }}>
+                #{leagueInfo!.master_rating_ranking}
+              </span>
+            ) : hasMR ? (
+              <span className="text-lg font-bold tabular-nums" style={{ color: rankColor }}>
+                {mr.toLocaleString()} MR
+              </span>
+            ) : lp > 0 ? (
+              <span className="text-lg font-bold tabular-nums text-zinc-200">
+                {lp.toLocaleString()} LP
+              </span>
+            ) : null}
           </div>
-          {isLegend && (leagueInfo?.master_rating_ranking ?? 0) > 0 ? (
-            <span className="text-base font-bold tabular-nums" style={{ color: rankColor }}>
-              #{leagueInfo!.master_rating_ranking}
-            </span>
-          ) : hasMR ? (
-            <span className="text-base font-bold tabular-nums" style={{ color: rankColor }}>
-              {mr.toLocaleString()} MR
-            </span>
-          ) : lp > 0 ? (
-            <span className="text-base font-bold tabular-nums text-zinc-200">
-              {lp.toLocaleString()} LP
-            </span>
-          ) : null}
         </div>
 
       </div>

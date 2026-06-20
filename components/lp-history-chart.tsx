@@ -28,9 +28,9 @@ function fmtFull(ts: number) {
 function CustomTooltip({ active, payload, isMaster }: { active?: boolean; payload?: Array<{ value: number; payload: { at: number } }>; isMaster: boolean }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-zinc-800 border border-zinc-700 rounded px-3 py-2 text-xs">
+    <div className="bg-zinc-800 border border-zinc-700 rounded-none px-3 py-2 text-xs">
       <p className="text-zinc-300 mb-1">{fmtFull(payload[0].payload.at)}</p>
-      <p className="text-sky-400 font-bold tabular-nums">{payload[0].value.toLocaleString()} {isMaster ? 'MR' : 'LP'}</p>
+      <p className="text-amber-400 font-bold tabular-nums">{payload[0].value.toLocaleString()} {isMaster ? 'MR' : 'LP'}</p>
     </div>
   )
 }
@@ -72,13 +72,13 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
                 key={c.charId}
                 onClick={() => setSelected(c.charId)}
                 className={[
-                  'flex items-center gap-1.5 px-2 py-1 rounded border text-xs transition-colors cursor-pointer',
+                  'flex items-center gap-1.5 px-2 py-1 rounded-none border text-xs transition-colors cursor-pointer',
                   sel === c.charId
                     ? 'bg-zinc-700 border-zinc-600 text-white'
                     : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-zinc-300',
                 ].join(' ')}
               >
-                <div className="relative w-5 h-5 overflow-hidden rounded-sm flex-shrink-0">
+                <div className="relative w-5 h-5 overflow-hidden rounded-none flex-shrink-0">
                   <Image src={getCharacterImageUrl(c.charSlug)} alt={c.charName} fill className="object-cover object-top" unoptimized />
                 </div>
                 {c.charName}
@@ -141,10 +141,10 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
               <Line
                 type="monotone"
                 dataKey="lp"
-                stroke="#38bdf8"
+                stroke="#fbbf24"
                 strokeWidth={2}
-                dot={{ r: 3, fill: '#38bdf8', strokeWidth: 0 }}
-                activeDot={{ r: 4, fill: '#38bdf8', strokeWidth: 0 }}
+                dot={{ r: 3, fill: '#fbbf24', strokeWidth: 0 }}
+                activeDot={{ r: 4, fill: '#fbbf24', strokeWidth: 0 }}
               />
             </LineChart>
           </ResponsiveContainer>

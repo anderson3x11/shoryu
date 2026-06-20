@@ -1,9 +1,8 @@
 'use client'
 
-import React from 'react'
 import Image from 'next/image'
 import { Card, CardTitle } from '@/components/ui/card'
-import { getCharacterImageUrl } from '@/lib/constants/characters'
+import { getCharacterImageUrl, getCharacterByBucklerId } from '@/lib/constants/characters'
 import type { MatchupRow, MatchupVs } from '@/lib/supabase/ranked-stats'
 
 interface MatchupChartProps {
@@ -12,64 +11,65 @@ interface MatchupChartProps {
   error?: boolean
 }
 
-function cellStyle(wins: number, total: number): React.CSSProperties {
-  const r = wins / total
-  const neutral = { backgroundColor: 'rgba(39,39,42,0.5)', color: 'rgb(161,161,170)' }
-  if (r >= 0.499 && r <= 0.501) return neutral
+// Skewed bar matching the Stats-page usage bars
+const BAR_CLIP = 'polygon(3px 0%, 100% 0%, calc(100% - 3px) 100%, 0% 100%)'
 
-  if (r > 0.5) {
-    const t = Math.min((r - 0.5) / 0.5, 1)           // 0 → 1 as rate goes 50% → 100%
-    const bgAlpha = 0.12 + t * 0.48                   // 0.12 → 0.60
-    const textL   = 70 - t * 22                        // 70% → 48% lightness
-    const textS   = 65 + t * 25                        // 65% → 90% saturation
-    return {
-      backgroundColor: `hsla(145,65%,14%,${bgAlpha})`,
-      color: `hsl(145,${textS}%,${textL}%)`,
-    }
-  } else {
-    const t = Math.min((0.5 - r) / 0.5, 1)
-    const bgAlpha = 0.12 + t * 0.48
-    const textL   = 70 - t * 22
-    const textS   = 65 + t * 25
-    return {
-      backgroundColor: `hsla(0,65%,14%,${bgAlpha})`,
-      color: `hsl(0,${textS}%,${textL}%)`,
-    }
+// Win-rate driven colors: green above 50%, red below, deepening toward the extremes.
+function matchupColors(wins: number, total: number): { bar: string; text: string } {
+  const r = wins / total
+  if (r > 0.501) {
+    const t = Math.min((r - 0.5) / 0.5, 1)
+    return { bar: `hsl(145, ${58 + t * 22}%, ${40 + t * 8}%)`, text: `hsl(145, ${65 + t * 25}%, ${62 - t * 8}%)` }
   }
+  if (r < 0.499) {
+    const t = Math.min((0.5 - r) / 0.5, 1)
+    return { bar: `hsl(0, ${58 + t * 22}%, ${46 + t * 6}%)`, text: `hsl(0, ${65 + t * 25}%, ${64 - t * 8}%)` }
+  }
+  return { bar: 'rgb(113,113,122)', text: 'rgb(161,161,170)' }
 }
 
-function Cell({ vs }: { vs: MatchupVs | undefined }) {
-  if (!vs) return <td className="w-14 h-12 border border-zinc-800/60 bg-zinc-900/30" />
+function MatchupBar({ vs }: { vs: MatchupVs }) {
   const rate = Math.round((vs.wins / vs.total) * 100)
+  const losses = vs.total - vs.wins
+  const { bar, text } = matchupColors(vs.wins, vs.total)
+
   return (
-    <td className="w-14 h-12 border border-zinc-800/60 text-center align-middle" style={cellStyle(vs.wins, vs.total)}>
-      <div className="text-xs font-bold tabular-nums">{rate}%</div>
-      <div className="text-[10px] opacity-60 tabular-nums">{vs.wins}/{vs.total}</div>
-    </td>
+    <div className="flex items-center gap-2.5">
+      <div className="relative w-9 h-9 overflow-hidden flex-shrink-0 bg-zinc-800">
+        <Image
+          src={getCharacterImageUrl(vs.charSlug)}
+          alt={vs.charName}
+          fill
+          className="object-cover object-top"
+          unoptimized
+        />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline justify-between gap-2 mb-1">
+          <span className="text-xs text-zinc-200 uppercase tracking-wide truncate">{vs.charName}</span>
+          <span className="text-xs font-bold tabular-nums flex-shrink-0" style={{ color: text }}>
+            {rate}%
+            <span className="text-[10px] font-normal text-zinc-400 ml-1">{vs.wins}-{losses}</span>
+          </span>
+        </div>
+        <div className="h-1.5 bg-zinc-800 overflow-hidden" style={{ clipPath: BAR_CLIP }}>
+          <div className="h-full" style={{ width: `${rate}%`, background: bar }} />
+        </div>
+      </div>
+    </div>
   )
 }
 
 export function MatchupChart({ rows, totalBattles, error = false }: MatchupChartProps) {
-  // Build the union of all opponent characters, sorted by total encounters
-  const oppTotals: Record<number, { slug: string; name: string; total: number }> = {}
-  if (rows) {
-    for (const row of rows) {
-      for (const vs of Object.values(row.vs)) {
-        if (!oppTotals[vs.charId]) oppTotals[vs.charId] = { slug: vs.charSlug, name: vs.charName, total: 0 }
-        oppTotals[vs.charId].total += vs.total
-      }
-    }
-  }
-  const oppCols = Object.entries(oppTotals)
-    .sort((a, b) => b[1].total - a[1].total)
-    .map(([id, info]) => ({ charId: Number(id), ...info }))
-
   return (
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">
       <div className="px-4 pt-4 pb-3 flex items-center justify-between gap-2 flex-wrap">
-        <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">Matchups</CardTitle>
+        <div className="flex items-center gap-2">
+          <span className="block w-1.5 h-5 -skew-x-12 bg-amber-400" />
+          <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">Matchups</CardTitle>
+        </div>
         {rows !== null && (
-          <span className="text-xs text-zinc-300">
+          <span className="text-xs text-zinc-400">
             Based on last {totalBattles} ranked matches
           </span>
         )}
@@ -90,61 +90,39 @@ export function MatchupChart({ rows, totalBattles, error = false }: MatchupChart
         <div className="px-4 pb-4 text-sm text-zinc-300">No ranked match data found.</div>
       )}
 
-      {!error && rows !== null && rows.length > 0 && oppCols.length > 0 && (
-        <div className="overflow-x-auto pb-4">
-          {/* border-separate keeps sticky positioning working across browsers */}
-          <table className="border-separate border-spacing-0 text-xs">
-            <thead>
-              <tr>
-                {/* top-left corner — z-20 so it covers scrolling column headers */}
-                <th className="sticky left-0 z-20 bg-zinc-900 w-44 min-w-44 border-r border-zinc-800" />
-                {oppCols.map(col => (
-                  <th key={col.charId} className="w-14 min-w-14 pb-2 px-1 align-bottom border-b border-zinc-800">
-                    <div className="flex flex-col items-center gap-1">
-                      <div className="relative w-9 h-9 overflow-hidden rounded">
-                        <Image
-                          src={getCharacterImageUrl(col.slug)}
-                          alt={col.name}
-                          fill
-                          className="object-cover object-top"
-                          unoptimized
-                        />
-                      </div>
-                      <span className="text-[9px] text-zinc-300 leading-tight text-center w-14 truncate block">
-                        {col.name}
-                      </span>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(row => (
-                <tr key={row.charId}>
-                  <td className="sticky left-0 z-10 bg-zinc-900 border-r border-b border-zinc-800 px-3 py-2">
-                    <div className="flex items-center gap-2.5 w-36">
-                      <div className="relative w-10 h-10 overflow-hidden rounded flex-shrink-0">
-                        <Image
-                          src={getCharacterImageUrl(row.charSlug)}
-                          alt={row.charName}
-                          fill
-                          className="object-cover object-top"
-                          unoptimized
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs font-semibold text-zinc-200 truncate">{row.charName}</p>
-                        <p className="text-[10px] text-zinc-300">{row.totalGames}g</p>
-                      </div>
-                    </div>
-                  </td>
-                  {oppCols.map(col => (
-                    <Cell key={col.charId} vs={row.vs[col.charId]} />
+      {!error && rows !== null && rows.length > 0 && (
+        <div className="px-4 pb-4 space-y-5">
+          {rows.map(row => {
+            const matchups = Object.values(row.vs).sort((a, b) => b.total - a.total)
+            const charColor = getCharacterByBucklerId(row.charId)?.color ?? '#fbbf24'
+            return (
+              <div key={row.charId} className="space-y-3.5">
+                {/* Main character this block of matchups belongs to */}
+                <div className="flex items-center gap-3 bg-zinc-800/40 px-3 py-2.5">
+                  <span className="block w-1.5 h-9 -skew-x-12 flex-shrink-0" style={{ background: charColor }} />
+                  <div className="relative w-12 h-12 overflow-hidden flex-shrink-0 bg-zinc-900">
+                    <Image
+                      src={getCharacterImageUrl(row.charSlug)}
+                      alt={row.charName}
+                      fill
+                      className="object-cover object-top"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-bebas text-2xl tracking-widest text-zinc-100 leading-none">{row.charName}</div>
+                    <div className="text-[11px] text-zinc-400 tabular-nums mt-1.5">{row.totalGames} ranked games</div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 px-1">
+                  {matchups.map(vs => (
+                    <MatchupBar key={vs.charId} vs={vs} />
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
     </Card>
