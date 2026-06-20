@@ -41,7 +41,7 @@ function SearchItem({ char, onSelect }: { char: StreedleCharacter; onSelect: () 
           <Image src={`/characters/${char.id}.png`} alt={char.name} fill className="object-cover object-top" unoptimized onError={() => setImgErr(true)} />
         ) : (
           <div className="w-full h-full flex items-center justify-center px-0.5">
-            <span className="text-[9px] text-zinc-400 text-center leading-tight">{char.name}</span>
+            <span className="text-[9px] text-zinc-300 text-center leading-tight">{char.name}</span>
           </div>
         )}
       </div>
@@ -132,17 +132,17 @@ export function StreedleGame() {
       {/* Title */}
       <div className="text-center space-y-2 pt-4">
         <h1 className="font-bebas text-8xl tracking-widest text-zinc-100">STREETDLE</h1>
-        <p className="text-zinc-400 text-lg">Guess today's Street Fighter character</p>
+        <p className="text-zinc-300 text-lg">Guess today's Street Fighter character</p>
       </div>
 
       {/* Legend */}
-      <div className="flex flex-col items-center gap-3 text-base text-zinc-400">
+      <div className="flex flex-col items-center gap-3 text-base text-zinc-300">
         <div className="flex flex-wrap justify-center gap-6">
           <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-sm bg-green-800 border border-green-600 inline-block" /> Correct</span>
           <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-sm bg-yellow-800 border border-yellow-600 inline-block" /> Partial match</span>
           <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-sm bg-red-900/40 border border-red-800 inline-block" /> Wrong</span>
         </div>
-        <div className="flex flex-wrap justify-center gap-6 text-zinc-500 text-sm">
+        <div className="flex flex-wrap justify-center gap-6 text-zinc-400 text-sm">
           <span>Yellow on Country: same continent</span>
           <span>▲ later in the series / ▼ earlier</span>
         </div>
@@ -164,7 +164,7 @@ export function StreedleGame() {
             <Image src={`/characters/${target.id}.png`} alt={target.name} fill className="object-cover object-top" unoptimized />
           </div>
           <div>
-            <p className="text-zinc-400 text-sm">The answer was</p>
+            <p className="text-zinc-300 text-sm">The answer was</p>
             <p className="text-zinc-100 font-semibold text-2xl">{target.name}</p>
           </div>
         </div>
@@ -176,7 +176,7 @@ export function StreedleGame() {
       {/* Give up */}
       {!gameOver && guessIds.length >= 3 && (
         <div className="flex justify-end">
-          <button onClick={giveUp} className="text-base text-zinc-400 hover:text-zinc-200 transition-colors">
+          <button onClick={giveUp} className="text-base text-zinc-300 hover:text-zinc-200 transition-colors">
             Give up
           </button>
         </div>
@@ -184,7 +184,7 @@ export function StreedleGame() {
 
       {/* Guess count */}
       {guessIds.length > 0 && (
-        <p className="text-base text-zinc-400 text-center">
+        <p className="text-base text-zinc-300 text-center">
           {guessIds.length} {guessIds.length === 1 ? 'guess' : 'guesses'}
         </p>
       )}
@@ -195,9 +195,9 @@ export function StreedleGame() {
           <table className="w-full text-sm border-collapse" style={{ minWidth: 820 }}>
             <thead>
               <tr className="border-b border-zinc-800 bg-zinc-900/50">
-                <th className="text-left px-3 py-2.5 text-zinc-400 font-medium w-40">Character</th>
+                <th className="text-left px-3 py-2.5 text-zinc-300 font-medium w-40">Character</th>
                 {COLUMNS.map(col => (
-                  <th key={col.key} className="text-center px-2 py-2.5 text-zinc-400 font-medium">{col.label}</th>
+                  <th key={col.key} className="text-center px-2 py-2.5 text-zinc-300 font-medium">{col.label}</th>
                 ))}
               </tr>
             </thead>
@@ -237,7 +237,7 @@ export function StreedleGame() {
       )}
 
       {guesses.length === 0 && !gameOver && (
-        <div className="text-center py-16 text-zinc-500 text-lg">No guesses yet</div>
+        <div className="text-center py-16 text-zinc-400 text-lg">No guesses yet</div>
       )}
     </div>
   )

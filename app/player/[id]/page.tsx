@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: PlayerPageProps) {
   const { id } = await params
   const profile = await getPlayerProfile(id)
   const name = profile?.fighter_banner_info?.personal_info?.fighter_id ?? id
-  return { title: `${name} - Shoryu` }
+  return { title: name }
 }
 
 export default async function PlayerPage({ params }: PlayerPageProps) {

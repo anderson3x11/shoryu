@@ -23,7 +23,7 @@ export default async function StatsPage() {
       ) : (
         <div className="space-y-4">
           <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Stats</h1>
-          <p className="text-zinc-400">Stats data unavailable. Check back later.</p>
+          <p className="text-zinc-300">Stats data unavailable. Check back later.</p>
         </div>
       )}
 

@@ -47,7 +47,7 @@ function ReplayIdCopy({ replayId }: { replayId: string }) {
       title={copied ? 'Copied!' : 'Click to copy'}
       className={cn(
         'text-[10px] sm:text-xs font-mono tabular-nums tracking-wider mt-0.5 cursor-pointer transition-colors',
-        copied ? 'text-emerald-400' : 'text-zinc-400 hover:text-zinc-300',
+        copied ? 'text-emerald-400' : 'text-zinc-300 hover:text-zinc-300',
       )}
     >
       {copied ? 'COPIED' : replayId}
@@ -197,7 +197,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">
       {/* Header + tabs */}
       <div className="px-4 pt-4 pb-0 flex items-center justify-between gap-4 flex-wrap">
-        <CardTitle className="text-sm text-zinc-400 uppercase tracking-wider">Match History</CardTitle>
+        <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">Match History</CardTitle>
         <div className="flex gap-1 flex-wrap justify-end">
           {MODES.map((m) => (
             <button
@@ -207,7 +207,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
                 'text-xs px-3 py-1 rounded border transition-colors cursor-pointer',
                 mode === m.id
                   ? 'bg-zinc-700 border-zinc-600 text-white'
-                  : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-zinc-300'
+                  : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-zinc-300'
               )}
             >
               {m.label}
@@ -225,7 +225,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
               'text-xs px-2.5 py-0.5 rounded border transition-colors cursor-pointer',
               charFilter === null
                 ? 'bg-zinc-700 border-zinc-600 text-white'
-                : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-zinc-300'
+                : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-zinc-300'
             )}
           >
             All
@@ -249,12 +249,12 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
       {/* Battles */}
       <div className={cn('mt-3 divide-y divide-zinc-800/60 transition-opacity', pending && 'opacity-40')}>
         {initialLoading ? (
-          <div className="px-4 py-10 flex items-center justify-center gap-2 text-sm text-zinc-400">
+          <div className="px-4 py-10 flex items-center justify-center gap-2 text-sm text-zinc-300">
             <span className="w-4 h-4 rounded-full border-2 border-zinc-600 border-t-sky-400 animate-spin" />
             Loading matches…
           </div>
         ) : battles.length === 0 ? (
-          <div className="px-4 py-6 text-sm text-zinc-400">
+          <div className="px-4 py-6 text-sm text-zinc-300">
             {charFilter ? 'No more matches with this character.' : 'No matches found.'}
           </div>
         ) : battles.map((battle) => {
@@ -299,7 +299,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
                   <p className="text-sm font-bold text-zinc-100 truncate leading-tight">
                     {me.player.fighter_id}
                   </p>
-                  <p className="text-xs text-zinc-400 truncate mt-0.5">
+                  <p className="text-xs text-zinc-300 truncate mt-0.5">
                     {me.playing_character_name}
                   </p>
                 </div>
@@ -318,13 +318,13 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
                 </div>
 
                 <div className="flex flex-col items-center gap-0.5 w-[140px] sm:w-[180px]">
-                  <span className="text-[11px] text-zinc-400 tabular-nums uppercase tracking-widest whitespace-nowrap">
+                  <span className="text-[11px] text-zinc-300 tabular-nums uppercase tracking-widest whitespace-nowrap">
                     {date && <span>{date}</span>}
-                    {date && (lpDelta || matchType) && <span className="text-zinc-500 mx-1.5">·</span>}
+                    {date && (lpDelta || matchType) && <span className="text-zinc-400 mx-1.5">·</span>}
                     {lpDelta ? (
                       <span className={cn(
                         'font-semibold',
-                        lpDelta.delta > 0 ? 'text-emerald-400' : lpDelta.delta < 0 ? 'text-red-400' : 'text-zinc-400'
+                        lpDelta.delta > 0 ? 'text-emerald-400' : lpDelta.delta < 0 ? 'text-red-400' : 'text-zinc-300'
                       )}>
                         {lpDelta.delta > 0 ? '+' : ''}{lpDelta.delta} {lpDelta.isMaster ? 'MR' : 'LP'}
                       </span>
@@ -334,7 +334,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
                   </span>
                   <span className="text-2xl sm:text-3xl font-bold text-zinc-100 tabular-nums leading-none">
                     {rounds.won}
-                    <span className="text-zinc-600 mx-2">–</span>
+                    <span className="text-zinc-500 mx-2">–</span>
                     {rounds.lost}
                   </span>
                   {me.round_results.length > 0 && (
@@ -373,7 +373,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
                   >
                     {opp.player.fighter_id}
                   </Link>
-                  <p className="text-xs text-zinc-400 truncate mt-0.5">
+                  <p className="text-xs text-zinc-300 truncate mt-0.5">
                     {opp.playing_character_name}
                   </p>
                 </div>
@@ -399,17 +399,17 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
           <button
             onClick={() => goPage(page - 1)}
             disabled={page <= 1 || pending}
-            className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-400 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+            className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
             ← Prev
           </button>
-          <span className="text-xs text-zinc-400">
+          <span className="text-xs text-zinc-300">
             Page {page} / {totalPages}
           </span>
           <button
             onClick={() => goPage(page + 1)}
             disabled={page >= totalPages || pending}
-            className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-400 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+            className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
             Next →
           </button>

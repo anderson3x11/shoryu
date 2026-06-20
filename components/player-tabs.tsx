@@ -75,7 +75,7 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
                   'text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1.5 rounded-md transition-colors cursor-pointer whitespace-nowrap',
                   tab === t.id
                     ? 'bg-sky-500 text-white'
-                    : 'text-zinc-400 hover:text-zinc-200',
+                    : 'text-zinc-300 hover:text-zinc-200',
                 )}
               >
                 {t.label}

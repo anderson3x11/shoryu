@@ -29,7 +29,7 @@ function CustomTooltip({ active, payload, isMaster }: { active?: boolean; payloa
   if (!active || !payload?.length) return null
   return (
     <div className="bg-zinc-800 border border-zinc-700 rounded px-3 py-2 text-xs">
-      <p className="text-zinc-400 mb-1">{fmtFull(payload[0].payload.at)}</p>
+      <p className="text-zinc-300 mb-1">{fmtFull(payload[0].payload.at)}</p>
       <p className="text-sky-400 font-bold tabular-nums">{payload[0].value.toLocaleString()} {isMaster ? 'MR' : 'LP'}</p>
     </div>
   )
@@ -64,7 +64,7 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
   return (
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">
       <div className="px-4 pt-4 pb-3 flex items-center justify-between gap-2 flex-wrap">
-        <CardTitle className="text-sm text-zinc-400 uppercase tracking-wider">{char?.isMaster ? 'MR' : 'LP'} History</CardTitle>
+        <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">{char?.isMaster ? 'MR' : 'LP'} History</CardTitle>
         {characters !== null && characters.length > 0 && (
           <div className="flex gap-1.5 flex-wrap">
             {characters.map(c => (
@@ -75,7 +75,7 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
                   'flex items-center gap-1.5 px-2 py-1 rounded border text-xs transition-colors cursor-pointer',
                   sel === c.charId
                     ? 'bg-zinc-700 border-zinc-600 text-white'
-                    : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-zinc-300',
+                    : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-zinc-300',
                 ].join(' ')}
               >
                 <div className="relative w-5 h-5 overflow-hidden rounded-sm flex-shrink-0">
@@ -89,18 +89,18 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
       </div>
 
       {error && (
-        <div className="px-4 pb-4 text-sm text-zinc-400">Failed to load LP history.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-300">Failed to load LP history.</div>
       )}
 
       {!error && characters === null && (
-        <div className="px-4 pb-4 flex items-center gap-2 text-sm text-zinc-400">
+        <div className="px-4 pb-4 flex items-center gap-2 text-sm text-zinc-300">
           <div className="w-3 h-3 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
           Loading history…
         </div>
       )}
 
       {!error && characters !== null && characters.length === 0 && (
-        <div className="px-4 pb-4 text-sm text-zinc-400">No ranked match data found.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-300">No ranked match data found.</div>
       )}
 
       {!error && points.length > 0 && (() => {
@@ -148,7 +148,7 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
               />
             </LineChart>
           </ResponsiveContainer>
-          <p className="text-[10px] text-zinc-500 text-right mt-1">Showing {points.length} of {char?.points.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
+          <p className="text-[10px] text-zinc-400 text-right mt-1">Showing {points.length} of {char?.points.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
         </div>
         )
       })()}

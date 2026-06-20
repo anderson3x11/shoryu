@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { BookOpen, Swords, Info, ExternalLink, CirclePlay } from 'lucide-react'
 
 export const metadata = {
-  title: 'Guides | Shoryu',
+  title: 'Guides - Shoryu',
   description: 'Street Fighter 6 guides, frame data, mechanics, and learning resources.',
 }
 
@@ -42,9 +42,9 @@ function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
       <span className="shrink-0" style={color ? { color } : undefined}>{icon}</span>
       <div className="min-w-0 flex-1">
         <div className="text-sm font-medium text-zinc-100 leading-tight">{title}</div>
-        <div className="text-xs text-zinc-400 truncate mt-0.5">{domain}</div>
+        <div className="text-xs text-zinc-300 truncate mt-0.5">{domain}</div>
       </div>
-      <ExternalLink size={14} className="shrink-0 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
+      <ExternalLink size={14} className="shrink-0 text-zinc-300 group-hover:text-zinc-200 transition-colors" />
     </a>
   )
 }
@@ -65,7 +65,7 @@ function VideoCard({ href, title, thumbnail }: { href: string; title: string; th
       </div>
       <div className="flex items-center justify-between px-3 py-2 gap-2">
         <span className="text-sm font-medium text-zinc-100 leading-tight truncate">{title}</span>
-        <ExternalLink size={13} className="shrink-0 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
+        <ExternalLink size={13} className="shrink-0 text-zinc-300 group-hover:text-zinc-200 transition-colors" />
       </div>
     </a>
   )
@@ -85,7 +85,7 @@ export default async function GuidesPage() {
 
       <div className="space-y-6">
         <section className="space-y-2">
-          <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Guides & Data</h2>
+          <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Guides & Data</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <LinkCard href="https://wiki.supercombo.gg/w/Street_Fighter_6" icon={<BookOpen size={16} />} title="Supercombo Wiki" domain="wiki.supercombo.gg" color="#60a5fa" />
             <LinkCard href="https://ultimateframedata.com/sf6" icon={<Swords size={16} />} title="Ultimate Frame Data" domain="ultimateframedata.com" color="#f97316" />
@@ -93,14 +93,14 @@ export default async function GuidesPage() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Glossary</h2>
+          <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Glossary</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <LinkCard href="https://glossary.infil.net/" icon={<Info size={16} />} title="Fighting Game Glossary" domain="glossary.infil.net" color="#a78bfa" />
           </div>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Techs</h2>
+          <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Techs</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {TECHS.map((v) => (
               <VideoCard key={v.url} href={v.url} title={v.title} thumbnail={thumbMap[v.url]} />

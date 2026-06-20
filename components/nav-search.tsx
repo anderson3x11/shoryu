@@ -8,6 +8,9 @@ import type { BucklerFighterBanner } from '@/lib/buckler'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
 
+// Beveled corners (top-right + bottom-left) matching the character tiles
+const BEVEL = 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))'
+
 export function NavSearch() {
   const router = useRouter()
   const [query, setQuery] = useState('')
@@ -76,37 +79,42 @@ export function NavSearch() {
   const isNumericQuery = /^\d+$/.test(query) && query.length >= 2
 
   return (
-    <div ref={containerRef} className="relative flex-1 sm:flex-none sm:w-56">
+    <div ref={containerRef} className="relative flex-1 sm:flex-none sm:w-72">
       <form onSubmit={handleSubmit}>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 w-3.5 h-3.5 pointer-events-none" />
+        <div className="group relative h-8">
+          <div
+            className="absolute inset-0 bg-zinc-700 group-focus-within:bg-amber-400 transition-colors duration-200"
+            style={{ clipPath: BEVEL }}
+          />
+          <div className="absolute inset-[2px] bg-zinc-900" style={{ clipPath: BEVEL }} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-4 h-4 text-zinc-400 group-focus-within:text-amber-400 transition-colors pointer-events-none" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search player..."
             autoComplete="off"
-            className="w-full h-8 pl-8 pr-3 text-sm bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
+            className="relative z-10 w-full h-full bg-transparent pl-9 pr-3 text-sm text-zinc-200 placeholder:text-zinc-400 focus:outline-none"
           />
           {loading && (
-            <div className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3 h-3 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+            <div className="absolute right-2.5 top-1/2 -translate-y-1/2 z-10 w-3 h-3 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
           )}
         </div>
       </form>
 
       {open && isNumericQuery && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-zinc-900 border border-zinc-700 rounded-none shadow-2xl z-50 overflow-hidden">
           <button
             onClick={() => { router.push(`/player/${query}`); setQuery(''); setOpen(false) }}
             className="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-zinc-800 transition-colors text-left cursor-pointer"
           >
-            <ArrowRight className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
+            <ArrowRight className="w-3.5 h-3.5 text-zinc-300 flex-shrink-0" />
             <span className="text-xs text-zinc-300">Player <span className="font-mono text-white">#{query}</span></span>
           </button>
         </div>
       )}
 
       {open && !isNumericQuery && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-zinc-900 border border-zinc-700 rounded-none shadow-2xl z-50 overflow-hidden">
           {results.slice(0, 6).map((r) => {
             const li = r.favorite_character_league_info
             const rankId = li ? getEffectiveRankId(li.league_rank, 0, li.master_rating_ranking, li.master_rating) : null
@@ -132,7 +140,7 @@ export function NavSearch() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-white truncate leading-tight">{r.personal_info.fighter_id}</p>
-                  <p className="text-[11px] text-zinc-400 truncate">{r.favorite_character_name}</p>
+                  <p className="text-[11px] text-zinc-300 truncate">{r.favorite_character_name}</p>
                 </div>
                 {rankId && (
                   <Image
@@ -150,7 +158,7 @@ export function NavSearch() {
           <a
             href={`/search?q=${encodeURIComponent(query)}`}
             onClick={() => setOpen(false)}
-            className="flex items-center justify-center gap-1 px-3 py-2 text-xs text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800 transition-colors border-t border-zinc-800"
+            className="flex items-center justify-center gap-1 px-3 py-2 text-xs text-zinc-300 hover:text-zinc-300 hover:bg-zinc-800 transition-colors border-t border-zinc-800"
           >
             Show all results →
           </a>

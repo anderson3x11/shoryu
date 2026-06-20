@@ -44,7 +44,7 @@ export function PlayCounts({ playData }: PlayCountsProps) {
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0 flex flex-col">
       {/* Total */}
       <div className="px-4 pt-4 pb-3 border-b border-zinc-800 flex-shrink-0">
-        <p className="text-[11px] text-zinc-400 uppercase tracking-wider mb-1">Matches Played</p>
+        <p className="text-[11px] text-zinc-300 uppercase tracking-wider mb-1">Matches Played</p>
         <p className="text-4xl font-bold text-white tabular-nums">{total.toLocaleString()}</p>
       </div>
 
@@ -60,7 +60,7 @@ export function PlayCounts({ playData }: PlayCountsProps) {
               <div className="w-0.5 self-stretch rounded-full flex-shrink-0" style={{ background: color }} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline justify-between mb-1.5">
-                  <span className="text-xs text-zinc-400">{label}</span>
+                  <span className="text-xs text-zinc-300">{label}</span>
                   <span className="text-sm font-bold text-zinc-200 tabular-nums">
                     {count.toLocaleString()}
                   </span>
@@ -72,7 +72,7 @@ export function PlayCounts({ playData }: PlayCountsProps) {
                   />
                 </div>
               </div>
-              <span className="text-[11px] text-zinc-400 tabular-nums w-7 text-right flex-shrink-0">
+              <span className="text-[11px] text-zinc-300 tabular-nums w-7 text-right flex-shrink-0">
                 {Math.round(pct)}%
               </span>
             </div>
@@ -83,11 +83,11 @@ export function PlayCounts({ playData }: PlayCountsProps) {
       {/* Time played */}
       {playtimes.length > 0 && (
         <div className="px-4 py-3 flex-shrink-0">
-          <p className="text-[11px] text-zinc-400 uppercase tracking-wider mb-2.5">Time Played</p>
+          <p className="text-[11px] text-zinc-300 uppercase tracking-wider mb-2.5">Time Played</p>
           <div className="space-y-1.5">
             {playtimes.map((pt) => (
               <div key={pt.content_type} className="flex justify-between text-xs">
-                <span className="text-zinc-400">
+                <span className="text-zinc-300">
                   {MODE_NAMES[pt.content_type_name] ?? pt.content_type_name}
                 </span>
                 <span className="text-zinc-300 tabular-nums font-medium">

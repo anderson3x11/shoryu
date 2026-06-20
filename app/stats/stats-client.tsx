@@ -48,7 +48,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
     <div className="space-y-6">
       <div>
         <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Stats</h1>
-        <p className="text-zinc-400 text-sm mt-1">Character Usage — {formatMonth(month)}</p>
+        <p className="text-zinc-300 text-sm mt-1">Character Usage - {formatMonth(month)}</p>
       </div>
 
       <div className="space-y-3">
@@ -60,7 +60,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
               className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
                 control === i
                   ? 'bg-zinc-100 text-zinc-900'
-                  : 'bg-zinc-800 text-zinc-400 hover:text-zinc-200'
+                  : 'bg-zinc-800 text-zinc-300 hover:text-zinc-200'
               }`}
             >
               {icon && (
@@ -80,7 +80,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
               className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors cursor-pointer ${
                 league === i
                   ? 'bg-zinc-100 text-zinc-900'
-                  : 'bg-zinc-800 text-zinc-400 hover:text-zinc-200'
+                  : 'bg-zinc-800 text-zinc-300 hover:text-zinc-200'
               }`}
             >
               {rankId && (
@@ -104,7 +104,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
           return (
             <div key={char.character_tool_name} className="flex items-center gap-3 sm:gap-4 py-2.5">
               {/* Rank */}
-              <span className="text-sm text-zinc-500 tabular-nums w-6 text-right flex-shrink-0">
+              <span className="text-sm text-zinc-400 tabular-nums w-6 text-right flex-shrink-0">
                 {rank + 1}
               </span>
 
@@ -123,7 +123,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
               <div className="flex-1 min-w-0 space-y-1">
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="text-sm font-semibold text-zinc-100 uppercase tracking-wide truncate">{name}</span>
-                  <span className={`text-xs tabular-nums flex-shrink-0 ${delta > 0.05 ? 'text-emerald-400' : delta < -0.05 ? 'text-red-400' : 'text-zinc-600'}`}>
+                  <span className={`text-xs tabular-nums flex-shrink-0 ${delta > 0.05 ? 'text-emerald-400' : delta < -0.05 ? 'text-red-400' : 'text-zinc-500'}`}>
                     {delta > 0.05 ? '▲' : delta < -0.05 ? '▼' : '='}{Math.abs(delta).toFixed(2)}
                   </span>
                 </div>
@@ -132,7 +132,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
                     <div className="h-full bg-emerald-500" style={{ width: `${barWidth}%` }} />
                   </div>
                   <span className="text-sm font-bold text-white tabular-nums w-10 text-right flex-shrink-0">
-                    {char.play_rate.toFixed(1)}<span className="text-xs font-normal text-zinc-500">%</span>
+                    {char.play_rate.toFixed(1)}<span className="text-xs font-normal text-zinc-400">%</span>
                   </span>
                 </div>
               </div>

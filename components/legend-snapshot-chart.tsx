@@ -22,7 +22,7 @@ export function LegendSnapshotChart({ snapshot }: { snapshot: LegendSnapshot }) 
     <div className="space-y-4">
       <div className="flex items-baseline justify-between gap-4">
         <h2 className="font-bebas text-4xl tracking-widest text-zinc-100">Legend Snapshot</h2>
-        <span className="text-xs text-zinc-500 flex-shrink-0">{date} · {player_count} players</span>
+        <span className="text-xs text-zinc-400 flex-shrink-0">{date} · {player_count} players</span>
       </div>
 
       <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -68,7 +68,7 @@ export function LegendSnapshotChart({ snapshot }: { snapshot: LegendSnapshot }) 
                       unoptimized
                     />
                   </div>
-                  <span className="text-[10px] text-zinc-500 tabular-nums">{entry.percentage}%</span>
+                  <span className="text-[10px] text-zinc-400 tabular-nums">{entry.percentage}%</span>
                 </div>
               )
             })}

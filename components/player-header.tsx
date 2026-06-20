@@ -83,15 +83,15 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
           <div className="flex items-center gap-2 flex-wrap">
             {flag && <span className="text-base leading-none">{flag}</span>}
             {banner.home_name && (
-              <span className="text-sm text-zinc-400">{banner.home_name}</span>
+              <span className="text-sm text-zinc-300">{banner.home_name}</span>
             )}
             {info.platform_tool_name && (
-              <span className="text-xs bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded">
+              <span className="text-xs bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded">
                 {PLATFORM_ICONS[info.platform_tool_name] ?? info.platform_name}
               </span>
             )}
           </div>
-          <p className="text-xs text-zinc-400 tabular-nums">#{info.short_id}</p>
+          <p className="text-xs text-zinc-300 tabular-nums">#{info.short_id}</p>
           {proPlayer && (
             <div className="flex items-center gap-2 flex-wrap pt-0.5">
               {proPlayer.twitch && (
@@ -115,7 +115,7 @@ export function PlayerHeader({ banner }: PlayerHeaderProps) {
             </div>
           )}
           {banner.title_data?.title_data_val && (
-            <p className="text-xs text-zinc-400 italic">
+            <p className="text-xs text-zinc-300 italic">
               &ldquo;{banner.title_data.title_data_val}&rdquo;
             </p>
           )}

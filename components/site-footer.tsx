@@ -12,11 +12,11 @@ export function SiteFooter() {
             href="https://x.com/shoryuapp"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+            className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
           >
             @shoryuapp
           </a>
-          <Link href="/about" prefetch={false} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
+          <Link href="/about" prefetch={false} className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors">
             About
           </Link>
         </div>

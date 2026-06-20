@@ -21,8 +21,8 @@ export function SessionSummary({ session }: SessionSummaryProps) {
     <Card className="bg-zinc-900 border-zinc-800">
       <div className="px-4 sm:px-5 py-4 flex flex-col gap-4">
         <div className="flex items-center justify-between gap-3 flex-wrap">
-          <CardTitle className="text-sm text-zinc-400 uppercase tracking-wider">{title}</CardTitle>
-          <span className="text-xs text-zinc-400 tabular-nums">
+          <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">{title}</CardTitle>
+          <span className="text-xs text-zinc-300 tabular-nums">
             {fmtDuration(session.durationSec)} · ended {fmtAge(ageSec)}
           </span>
         </div>
@@ -35,7 +35,7 @@ export function SessionSummary({ session }: SessionSummaryProps) {
 
         {session.chars.length > 0 && (
           <div className="flex items-center gap-x-4 gap-y-2 flex-wrap pt-3 border-t border-zinc-800/60 -mx-1 px-1 mt-1">
-            <span className="text-[10px] text-zinc-400 uppercase tracking-widest">Played</span>
+            <span className="text-[10px] text-zinc-300 uppercase tracking-widest">Played</span>
             {session.chars.map(c => {
               const hasDelta = c.deltaCount > 0
               const approx = hasDelta && c.deltaCount < c.rankedCount
@@ -51,11 +51,11 @@ export function SessionSummary({ session }: SessionSummaryProps) {
                   />
                 </div>
                 <span>{c.name}</span>
-                <span className="text-zinc-400 tabular-nums">×{c.count}</span>
+                <span className="text-zinc-300 tabular-nums">×{c.count}</span>
                 {hasDelta && (
                   <span className={cn(
                     'tabular-nums font-semibold',
-                    c.delta > 0 ? 'text-emerald-400' : c.delta < 0 ? 'text-red-400' : 'text-zinc-400'
+                    c.delta > 0 ? 'text-emerald-400' : c.delta < 0 ? 'text-red-400' : 'text-zinc-300'
                   )}>
                     {approx ? '~' : ''}{c.delta > 0 ? '+' : ''}{c.delta} {c.isMaster ? 'MR' : 'LP'}
                   </span>
@@ -89,7 +89,7 @@ function Stat({
       )}>
         {value}
       </span>
-      <span className="text-[10px] text-zinc-400 uppercase tracking-widest">{label}</span>
+      <span className="text-[10px] text-zinc-300 uppercase tracking-widest">{label}</span>
     </div>
   )
 }

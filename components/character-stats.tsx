@@ -97,7 +97,7 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
     <Card className="absolute inset-0 bg-zinc-900 border-zinc-800 flex flex-col py-0 gap-0">
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-4 pb-3 flex-shrink-0">
-        <CardTitle className="text-zinc-400 uppercase tracking-wider">Characters</CardTitle>
+        <CardTitle className="text-zinc-300 uppercase tracking-wider">Characters</CardTitle>
 
         {phases.length > 1 && (
           <div className="flex gap-1 flex-wrap justify-end">
@@ -108,7 +108,7 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
                 className={`text-[11px] px-2 py-0.5 rounded border border-zinc-700 transition-colors ${
                   activePhaseId === p.id
                     ? 'bg-zinc-600 text-white'
-                    : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'
+                    : 'bg-zinc-900 text-zinc-300 hover:text-zinc-200'
                 }`}
               >
                 {p.label}
@@ -122,8 +122,8 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
       <div className="relative flex-1 min-h-0">
       <div className="overflow-y-auto h-full">
         {displayed.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 gap-2 text-zinc-400">
-            <span className="text-2xl text-zinc-600">?</span>
+          <div className="flex flex-col items-center justify-center py-10 gap-2 text-zinc-300">
+            <span className="text-2xl text-zinc-500">?</span>
             <p className="text-sm">No ranked games this phase</p>
           </div>
         ) : (
@@ -135,7 +135,7 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
                 key={c.character_id}
                 className="flex items-center gap-3 px-4 py-2.5 border-t border-zinc-800"
               >
-                <span className="text-xs text-zinc-400 w-4 tabular-nums flex-shrink-0 text-right">
+                <span className="text-xs text-zinc-300 w-4 tabular-nums flex-shrink-0 text-right">
                   {i + 1}
                 </span>
 
@@ -165,7 +165,7 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
                       <div className="flex flex-col items-center justify-center">
                         <p className="text-sm font-semibold tabular-nums whitespace-nowrap">
                           <span className="text-emerald-400">{wr.win_count}W</span>
-                          <span className="text-zinc-500"> / </span>
+                          <span className="text-zinc-400"> / </span>
                           <span className="text-red-400">{losses}L</span>
                         </p>
                         <p className="text-sm font-semibold tabular-nums text-zinc-100">{rate.toFixed(1)}%</p>

@@ -11,7 +11,7 @@ interface SearchPageProps {
 
 export async function generateMetadata({ searchParams }: SearchPageProps) {
   const { q } = await searchParams
-  return { title: q ? `"${q}" on Shoryu` : 'Search | Shoryu' }
+  return { title: q ? `"${q}" on Shoryu` : 'Search - Shoryu' }
 }
 
 function PlayerCard({ banner }: { banner: BucklerFighterBanner }) {
@@ -45,7 +45,7 @@ function PlayerCard({ banner }: { banner: BucklerFighterBanner }) {
 
       <div className="flex-1 min-w-0 space-y-0.5">
         <p className="font-semibold text-zinc-100 truncate leading-tight">{info.fighter_id}</p>
-        <p className="text-xs text-zinc-400 truncate">
+        <p className="text-xs text-zinc-300 truncate">
           {banner.home_name && <span>{banner.home_name} · </span>}
           {banner.favorite_character_name}
         </p>
@@ -81,7 +81,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <div className="space-y-1">
         <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Search</h1>
         {query && (
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-zinc-300">
             {results.length > 0
               ? `Results for "${query}"${totalPages > 1 ? ` (page ${page} of ${totalPages})` : ''}`
               : `No results for "${query}"`}
@@ -90,7 +90,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       </div>
 
       {!query && (
-        <p className="text-zinc-400 text-sm">Enter a player name in the search bar above.</p>
+        <p className="text-zinc-300 text-sm">Enter a player name in the search bar above.</p>
       )}
 
       {results.length > 0 && (
@@ -106,16 +106,16 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           {page > 1 ? (
             <Link
               href={`/search?q=${encodeURIComponent(query)}&page=${page - 1}`}
-              className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-400 hover:text-zinc-200 transition-colors"
+              className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-zinc-200 transition-colors"
             >
               ← Prev
             </Link>
           ) : <span />}
-          <span className="text-xs text-zinc-400">Page {page} / {totalPages}</span>
+          <span className="text-xs text-zinc-300">Page {page} / {totalPages}</span>
           {page < totalPages ? (
             <Link
               href={`/search?q=${encodeURIComponent(query)}&page=${page + 1}`}
-              className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-400 hover:text-zinc-200 transition-colors"
+              className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-zinc-200 transition-colors"
             >
               Next →
             </Link>

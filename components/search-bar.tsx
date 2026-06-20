@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, Clock, ArrowRight } from 'lucide-react'
-import { Input } from '@/components/ui/input'
 import type { BucklerFighterBanner } from '@/lib/buckler'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
@@ -11,6 +10,9 @@ import Image from 'next/image'
 
 const STORAGE_KEY = 'shoryu_recent'
 const MAX_RECENT = 5
+
+// Beveled corners (top-right + bottom-left) matching the character tiles
+const BEVEL = 'polygon(0 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 11px 100%, 0 calc(100% - 11px))'
 
 interface RecentSearch {
   short_id: number
@@ -118,37 +120,47 @@ export function SearchBar() {
   const isNumericQuery = /^\d+$/.test(query) && query.length >= 2
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-2xl mx-auto">
+    <>
+      <div
+        onClick={() => setOpen(false)}
+        className={`fixed inset-0 z-30 bg-black/65 transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      />
+      <div ref={containerRef} className={`relative w-full max-w-2xl mx-auto ${open ? 'z-40' : ''}`}>
       <form onSubmit={handleSubmit}>
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 w-5 h-5 pointer-events-none" />
-          <Input
+        <div className="group relative h-14">
+          <div
+            className="absolute inset-0 bg-zinc-700 group-focus-within:bg-amber-400 transition-colors duration-200"
+            style={{ clipPath: BEVEL }}
+          />
+          <div className="absolute inset-[2px] bg-zinc-900" style={{ clipPath: BEVEL }} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-5 h-5 text-zinc-400 group-focus-within:text-amber-400 transition-colors pointer-events-none" />
+          <input
             value={query}
             onChange={handleQueryChange}
             placeholder="Search by CFN name or ID"
-            className="pl-12 pr-4 h-14 text-base bg-zinc-900 border-zinc-700 rounded-xl placeholder:text-zinc-500"
             autoComplete="off"
+            className="relative z-10 w-full h-full bg-transparent pl-12 pr-12 text-base text-zinc-100 placeholder:text-zinc-400 focus:outline-none"
           />
           {loading && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
           )}
         </div>
       </form>
 
       {open && isNumericQuery && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-none shadow-2xl z-50 overflow-hidden">
           <button
             onClick={() => { router.push(`/player/${query}`); setQuery(''); setOpen(false) }}
             className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-zinc-800 transition-colors text-left cursor-pointer"
           >
-            <ArrowRight className="w-4 h-4 text-zinc-400 flex-shrink-0" />
+            <ArrowRight className="w-4 h-4 text-zinc-300 flex-shrink-0" />
             <span className="text-sm text-zinc-300">Go to player <span className="font-mono text-white">#{query}</span></span>
           </button>
         </div>
       )}
 
       {open && !isNumericQuery && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-none shadow-2xl z-50 overflow-hidden">
           {results.slice(0, 8).map((r) => {
             const li = r.favorite_character_league_info
             const rankId = li ? getEffectiveRankId(li.league_rank, 0, li.master_rating_ranking, li.master_rating) : null
@@ -175,7 +187,7 @@ export function SearchBar() {
 
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-white truncate">{r.personal_info.fighter_id}</p>
-                  <p className="text-xs text-zinc-400 truncate">
+                  <p className="text-xs text-zinc-300 truncate">
                     {r.home_name} · {r.favorite_character_name}
                   </p>
                 </div>
@@ -190,7 +202,7 @@ export function SearchBar() {
                       unoptimized
                       className="object-contain"
                     />
-                    <span className="text-xs text-zinc-400 hidden sm:block">{rank?.name}</span>
+                    <span className="text-xs text-zinc-300 hidden sm:block">{rank?.name}</span>
                   </div>
                 )}
               </button>
@@ -199,7 +211,7 @@ export function SearchBar() {
           <a
             href={`/search?q=${encodeURIComponent(query)}`}
             onClick={() => setOpen(false)}
-            className="flex items-center justify-center gap-1 px-4 py-3 text-sm text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800 transition-colors border-t border-zinc-800"
+            className="flex items-center justify-center gap-1 px-4 py-3 text-sm text-zinc-300 hover:text-zinc-300 hover:bg-zinc-800 transition-colors border-t border-zinc-800"
           >
             Show all results →
           </a>
@@ -207,14 +219,14 @@ export function SearchBar() {
       )}
 
       {open && !isNumericQuery && query.length >= 2 && results.length === 0 && !loading && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl z-50 px-4 py-6 text-center text-zinc-400 text-sm">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-none shadow-2xl z-50 px-4 py-6 text-center text-zinc-300 text-sm">
           No players found for &quot;{query}&quot;
         </div>
       )}
 
       {query === '' && recent.length > 0 && (
         <div className="mt-3">
-          <p className="text-xs text-zinc-400 mb-2 flex items-center gap-1.5">
+          <p className="text-xs text-zinc-300 mb-2 flex items-center gap-1.5">
             <Clock className="w-3 h-3" />
             Recent
           </p>
@@ -223,7 +235,7 @@ export function SearchBar() {
               <button
                 key={r.short_id}
                 onClick={() => router.push(`/player/${r.short_id}`)}
-                className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800/60 hover:bg-zinc-800 border border-zinc-700/50 rounded-lg transition-colors cursor-pointer"
+                className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800/60 hover:bg-zinc-800 border border-zinc-700/50 rounded-none transition-colors cursor-pointer"
               >
                 <div className="relative w-5 h-5 rounded overflow-hidden bg-zinc-700 flex-shrink-0">
                   {r.char_slug && (
@@ -242,6 +254,7 @@ export function SearchBar() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   )
 }
