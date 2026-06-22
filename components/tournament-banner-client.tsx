@@ -1,28 +1,83 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useSyncExternalStore } from 'react'
 import { Trophy, ExternalLink, X } from 'lucide-react'
 
-type Props = {
+// How many weeks ahead the banner appears.
+// 0 = only during the tournament's own week (Monday onward) — production behavior.
+// 2 = show up to 2 weeks early — handy for testing so an upcoming event shows now.
+const BANNER_LEAD_WEEKS = 0
+const DAY_MS = 86_400_000
+
+// A weekend-sized tournament the server deemed bannerable. start/end are midnight timestamps.
+export type BannerCandidate = {
   name: string
   url: string
   date: string
   location: string | null
-  label: string
+  start: number
+  end: number
 }
 
-export function TournamentBannerClient({ name, url, date, location, label }: Props) {
+function startOfWeekMonday(d: Date): number {
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate())
+  const offset = (x.getDay() + 6) % 7 // Mon=0 ... Sun=6
+  x.setDate(x.getDate() - offset)
+  return x.getTime()
+}
+
+// Pick the soonest tournament within the lead window. Runs on the client with the
+// real current date, so production stays correct even though the page is static.
+function pick(candidates: BannerCandidate[], today: Date): BannerCandidate | null {
+  const todayMonday = startOfWeekMonday(today)
+  const todayMs = today.getTime()
+
+  return (
+    candidates
+      .filter((c) => c.end >= todayMs)
+      .filter((c) => {
+        const weeksAhead = Math.round((startOfWeekMonday(new Date(c.start)) - todayMonday) / (7 * DAY_MS))
+        return weeksAhead <= BANNER_LEAD_WEEKS
+      })
+      .sort((a, b) => a.start - b.start)[0] ?? null
+  )
+}
+
+function relativeLabel(start: number, end: number, today: number): string {
+  if (start <= today && today <= end) return 'Happening now'
+  const days = Math.round((start - today) / DAY_MS)
+  if (days <= 0) return 'Starts today'
+  if (days === 1) return 'Starts tomorrow'
+  return `Starts in ${days} days`
+}
+
+const subscribe = () => () => {}
+
+export function TournamentBannerClient({ candidates }: { candidates: BannerCandidate[] }) {
   const [hidden, setHidden] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
-  // Expose the banner height so sticky chrome below the navbar (e.g. the profile
-  // tab bar) can offset itself, and collapse to 0 when dismissed.
-  useEffect(() => {
-    const h = hidden ? 0 : (ref.current?.offsetHeight ?? 0)
-    document.documentElement.style.setProperty('--banner-h', `${h}px`)
-  }, [hidden])
+  // false during SSR/SSG and on the first client render (so static HTML, which has no
+  // banner, hydrates cleanly), then true — letting us decide using the real browser clock.
+  const isClient = useSyncExternalStore(subscribe, () => true, () => false)
 
-  if (hidden) return null
+  let selected: BannerCandidate | null = null
+  let label = ''
+  if (isClient) {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    selected = pick(candidates, today)
+    if (selected) label = relativeLabel(selected.start, selected.end, today.getTime())
+  }
+
+  // Expose the banner height so sticky chrome below the navbar (e.g. the profile
+  // tab bar) can offset itself, and collapse to 0 when hidden or dismissed.
+  useEffect(() => {
+    const h = hidden || !selected ? 0 : ref.current?.offsetHeight ?? 0
+    document.documentElement.style.setProperty('--banner-h', `${h}px`)
+  }, [hidden, selected])
+
+  if (hidden || !selected) return null
 
   const dismiss = () => setHidden(true)
 
@@ -38,16 +93,16 @@ export function TournamentBannerClient({ name, url, date, location, label }: Pro
         </div>
 
         <span className="font-bebas text-lg sm:text-xl tracking-wider leading-none text-zinc-100 truncate">
-          {name}
+          {selected.name}
         </span>
-        {location && (
-          <span className="hidden md:inline text-sm text-zinc-300 tracking-wide shrink-0">{location}</span>
+        {selected.location && (
+          <span className="hidden md:inline text-sm text-zinc-300 tracking-wide shrink-0">{selected.location}</span>
         )}
-        <span className="hidden sm:inline text-sm text-zinc-400 tabular-nums tracking-wide shrink-0">{date}</span>
+        <span className="hidden sm:inline text-sm text-zinc-400 tabular-nums tracking-wide shrink-0">{selected.date}</span>
 
         <div className="ml-auto flex items-center gap-2 sm:gap-3 shrink-0">
           <a
-            href={url}
+            href={selected.url}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-amber-400/80 hover:text-amber-400 transition-colors"

@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { BookOpen, Swords, FileSpreadsheet, CirclePlay, MessagesSquare, ExternalLink, Trophy } from 'lucide-react'
+import { BookOpen, Swords, FileSpreadsheet, MessagesSquare, ExternalLink, Trophy } from 'lucide-react'
 import type { TechSection } from '@/lib/constants/character-links'
+import { VideoCard } from '@/components/video-card'
+import { CharacterTechs } from '@/components/character-techs'
 
 const TECH_ORDER = ['guides', 'combos', 'pressure', 'setups', 'techs'] as const
 const TECH_LABELS: Record<string, string> = { guides: 'Guides', combos: 'Combos', pressure: 'Pressure', setups: 'Setups', techs: 'Techs' }
@@ -73,25 +75,12 @@ function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
   )
 }
 
-function VideoCard({ href, title, thumbnail }: { href: string; title: string; thumbnail: string | null }) {
+function SectionHeader({ children }: { children: React.ReactNode }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group rounded-none border border-zinc-800 bg-zinc-900 overflow-hidden hover:border-zinc-600 transition-colors"
-    >
-      <div className="relative w-full aspect-video bg-zinc-800">
-        {thumbnail && <Image src={thumbnail} alt={title} fill className="object-cover" unoptimized />}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
-          <CirclePlay size={36} className="text-white/80" />
-        </div>
-      </div>
-      <div className="flex items-center justify-between px-3 py-2 gap-2">
-        <span className="text-sm font-medium text-zinc-100 leading-tight truncate">{title}</span>
-        <ExternalLink size={13} className="shrink-0 text-zinc-300 group-hover:text-zinc-200 transition-colors" />
-      </div>
-    </a>
+    <div className="flex items-center gap-2.5">
+      <span className="block w-1.5 h-6 -skew-x-12 bg-amber-400 shrink-0" />
+      <h2 className="font-bebas text-2xl tracking-widest text-zinc-100 leading-none">{children}</h2>
+    </div>
   )
 }
 
@@ -119,34 +108,65 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   const thumbnails = await Promise.all(allYtItems.map((item) => getYoutubeThumbnail(item.url)))
   const thumbMap = Object.fromEntries(allYtItems.map((item, i) => [item.url, thumbnails[i]]))
 
+  const techCategories = TECH_ORDER
+    .map((cat) => ({
+      id: cat,
+      label: TECH_LABELS[cat],
+      videos: (allTechs[cat] ?? []).map((v) => ({ title: v.title, url: v.url, thumbnail: thumbMap[v.url] ?? null })),
+    }))
+    .filter((c) => c.videos.length > 0)
+
   const hasGuides = !!(links.supercombo || links.ufd || links.raidhyn)
   const hasCommunity = !!(links.discords?.length)
   const players = links.players ?? []
 
   return (
-    <div className="space-y-8">
-      <div className="relative w-full h-64 rounded-none overflow-hidden border border-zinc-800">
-        <Image
-          src={getCharacterImageUrl(char.slug)}
-          alt={char.name}
-          fill
-          className="object-cover object-center"
-          unoptimized
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
-        <h1
-          className="absolute bottom-1 left-6 font-title text-9xl leading-none text-white uppercase"
-          style={{ letterSpacing: '0.03em' }}
-        >
-          {char.name}
-        </h1>
+    <div className="space-y-6">
+      <div>
+        <div className="relative w-full h-64 rounded-none overflow-hidden border border-zinc-800">
+          <Image
+            src={getCharacterImageUrl(char.slug)}
+            alt={char.name}
+            fill
+            className="object-cover object-center"
+            unoptimized
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+          <h1
+            className="absolute bottom-1 left-6 font-title text-9xl leading-none text-white uppercase"
+            style={{ letterSpacing: '0.03em' }}
+          >
+            {char.name}
+          </h1>
+          <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: char.color }} />
+        </div>
+
+        {/* Signature-color accent + at-a-glance resource counts */}
+        <div className="mt-3 flex items-center gap-3 flex-wrap">
+          <span className="block w-10 h-2 -skew-x-12 shrink-0" style={{ background: char.color }} />
+          <div className="flex items-center gap-2.5 text-sm text-zinc-300 flex-wrap">
+            {hasGuides && <span>Frame data &amp; wiki</span>}
+            {allTechVideos.length > 0 && (
+              <>
+                <span className="text-zinc-600">·</span>
+                <span>{allTechVideos.length} tech videos</span>
+              </>
+            )}
+            {players.length > 0 && (
+              <>
+                <span className="text-zinc-600">·</span>
+                <span>{players.length} players to watch</span>
+              </>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {hasGuides && (
-          <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Guides & Data</h2>
+          <section className="space-y-3">
+            <SectionHeader>Guides &amp; Data</SectionHeader>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {links.supercombo && (
                 <LinkCard href={links.supercombo} icon={<BookOpen size={16} />} title="Supercombo Wiki" domain="wiki.supercombo.gg" color="#60a5fa" />
@@ -161,42 +181,9 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           </section>
         )}
 
-        {watchItems.length > 0 && (
-          <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Replays</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {watchItems.map((item) => (
-                <VideoCard key={item.url} href={item.url} title={item.title} thumbnail={thumbMap[item.url]} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {hasTechs && (
-          <section className="space-y-4">
-            <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Techs</h2>
-            <div className="space-y-4">
-              {TECH_ORDER.map(cat => {
-                const items = allTechs[cat]
-                if (!items?.length) return null
-                return (
-                  <div key={cat} className="space-y-2">
-                    <h3 className="text-xs font-medium text-zinc-300 uppercase tracking-wider">{TECH_LABELS[cat]}</h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {items.map((item) => (
-                        <VideoCard key={item.url} href={item.url} title={item.title} thumbnail={thumbMap[item.url]} />
-                      ))}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </section>
-        )}
-
         {players.length > 0 && (
-          <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Players to Watch</h2>
+          <section className="space-y-3">
+            <SectionHeader>Players to Watch</SectionHeader>
             {links.playersNote && <p className="text-sm italic text-zinc-300">{links.playersNote}</p>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {players.map((player) => {
@@ -223,8 +210,8 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
         )}
 
         {hasCommunity && (
-          <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Community</h2>
+          <section className="space-y-3">
+            <SectionHeader>Community</SectionHeader>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {links.discords!.map((url, i) => (
                 <LinkCard
@@ -237,6 +224,24 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
                 />
               ))}
             </div>
+          </section>
+        )}
+
+        {watchItems.length > 0 && (
+          <section className="space-y-3">
+            <SectionHeader>Replays</SectionHeader>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {watchItems.map((item) => (
+                <VideoCard key={item.url} href={item.url} title={item.title} thumbnail={thumbMap[item.url]} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {hasTechs && (
+          <section className="space-y-3">
+            <SectionHeader>Techs</SectionHeader>
+            <CharacterTechs categories={techCategories} />
           </section>
         )}
       </div>
