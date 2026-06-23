@@ -31,13 +31,13 @@ export const metadata: Metadata = {
     title: 'Shoryu - SF6 Stats',
     description: 'Street Fighter 6 player profiles, Master ranking, matchup charts, match history, and character guides.',
     url: BASE,
-    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Shoryu - SF6 Stats' }],
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'Shoryu - SF6 Stats' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Shoryu - SF6 Stats',
     description: 'Street Fighter 6 player profiles, Master ranking, matchup charts, match history, and character guides.',
-    images: ['/logo.png'],
+    images: ['/og.png'],
   },
 }
 
