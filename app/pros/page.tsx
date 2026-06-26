@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { PRO_PLAYERS, type ProPlayer } from '@/lib/data/pro-players'
-import { getPlayerProfile } from '@/lib/buckler/client'
+import { getPlayerProfileResult } from '@/lib/buckler/client'
+import { ServiceUnavailable } from '@/components/service-unavailable'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
 import type { BucklerFighterBanner } from '@/lib/buckler'
@@ -81,14 +82,18 @@ function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighter
 }
 
 export default async function ProsPage() {
-  const profiles = await Promise.all(
-    PRO_PLAYERS.map((p) => getPlayerProfile(p.short_id))
-  )
-
-  const withProfiles = PRO_PLAYERS.map((player, i) => ({
-    player,
-    banner: profiles[i]?.fighter_banner_info ?? null,
-  }))
+  // Fetch sequentially and bail on the first 'unavailable': if the session is dead every
+  // request would 403, so there's no point firing one per pro. Individual 'notfound' pros
+  // are skipped (banner null) without stopping the rest.
+  const withProfiles: { player: ProPlayer; banner: BucklerFighterBanner | null }[] = []
+  for (const player of PRO_PLAYERS) {
+    const result = await getPlayerProfileResult(player.short_id)
+    if (result.status === 'unavailable') return <ServiceUnavailable />
+    withProfiles.push({
+      player,
+      banner: result.status === 'ok' ? result.profile.fighter_banner_info ?? null : null,
+    })
+  }
 
   const pros     = withProfiles.filter(({ player }) => player.category === 'pro')
   const creators = withProfiles.filter(({ player }) => player.category === 'creator')

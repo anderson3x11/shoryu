@@ -49,6 +49,15 @@ function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
   )
 }
 
+function SectionHeader({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-2.5">
+      <span className="block w-1.5 h-6 -skew-x-12 bg-amber-400 shrink-0" />
+      <h2 className="font-bebas text-2xl tracking-widest text-zinc-100 leading-none">{children}</h2>
+    </div>
+  )
+}
+
 function VideoCard({ href, title, thumbnail }: { href: string; title: string; thumbnail: string | null }) {
   return (
     <a
@@ -80,31 +89,31 @@ export default async function GuidesPage() {
   )
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8">
+    <div className="space-y-8">
       <div className="flex items-center gap-3">
         <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
         <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Guides</h1>
       </div>
 
-      <div className="space-y-6">
-        <section className="space-y-2">
-          <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Guides & Data</h2>
+      <div className="space-y-8">
+        <section className="space-y-3">
+          <SectionHeader>Guides &amp; Data</SectionHeader>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <LinkCard href="https://wiki.supercombo.gg/w/Street_Fighter_6" icon={<BookOpen size={16} />} title="Supercombo Wiki" domain="wiki.supercombo.gg" color="#60a5fa" />
             <LinkCard href="https://ultimateframedata.com/sf6" icon={<Swords size={16} />} title="Ultimate Frame Data" domain="ultimateframedata.com" color="#f97316" />
           </div>
         </section>
 
-        <section className="space-y-2">
-          <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Glossary</h2>
+        <section className="space-y-3">
+          <SectionHeader>Glossary</SectionHeader>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <LinkCard href="https://glossary.infil.net/" icon={<Info size={16} />} title="Fighting Game Glossary" domain="glossary.infil.net" color="#a78bfa" />
           </div>
         </section>
 
-        <section className="space-y-2">
-          <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Techs</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <section className="space-y-3">
+          <SectionHeader>Techs</SectionHeader>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {TECHS.map((v) => (
               <VideoCard key={v.url} href={v.url} title={v.title} thumbnail={thumbMap[v.url]} />
             ))}

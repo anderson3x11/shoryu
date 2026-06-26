@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getRanking } from '@/lib/buckler/client'
+import { getRankingResult } from '@/lib/buckler/client'
+import { ServiceUnavailable } from '@/components/service-unavailable'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
 import type { BucklerRankingEntry } from '@/lib/buckler/types'
@@ -70,9 +71,10 @@ export default async function RankingPage({
   const { page: pageStr } = await searchParams
   const page = Math.max(1, parseInt(pageStr ?? '1', 10))
 
-  const data = await getRanking(page)
-  const players = data?.ranking_fighter_list ?? []
-  const totalPages = data?.total_page ?? 1
+  const result = await getRankingResult(page)
+  if (result.status === 'unavailable') return <ServiceUnavailable />
+  const players = result.status === 'ok' ? result.data.ranking_fighter_list : []
+  const totalPages = result.status === 'ok' ? result.data.total_page : 1
 
   return (
     <div className="space-y-6">

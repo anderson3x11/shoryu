@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import { BookOpen, Swords, FileSpreadsheet, MessagesSquare, ExternalLink, Trophy } from 'lucide-react'
 import type { TechSection } from '@/lib/constants/character-links'
 import { VideoCard } from '@/components/video-card'
@@ -7,7 +6,7 @@ import { CharacterTechs } from '@/components/character-techs'
 
 const TECH_ORDER = ['guides', 'combos', 'pressure', 'setups', 'techs'] as const
 const TECH_LABELS: Record<string, string> = { guides: 'Guides', combos: 'Combos', pressure: 'Pressure', setups: 'Setups', techs: 'Techs' }
-import { CHARACTERS, getCharacterImageUrl } from '@/lib/constants/characters'
+import { CHARACTERS, getCharacterFullImageUrl, getCharacterHeaderY } from '@/lib/constants/characters'
 import { CHARACTER_LINKS } from '@/lib/constants/character-links'
 
 interface CharacterPageProps {
@@ -78,7 +77,7 @@ function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
 function SectionHeader({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-2.5">
-      <span className="block w-1.5 h-6 -skew-x-12 bg-amber-400 shrink-0" />
+      <span className="block w-1.5 h-6 -skew-x-12 shrink-0" style={{ background: 'var(--accent)' }} />
       <h2 className="font-bebas text-2xl tracking-widest text-zinc-100 leading-none">{children}</h2>
     </div>
   )
@@ -120,22 +119,24 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   const hasCommunity = !!(links.discords?.length)
   const players = links.players ?? []
 
+  // Secondary color accents this page (ticks, active chips, hover) in place of the amber Shoryu accent.
+  const accent = char.colorSecondary ?? '#fbbf24'
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ ['--accent']: accent } as React.CSSProperties}>
       <div>
-        <div className="relative w-full h-64 rounded-none overflow-hidden border border-zinc-800">
-          <Image
-            src={getCharacterImageUrl(char.slug)}
-            alt={char.name}
-            fill
-            className="object-cover object-center"
-            unoptimized
-            priority
+        <div className="relative w-full h-72 sm:h-80 rounded-none overflow-hidden border border-zinc-800">
+          <div
+            className="absolute inset-0 bg-no-repeat bg-cover"
+            style={{
+              backgroundImage: `url(${getCharacterFullImageUrl(char.slug)})`,
+              backgroundPosition: `center ${getCharacterHeaderY(char.id)}%`,
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
           <h1
             className="absolute bottom-1 left-6 font-title text-9xl leading-none text-white uppercase"
-            style={{ letterSpacing: '0.03em' }}
+            style={{ letterSpacing: '0.1em' }}
           >
             {char.name}
           </h1>
@@ -189,14 +190,14 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
               {players.map((player) => {
                 const inner = (
                   <>
-                    <Trophy size={15} className="shrink-0 text-amber-500" />
+                    <Trophy size={15} className="shrink-0" style={{ color: 'var(--accent)' }} />
                     <span className="text-sm font-medium text-zinc-100 group-hover:text-white transition-colors truncate">{player.name}</span>
                     {player.liquipedia && <ExternalLink size={13} className="shrink-0 ml-auto text-zinc-300 group-hover:text-zinc-200 transition-colors" />}
                   </>
                 )
                 return player.liquipedia ? (
                   <a key={player.name} href={player.liquipedia} target="_blank" rel="noopener noreferrer"
-                    className="group flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-amber-700/60 hover:bg-zinc-800/60 transition-colors">
+                    className="group flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-[color:var(--accent)] hover:bg-zinc-800/60 transition-colors">
                     {inner}
                   </a>
                 ) : (
@@ -241,7 +242,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
         {hasTechs && (
           <section className="space-y-3">
             <SectionHeader>Techs</SectionHeader>
-            <CharacterTechs categories={techCategories} />
+            <CharacterTechs categories={techCategories} accent={accent} />
           </section>
         )}
       </div>
