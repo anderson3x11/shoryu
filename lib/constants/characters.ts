@@ -39,7 +39,11 @@ export const CHARACTERS: Character[] = [
   { id: 'sagat',    name: 'Sagat',     slug: 'sagat',    bucklerCharId: 25, color: '#a07a4a', colorSecondary: '#c8b89a' },
   { id: 'cviper',   name: 'C. Viper',  slug: 'cviper',   bucklerCharId: 30, color: '#b03038', colorSecondary: '#e6ebf0' },
   { id: 'alex',     name: 'Alex',      slug: 'alex',     bucklerCharId: 31, color: '#3f8050', colorSecondary: '#b05048' },
-  { id: 'ingrid',   name: 'Ingrid',    slug: 'ingrid',   bucklerCharId: 32, color: '#b9a0e8', colorSecondary: '#d4a738' },
+  { id: 'ingrid', name: 'Ingrid', slug: 'ingrid', bucklerCharId: 32, color: '#b9a0e8', colorSecondary: '#d4a738' },
+  // { id: 'yasmine',   name: 'Yasmine',    slug: 'yasmine',   bucklerCharId: 33, color: '#b9a0e8', colorSecondary: '#d4a738' },
+  // { id: 'arjun',   name: 'Arjun',    slug: 'arjun',   bucklerCharId: 34, color: '#b9a0e8', colorSecondary: '#d4a738' },
+  // { id: 'tifa',   name: 'Tifa',    slug: 'tifa',   bucklerCharId: 35, color: '#b9a0e8', colorSecondary: '#d4a738' },
+  // { id: 'bosch',   name: 'Bosch',    slug: 'bosh',   bucklerCharId: 36, color: '#b9a0e8', colorSecondary: '#d4a738' },
   { id: 'random',   name: 'Random',    slug: 'random',   bucklerCharId: 254, color: '#71717a', hidden: true },
 ]
 
@@ -64,11 +68,11 @@ export function getCharacterFullImageUrl(slug: string): string {
 // Full-body splash arts are shown with background-size cover; this picks the
 // vertical band so the crop lands on each character's head/torso. Default 14.
 const CHARACTER_HEADER_Y: Record<string, number> = {
-  luke: 15, jamie: 17, manon: 25, kimberly: 52, marisa: 41, lily: 33,
-  jp: 7, juri: 54, deejay: 22, cammy: 10, ryu: 12, honda: 42, blanka: 33,
-  guile: 5, ken: 22, chunli: 27, zangief: 20, dhalsim: 18, rashid: 31,
-  aki: 31, ed: 24, gouki: 25, vega: 16, terry: 23, mai: 39, elena: 67,
-  sagat: 15, cviper: 12, alex: 31, ingrid: 45,
+  luke: 14, jamie: 16, manon: 22, kimberly: 52, marisa: 35, lily: 38,
+  jp: 6, juri: 54, deejay: 16, cammy: 5, ryu: 12, honda: 42, blanka: 33,
+  guile: 1, ken: 22, chunli: 23, zangief: 20, dhalsim: 18, rashid: 35,
+  aki: 35, ed: 18, gouki: 25, vega: 15, terry: 20, mai: 39, elena: 72,
+  sagat: 15, cviper: 10, alex: 31, ingrid: 47,
 }
 
 export function getCharacterHeaderY(id: string): number {

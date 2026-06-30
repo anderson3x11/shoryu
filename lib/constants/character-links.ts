@@ -11,6 +11,7 @@ export interface TechSection {
   pressure?: Video[];
   setups?: Video[];
   techs?: Video[];
+  oki?: Video[];
 }
 
 export interface Player {
@@ -1925,24 +1926,61 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
     ],
     techs: {
       guides: [
-        { title: "Ingrid Guide", url: "https://www.youtube.com/watch?v=CemqJ5giO88"},
-        { title: "Anti Ingrid Guide", url: "https://www.youtube.com/watch?v=6kOWXT6fol0"},
+        { title: "Ingrid Guide", url: "https://www.youtube.com/watch?v=CemqJ5giO88" },
+        { title: "Anti Ingrid Guide", url: "https://www.youtube.com/watch?v=6kOWXT6fol0" },
+        { title: "So you wanna learn Ingrid", url: "https://www.youtube.com/watch?v=mUzxSpeXXZY" },
+        { title: "BrianF mastering Ingrid", url: "https://www.youtube.com/watch?v=k4Inl5ZTlIQ"},
       ],
       combos: [
-        { title: "Combos", url: "https://www.youtube.com/watch?v=Fb566Gy3YcU" },
-        {
-          title: "Combos & Setups",
-          url: "https://www.youtube.com/watch?v=QmUwizYjJNc",
-        },
+        { title: "Essential Combos", url: "https://www.youtube.com/watch?v=L-e9zVpqueE" },
+        { title: "Combos", url: "https://www.youtube.com/watch?v=nQ6tcRElnfA" },
+        { title: "Combos and setups", url: "https://www.youtube.com/watch?v=QmUwizYjJNc" },
+        { title: "Combos and conversions", url: "https://www.youtube.com/watch?v=oracUZ7upAE" },
       ],
       setups: [
-        {
-          title: "Safejump Shimmy setup",
-          url: "https://www.youtube.com/watch?v=zx9p4cTrKh8",
-        },
+        { title: "Safejump Shimmy setup", url: "https://www.youtube.com/watch?v=zx9p4cTrKh8" },
+        { title: "Knockdown and Oki", url: "https://www.youtube.com/watch?v=Wey8M4nfeI4" },
       ],
+      techs: [
+        { title: "Ingrid tech", url: "https://www.youtube.com/watch?v=n3SRVhCrvno" },
+        { title: "Ingrid SA 2 tech", url: "https://www.youtube.com/watch?v=t_6usBZZM9A"},
+      ]
     },
     players: [
     ],
   },
 };
+
+/*
+yasmine : {
+  supercombo: SC + "Yasmine",
+  ufd: UFD + "yasmine",
+  playlist: YT + "PLvZ5t8JLwU9J-V_RxiT7CvqvfafKK8NKv",
+  discords: [
+    "https://discord.gg/jEsdJZWswT",
+    "https://discord.gg/eUAjKa6VAy",
+  ],
+  techs: {
+    guides: [
+      { title: "Ingrid Guide", url: "https://www.youtube.com/watch?v=CemqJ5giO88"},
+      { title: "Anti Ingrid Guide", url: "https://www.youtube.com/watch?v=6kOWXT6fol0"},
+    ],
+    combos: [
+      { title: "Combos", url: "https://www.youtube.com/watch?v=Fb566Gy3YcU" },
+      {
+        title: "Combos & Setups",
+        url: "https://www.youtube.com/watch?v=QmUwizYjJNc",
+      },
+    ],
+    setups: [
+      {
+        title: "Safejump Shimmy setup",
+        url: "https://www.youtube.com/watch?v=zx9p4cTrKh8",
+      },
+    ],
+  },
+  players: [
+  ],
+},
+};
+*/
