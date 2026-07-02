@@ -177,7 +177,7 @@ export const getTournaments = unstable_cache(
         {
           cache: 'no-store',
           headers: {
-            'User-Agent': 'Shoryu/1.0 (+https://shoryu.vercel.app)',
+            'User-Agent': 'Shoryu/1.0 (+https://shoryu.site)',
             'Accept-Language': 'en-US,en;q=0.9',
           },
         }

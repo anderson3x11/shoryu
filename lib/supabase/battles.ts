@@ -27,6 +27,15 @@ async function getLatestBattleAt(playerId: number): Promise<number | null> {
   return data ? Math.floor(new Date(data.played_at).getTime() / 1000) : null
 }
 
+async function getLastSyncedAt(playerId: number): Promise<number | null> {
+  const { data } = await supabase
+    .from('players')
+    .select('last_synced_at')
+    .eq('player_id', playerId)
+    .maybeSingle()
+  return data?.last_synced_at ? new Date(data.last_synced_at).getTime() : null
+}
+
 async function insertBattles(playerId: number, sid: number, battles: BucklerBattle[]) {
   if (battles.length === 0) return
 
@@ -61,11 +70,43 @@ async function insertBattles(playerId: number, sid: number, battles: BucklerBatt
   )
 }
 
+async function touchPlayerSync(playerId: number) {
+  // Records "synced now" without clobbering fighter_id — the throttle keys off this even when
+  // an incremental scan found no new battles, so a quiet player isn't re-fetched every visit.
+  await supabase
+    .from('players')
+    .upsert({ player_id: playerId, last_synced_at: new Date().toISOString() }, { onConflict: 'player_id' })
+}
+
+async function getRankedBattlesFromDB(playerId: number): Promise<DBBattle[]> {
+  const { data } = await supabase
+    .from('battles')
+    .select('*')
+    .eq('player_id', playerId)
+    .eq('mode', 'rank')
+    .order('played_at', { ascending: true })
+  return (data ?? []) as DBBattle[]
+}
+
+// How long a synced player is considered fresh: within this window, repeat visits serve the
+// DB with no Buckler call at all (a profile only gains a handful of ranked games per hour).
+const SYNC_TTL_MS = 2 * 60 * 60 * 1000
+
 // Called by matchups and lp-history routes.
-// First visit: full sync up to 10 pages. Subsequent visits: incremental (usually 1 page).
+// First visit: full sync up to 10 pages. Subsequent visits: incremental (usually 1 page),
+// but skipped entirely when the player was synced within SYNC_TTL_MS. `force` bypasses the TTL.
 // Returns all ranked battles from DB for this player.
-export async function syncAndGetRankedBattles(playerId: string, sid: number): Promise<DBBattle[]> {
+export async function syncAndGetRankedBattles(playerId: string, sid: number, force = false): Promise<DBBattle[]> {
   const numId = Number(playerId)
+
+  // Fresh enough — serve straight from the DB, no Buckler request.
+  if (!force) {
+    const lastSynced = await getLastSyncedAt(numId)
+    if (lastSynced && Date.now() - lastSynced < SYNC_TTL_MS) {
+      return getRankedBattlesFromDB(numId)
+    }
+  }
+
   const latestAt = await getLatestBattleAt(numId)
 
   if (latestAt === null) {
@@ -92,12 +133,8 @@ export async function syncAndGetRankedBattles(playerId: string, sid: number): Pr
     await insertBattles(numId, sid, fresh)
   }
 
-  const { data } = await supabase
-    .from('battles')
-    .select('*')
-    .eq('player_id', numId)
-    .eq('mode', 'rank')
-    .order('played_at', { ascending: true })
+  // Stamp freshness so the TTL holds even when nothing new was inserted above.
+  await touchPlayerSync(numId)
 
-  return (data ?? []) as DBBattle[]
+  return getRankedBattlesFromDB(numId)
 }

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { PRO_PLAYERS, type ProPlayer } from '@/lib/data/pro-players'
-import { getPlayerProfileResult } from '@/lib/buckler/client'
+import { getProPlayer, type ProPlayer } from '@/lib/data/pro-players'
+import { getProSnapshot } from '@/lib/supabase/snapshots'
 import { ServiceUnavailable } from '@/components/service-unavailable'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
@@ -82,18 +82,18 @@ function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighter
 }
 
 export default async function ProsPage() {
-  // Fetch sequentially and bail on the first 'unavailable': if the session is dead every
-  // request would 403, so there's no point firing one per pro. Individual 'notfound' pros
-  // are skipped (banner null) without stopping the rest.
-  const withProfiles: { player: ProPlayer; banner: BucklerFighterBanner | null }[] = []
-  for (const player of PRO_PLAYERS) {
-    const result = await getPlayerProfileResult(player.short_id)
-    if (result.status === 'unavailable') return <ServiceUnavailable />
-    withProfiles.push({
-      player,
-      banner: result.status === 'ok' ? result.profile.fighter_banner_info ?? null : null,
+  // Banners come from the twice-daily sync snapshot in Supabase, not a live Buckler fetch —
+  // this page used to fire one request per pro on every render. If the snapshot is missing
+  // (sync never ran), show the retry-later fallback. Order follows PRO_PLAYERS.
+  const snapshot = await getProSnapshot()
+  if (!snapshot) return <ServiceUnavailable />
+
+  const withProfiles: { player: ProPlayer; banner: BucklerFighterBanner | null }[] = snapshot
+    .map(({ short_id, banner }) => {
+      const player = getProPlayer(short_id)
+      return player ? { player, banner } : null
     })
-  }
+    .filter((x): x is { player: ProPlayer; banner: BucklerFighterBanner | null } => x !== null)
 
   const pros     = withProfiles.filter(({ player }) => player.category === 'pro')
   const creators = withProfiles.filter(({ player }) => player.category === 'creator')

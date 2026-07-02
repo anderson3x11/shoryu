@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
-import { getPlayerProfileResult } from '@/lib/buckler'
+import { getCachedPlayerProfile } from '@/lib/supabase/player-cache'
 import { ServiceUnavailable } from '@/components/service-unavailable'
 import { PlayerHeader } from '@/components/player-header'
+import { RefreshProfileButton } from '@/components/refresh-profile-button'
 import { CharacterStats, type PhaseData } from '@/components/character-stats'
 import { PlayCounts } from '@/components/play-counts'
 import { PlayerTabs } from '@/components/player-tabs'
@@ -14,7 +15,7 @@ interface PlayerPageProps {
 
 export async function generateMetadata({ params }: PlayerPageProps) {
   const { id } = await params
-  const result = await getPlayerProfileResult(id)
+  const result = await getCachedPlayerProfile(id)
   const name = result.status === 'ok'
     ? result.profile.fighter_banner_info?.personal_info?.fighter_id ?? id
     : id
@@ -26,7 +27,8 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
 
   // Overview only needs the profile. Battle logs / LP-MR history / matchups are fetched
   // client-side, lazily, when the Recent Battles or Stats tab is first opened.
-  const result = await getPlayerProfileResult(id)
+  // Served from the Supabase profile cache (12h TTL) — see getCachedPlayerProfile.
+  const result = await getCachedPlayerProfile(id)
 
   // Cookie expired / Buckler down: show a retry-later fallback instead of a 404 that would
   // read like the player doesn't exist.
@@ -45,6 +47,9 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <RefreshProfileButton playerId={String(shortId)} />
+      </div>
       <PlayerTabs
         playerId={String(shortId)}
         shortId={shortId}

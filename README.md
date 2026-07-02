@@ -2,7 +2,7 @@
 
 Street Fighter 6 stats site. Player profiles, matchup charts, LP/MR history, rankings, and tournament results.
 
-**Live at [shoryu.vercel.app](https://shoryu.vercel.app)**
+**Live at [shoryu.site](https://shoryu.site)**
 
 ## Stack
 

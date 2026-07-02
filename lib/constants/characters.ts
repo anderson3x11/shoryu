@@ -43,7 +43,7 @@ export const CHARACTERS: Character[] = [
   // { id: 'yasmine',   name: 'Yasmine',    slug: 'yasmine',   bucklerCharId: 33, color: '#b9a0e8', colorSecondary: '#d4a738' },
   // { id: 'arjun',   name: 'Arjun',    slug: 'arjun',   bucklerCharId: 34, color: '#b9a0e8', colorSecondary: '#d4a738' },
   // { id: 'tifa',   name: 'Tifa',    slug: 'tifa',   bucklerCharId: 35, color: '#b9a0e8', colorSecondary: '#d4a738' },
-  // { id: 'bosch',   name: 'Bosch',    slug: 'bosh',   bucklerCharId: 36, color: '#b9a0e8', colorSecondary: '#d4a738' },
+  // { id: 'bosch',   name: 'Bosch',    slug: 'bosch',   bucklerCharId: 36, color: '#b9a0e8', colorSecondary: '#d4a738' },
   { id: 'random',   name: 'Random',    slug: 'random',   bucklerCharId: 254, color: '#71717a', hidden: true },
 ]
 

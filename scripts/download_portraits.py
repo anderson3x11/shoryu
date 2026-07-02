@@ -15,7 +15,7 @@ SLUGS = [
     'ryu', 'luke', 'kimberly', 'chunli', 'manon', 'zangief', 'jp', 'dhalsim',
     'cammy', 'ken', 'deejay', 'lily', 'aki', 'rashid', 'blanka', 'juri',
     'marisa', 'guile', 'ed', 'honda', 'jamie', 'gouki', 'sagat', 'vega',
-    'terry', 'mai', 'elena', 'cviper', 'alex', 'ingrid',
+    'terry', 'mai', 'elena', 'cviper', 'alex', 'ingrid', 'yasmine', 'arjun', 'tifa', 'bosch'
 ]
 
 BASE = 'https://www.streetfighter.com/6/assets/images/character/{n}/{n}.png'

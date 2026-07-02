@@ -1,4 +1,4 @@
-import { getUsageRate } from '@/lib/buckler/client'
+import { getUsageSnapshot } from '@/lib/supabase/snapshots'
 import { getLatestLegendSnapshot } from '@/lib/supabase/legend'
 import { StatsClient } from './stats-client'
 import { LegendSnapshotChart } from '@/components/legend-snapshot-chart'
@@ -12,7 +12,7 @@ export const metadata = {
 
 export default async function StatsPage() {
   const [result, snapshot] = await Promise.all([
-    getUsageRate(),
+    getUsageSnapshot(),
     getLatestLegendSnapshot(),
   ])
 

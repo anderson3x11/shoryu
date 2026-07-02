@@ -7,7 +7,7 @@ import { NavSearch } from '@/components/nav-search'
 import { NavMenu } from '@/components/nav-menu'
 import { TournamentBanner } from '@/components/tournament-banner'
 import { SiteFooter } from '@/components/site-footer'
-import { Analytics } from '@vercel/analytics/next'
+import Script from 'next/script'
 import './globals.css'
 
 const martyric = localFont({ src: '../public/fonts/Martyric_PersonalUse.ttf', variable: '--font-display' })
@@ -16,6 +16,9 @@ const bebasNeue = Bebas_Neue({ weight: '400', variable: '--font-bebas', subsets:
 const barlow = Barlow({ weight: ['400', '500', '600', '700'], variable: '--font-sans', subsets: ['latin'] })
 
 const BASE = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://shoryu.site'
+
+const UMAMI_URL = process.env.NEXT_PUBLIC_UMAMI_URL
+const UMAMI_ID = process.env.NEXT_PUBLIC_UMAMI_ID
 
 export const metadata: Metadata = {
   title: {
@@ -77,7 +80,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <SiteFooter />
-        <Analytics />
+        {UMAMI_URL && UMAMI_ID && (
+          <Script src={UMAMI_URL} data-website-id={UMAMI_ID} strategy="afterInteractive" />
+        )}
       </body>
     </html>
   )
