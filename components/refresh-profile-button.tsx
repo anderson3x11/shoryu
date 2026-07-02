@@ -20,16 +20,16 @@ export function RefreshProfileButton({ playerId }: { playerId: string }) {
     try {
       const res = await fetch(`/api/player/${playerId}/refresh`, { method: 'POST' })
       if (res.status === 429) {
-        setNote('Déjà à jour, réessaie dans un instant.')
+        setNote('Recently refreshed, try again later.')
         return
       }
       if (!res.ok) {
-        setNote('Rafraîchissement indisponible.')
+        setNote('Refresh unavailable.')
         return
       }
       startTransition(() => router.refresh())
     } catch {
-      setNote('Rafraîchissement indisponible.')
+      setNote('Refresh unavailable.')
     } finally {
       setLoading(false)
     }
@@ -44,7 +44,7 @@ export function RefreshProfileButton({ playerId }: { playerId: string }) {
         className="flex items-center gap-1.5 rounded-none border border-zinc-700 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-300 hover:border-amber-400 hover:text-amber-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <RefreshCw className={`w-3.5 h-3.5 ${busy ? 'animate-spin' : ''}`} />
-        Rafraîchir
+        Refresh
       </button>
     </div>
   )

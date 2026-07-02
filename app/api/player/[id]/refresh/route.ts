@@ -1,9 +1,9 @@
 import { getCachedPlayerProfile, getProfileFetchedAt } from '@/lib/supabase/player-cache'
 
 // Manual "Refresh" for a player profile: forces one Buckler fetch (bypassing the 12h cache)
-// and updates the stored copy. Rate-limited to once per 2 min per player to stop the button
+// and updates the stored copy. Rate-limited to once per 5 min per player to stop the button
 // from being used to hammer Buckler.
-const MIN_INTERVAL_MS = 2 * 60 * 1000
+const MIN_INTERVAL_MS = 5 * 60 * 1000
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
