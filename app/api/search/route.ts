@@ -9,6 +9,6 @@ export async function GET(req: NextRequest) {
 
   const { results, totalPages } = await searchPlayers(q)
   return NextResponse.json({ results, totalPages }, {
-    headers: { 'Cache-Control': 's-maxage=600, stale-while-revalidate=1200' },
+    headers: { 'Cache-Control': 's-maxage=1800, stale-while-revalidate=3600' },
   })
 }

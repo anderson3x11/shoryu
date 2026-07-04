@@ -35,6 +35,14 @@ async function fetchRaw(path: string): Promise<{ ok: boolean; status: number; pa
 }
 
 export async function GET(req: NextRequest) {
+  // Guarded: this route can proxy arbitrary Buckler paths (?path=) through our session cookie, so
+  // it must never be openly hittable — that would let anyone drive unlimited requests and get the
+  // account banned. Requires the same secret as the cron route (fail closed if unset).
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const { searchParams } = req.nextUrl
   const id = searchParams.get('id') ?? DEFAULT_SHORT_ID
 

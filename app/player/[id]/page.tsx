@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import { getCachedPlayerProfile } from '@/lib/supabase/player-cache'
 import { ServiceUnavailable } from '@/components/service-unavailable'
@@ -9,13 +10,17 @@ import { PlayerTabs } from '@/components/player-tabs'
 
 export const revalidate = 600
 
+// Dedupe the profile read across generateMetadata + the page render: React cache() memoizes it
+// for the request, so a single view is one Supabase hit (and at most one Buckler fetch on a miss).
+const getProfile = cache((id: string) => getCachedPlayerProfile(id))
+
 interface PlayerPageProps {
   params: Promise<{ id: string }>
 }
 
 export async function generateMetadata({ params }: PlayerPageProps) {
   const { id } = await params
-  const result = await getCachedPlayerProfile(id)
+  const result = await getProfile(id)
   const name = result.status === 'ok'
     ? result.profile.fighter_banner_info?.personal_info?.fighter_id ?? id
     : id
@@ -28,7 +33,7 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
   // Overview only needs the profile. Battle logs / LP-MR history / matchups are fetched
   // client-side, lazily, when the Recent Battles or Stats tab is first opened.
   // Served from the Supabase profile cache (12h TTL) — see getCachedPlayerProfile.
-  const result = await getCachedPlayerProfile(id)
+  const result = await getProfile(id)
 
   // Cookie expired / Buckler down: show a retry-later fallback instead of a 404 that would
   // read like the player doesn't exist.

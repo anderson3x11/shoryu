@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next'
 import { CHARACTERS } from '@/lib/constants/characters'
-import { PRO_PLAYERS } from '@/lib/data/pro-players'
 
 const BASE = 'https://shoryu.site'
 
@@ -26,11 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
     }))
 
-  const proPlayerPages = PRO_PLAYERS.map(p => ({
-    url: `${BASE}/player/${p.short_id}`,
-    priority: 0.6 as const,
-    changeFrequency: 'daily' as const,
-  }))
-
-  return [...staticPages, ...characterPages, ...proPlayerPages]
+  // Individual /player/ pages are intentionally omitted: robots.txt disallows /player/ (so
+  // crawlers don't trigger Buckler profile fetches), so sitemapping them would be contradictory.
+  return [...staticPages, ...characterPages]
 }

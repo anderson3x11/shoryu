@@ -55,10 +55,13 @@ export async function GET(req: Request) {
   // until we run out of Buckler data, or until we hit the scan cap.
   if (char && sid) {
     const need = page * PAGE_SIZE + 1
+    // 'all' fans out to 4 Buckler requests per page (rank+casual+hub+custom), so cap it tighter
+    // than single-mode scans to keep a filtered cache-miss from ballooning Buckler load.
+    const maxPages = mode === 'all' ? 3 : MAX_BUCKLER_PAGES
     const collected: BucklerBattle[] = []
     let exhausted = false
     let bucklerPage = 1
-    while (collected.length < need && bucklerPage <= MAX_BUCKLER_PAGES) {
+    while (collected.length < need && bucklerPage <= maxPages) {
       const { battles, maxTotalPage } = await loadPage(id, bucklerPage, mode)
       for (const b of battles) {
         const isP1 = b.player1_info.player.short_id === sid
