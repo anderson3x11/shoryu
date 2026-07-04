@@ -1,4 +1,5 @@
 import { getCachedPlayerProfile, getProfileFetchedAt } from '@/lib/supabase/player-cache'
+import { syncAndGetRankedBattles } from '@/lib/supabase/battles'
 
 // Manual "Refresh" for a player profile: forces one Buckler fetch (bypassing the 12h cache)
 // and updates the stored copy. Rate-limited to once per 5 min per player to stop the button
@@ -18,5 +19,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const result = await getCachedPlayerProfile(id, true)
   if (result.status === 'unavailable') return Response.json({ error: 'unavailable' }, { status: 503 })
   if (result.status === 'notfound') return Response.json({ error: 'notfound' }, { status: 404 })
+  // Also force a ranked-battle re-sync so the Stats charts + Recent Battles refresh, not just the
+  // overview — otherwise they'd serve the 12h-cached data until the next natural sync.
+  await syncAndGetRankedBattles(id, numId, true)
   return Response.json({ ok: true })
 }

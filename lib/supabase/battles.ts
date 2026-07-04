@@ -88,9 +88,10 @@ async function getRankedBattlesFromDB(playerId: number): Promise<DBBattle[]> {
   return (data ?? []) as DBBattle[]
 }
 
-// How long a synced player is considered fresh: within this window, repeat visits serve the
-// DB with no Buckler call at all (a profile only gains a handful of ranked games per hour).
-const SYNC_TTL_MS = 2 * 60 * 60 * 1000
+// How long a synced player is considered fresh: within this window, repeat visits serve the DB
+// with no Buckler call at all. Matches the 12h profile cache so a normal profile view never hits
+// Buckler; the manual Refresh button (force=true) is the only path to fresher data.
+const SYNC_TTL_MS = 12 * 60 * 60 * 1000
 
 // Called by matchups and lp-history routes.
 // First visit: full sync up to 10 pages. Subsequent visits: incremental (usually 1 page),

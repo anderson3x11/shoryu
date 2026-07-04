@@ -76,6 +76,11 @@ create table if not exists usage_snapshot (
 
 create table if not exists player_profiles (
   player_id  bigint primary key,
-  profile    jsonb not null,     -- BucklerProfilePage
+  profile    jsonb not null,     -- BucklerProfilePage (includes the current-phase matchup matrix)
   fetched_at timestamptz not null default now()
 );
+
+-- NOTE: the matchup chart reads the current-phase matrix straight out of the cached profile above
+-- (12h TTL), so there is no separate matchup table. Cross-phase history was dropped (Buckler only
+-- exposes the current phase). If player_phase_stats / player_peak were created for the earlier
+-- cross-phase attempt, they are unused and can be dropped.

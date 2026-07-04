@@ -76,16 +76,16 @@ export async function GET(req: Request) {
       battles: slice,
       totalPages: page + (hasMore ? 1 : 0),
       currentPage: page,
-    }, { headers: { 'Cache-Control': 's-maxage=300, stale-while-revalidate=900' } })
+    }, { headers: { 'Cache-Control': 's-maxage=43200, stale-while-revalidate=86400' } })
   }
 
   // Unfiltered: original behavior — 'all' mode takes top-PAGE_SIZE most recent across all 4 sub-modes.
   if (mode === 'all') {
     const { battles, maxTotalPage } = await loadPage(id, page, 'all')
     const sliced = battles.sort((a, b) => b.uploaded_at - a.uploaded_at).slice(0, PAGE_SIZE)
-    return Response.json({ battles: sliced, totalPages: maxTotalPage, currentPage: page }, { headers: { 'Cache-Control': 's-maxage=300, stale-while-revalidate=900' } })
+    return Response.json({ battles: sliced, totalPages: maxTotalPage, currentPage: page }, { headers: { 'Cache-Control': 's-maxage=43200, stale-while-revalidate=86400' } })
   }
 
   const { battles, maxTotalPage } = await loadPage(id, page, mode)
-  return Response.json({ battles, totalPages: maxTotalPage, currentPage: page }, { headers: { 'Cache-Control': 's-maxage=300, stale-while-revalidate=900' } })
+  return Response.json({ battles, totalPages: maxTotalPage, currentPage: page }, { headers: { 'Cache-Control': 's-maxage=43200, stale-while-revalidate=86400' } })
 }

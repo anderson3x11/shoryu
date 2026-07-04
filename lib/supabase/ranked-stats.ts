@@ -1,4 +1,5 @@
 import type { DBBattle } from './battles'
+import type { BucklerPlayData } from '@/lib/buckler'
 import { getCharacterByBucklerId } from '@/lib/constants/characters'
 
 // Shared shapes + builders for ranked-derived stats (LP/MR history + matchup matrix).
@@ -218,4 +219,54 @@ export function buildMatchupRows(battles: DBBattle[]): { rows: MatchupRow[]; tot
   }).sort((a, b) => b.totalGames - a.totalGames)
 
   return { rows, totalBattles: battles.length }
+}
+
+// Buckler's per-character arrays include aggregate pseudo-characters that must be skipped or every
+// game double-counts: 253 = "Any/All" (the row/rival total), 254 = Random.
+const MATCHUP_AGGREGATE_IDS = new Set([253, 254])
+type CharRivalRow = BucklerPlayData['character_win_rates_by_rival_character'][number]
+
+// Build MatchupRow[] from Buckler's server-computed current-phase matchup matrix
+// (profile.play.character_win_rates_by_rival_character) — thousands of games, not our ~100
+// synced battles. Same output shape as buildMatchupRows so the chart is source-agnostic.
+export function matchupRowsFromMatrix(
+  matrix: CharRivalRow[] | null | undefined,
+): { rows: MatchupRow[]; totalBattles: number } {
+  const acc: Record<number, Record<number, { wins: number; total: number }>> = {}
+
+  for (const row of matrix ?? []) {
+    if (MATCHUP_AGGREGATE_IDS.has(row.character_id)) continue
+    for (const rv of row.rival_character_win_rates ?? []) {
+      if (MATCHUP_AGGREGATE_IDS.has(rv.rival_character_id) || rv.battle_count <= 0) continue
+      ;(acc[row.character_id] ??= {})[rv.rival_character_id] ??= { wins: 0, total: 0 }
+      acc[row.character_id][rv.rival_character_id].wins += rv.win_count
+      acc[row.character_id][rv.rival_character_id].total += rv.battle_count
+    }
+  }
+
+  let totalBattles = 0
+  const rows: MatchupRow[] = Object.entries(acc)
+    .map(([myIdStr, vsMap]) => {
+      const myId = Number(myIdStr)
+      const myChar = getCharacterByBucklerId(myId)
+      const vs: Record<number, MatchupVs> = {}
+      let totalGames = 0
+      for (const [oppIdStr, d] of Object.entries(vsMap)) {
+        const oppId = Number(oppIdStr)
+        const oppChar = getCharacterByBucklerId(oppId)
+        vs[oppId] = {
+          charId: oppId,
+          charSlug: oppChar?.slug ?? String(oppId),
+          charName: oppChar?.name ?? String(oppId),
+          wins: d.wins,
+          total: d.total,
+        }
+        totalGames += d.total
+      }
+      totalBattles += totalGames
+      return { charId: myId, charSlug: myChar?.slug ?? '', charName: myChar?.name ?? String(myId), totalGames, vs }
+    })
+    .sort((a, b) => b.totalGames - a.totalGames)
+
+  return { rows, totalBattles }
 }

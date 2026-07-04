@@ -8,6 +8,7 @@ import type { MatchupRow, MatchupVs } from '@/lib/supabase/ranked-stats'
 interface MatchupChartProps {
   rows: MatchupRow[] | null   // null = still loading
   totalBattles: number
+  seasonId?: number | null    // Buckler phase the matchup data is for (current phase only)
   error?: boolean
 }
 
@@ -60,7 +61,7 @@ function MatchupBar({ vs }: { vs: MatchupVs }) {
   )
 }
 
-export function MatchupChart({ rows, totalBattles, error = false }: MatchupChartProps) {
+export function MatchupChart({ rows, totalBattles, seasonId = null, error = false }: MatchupChartProps) {
   return (
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">
       <div className="px-4 pt-4 pb-3 flex items-center justify-between gap-2 flex-wrap">
@@ -70,7 +71,7 @@ export function MatchupChart({ rows, totalBattles, error = false }: MatchupChart
         </div>
         {rows !== null && (
           <span className="text-xs text-zinc-400">
-            Based on last {totalBattles} ranked matches
+            {seasonId != null ? `Phase ${seasonId} · ` : ''}{totalBattles} ranked matches
           </span>
         )}
       </div>

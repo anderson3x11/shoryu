@@ -91,6 +91,19 @@ export interface BucklerPlayData {
     character_name: string
     character_tool_name: string
   }>
+  // Full matchup matrix for the current phase: per character the player used, a per-rival
+  // breakdown. Includes aggregate pseudo-characters (253 = "Any/All", 254 = Random) as extra
+  // rows AND as an extra rival entry inside each row — skip those to avoid double-counting.
+  character_win_rates_by_rival_character: Array<{
+    character_id: number
+    rival_character_win_rates: Array<{
+      rival_character_id: number
+      battle_count: number
+      win_count: number
+      rival_character_name: string
+      rival_character_tool_name: string
+    }>
+  }>
 }
 
 // Battle log player in a replay

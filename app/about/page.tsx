@@ -80,31 +80,12 @@ export default function AboutPage() {
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-400">Data</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-400">Questions?</h2>
         <p className="text-zinc-300 leading-relaxed">
-          All player data comes from{' '}
-          <a
-            href="https://www.streetfighter.com/6/buckler"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-zinc-200 hover:text-white underline underline-offset-2"
-          >
-            Buckler's Boot Camp
-          </a>
-          , Capcom's official SF6 companion site. Tournament data comes from{' '}
-          <a
-            href="https://liquipedia.net/fighters/Street_Fighter_6"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-zinc-200 hover:text-white underline underline-offset-2"
-          >
-            Liquipedia
-          </a>
-          .
-        </p>
-        <p className="text-zinc-400 text-sm">
-          Shoryu is not affiliated with or endorsed by Capcom. Street Fighter 6 and all
-          related assets are property of Capcom Co., Ltd.
+          The{' '}
+          <Link href="/faq" className="text-zinc-200 hover:text-white underline underline-offset-2">Q&amp;A</Link>{' '}
+          covers where the data comes from, how often it updates, why some stats only cover the current
+          phase, and what MR and LP mean.
         </p>
       </div>
 

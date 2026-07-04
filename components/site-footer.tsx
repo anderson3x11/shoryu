@@ -16,6 +16,9 @@ export function SiteFooter() {
           >
             @shoryuapp
           </a>
+          <Link href="/faq" prefetch={false} className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors">
+            Q&amp;A
+          </Link>
           <Link href="/about" prefetch={false} className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors">
             About
           </Link>

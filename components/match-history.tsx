@@ -79,7 +79,8 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
   useEffect(() => {
     if (initialBattles.length > 0) return
     const ctrl = new AbortController()
-    fetch(`/api/battles?id=${playerId}&mode=all&page=1`, { signal: ctrl.signal })
+    const v = new URLSearchParams(window.location.search).get('refreshed')
+    fetch(`/api/battles?id=${playerId}&mode=all&page=1${v ? `&v=${v}` : ''}`, { signal: ctrl.signal })
       .then(r => r.json())
       .then((json: { battles?: BucklerBattle[]; totalPages?: number }) => {
         setBattles(json.battles ?? [])
@@ -109,6 +110,8 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
       params.set('char', filter)
       params.set('sid', String(sid))
     }
+    const v = new URLSearchParams(window.location.search).get('refreshed')
+    if (v) params.set('v', v)
     const res  = await fetch(`/api/battles?${params}`)
     const json = await res.json()
     setBattles(json.battles ?? [])

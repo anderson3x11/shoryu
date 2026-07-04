@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/streetdle`,    priority: 0.7,  changeFrequency: 'daily'   },
     { url: `${BASE}/guides`,       priority: 0.6,  changeFrequency: 'weekly'  },
     { url: `${BASE}/about`,        priority: 0.3,  changeFrequency: 'monthly' },
+    { url: `${BASE}/faq`,          priority: 0.4,  changeFrequency: 'monthly' },
     { url: `${BASE}/changelog`,    priority: 0.3,  changeFrequency: 'weekly'  },
   ] satisfies MetadataRoute.Sitemap
 

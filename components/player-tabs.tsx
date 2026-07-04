@@ -18,6 +18,7 @@ interface RankedStats {
   characters: LpCharacter[]
   rows: MatchupRow[]
   totalBattles: number
+  seasonId: number | null
   session: SessionData | null
   currentByChar: CurrentByChar
 }
@@ -53,7 +54,9 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
   useEffect(() => {
     if (!needStats) return
     const ctrl = new AbortController()
-    fetch(`/api/ranked-stats?id=${playerId}`, { signal: ctrl.signal })
+    // A ?refreshed token (set by the Refresh button's reload) busts the 12h CDN cache once.
+    const v = new URLSearchParams(window.location.search).get('refreshed')
+    fetch(`/api/ranked-stats?id=${playerId}${v ? `&v=${v}` : ''}`, { signal: ctrl.signal })
       .then(r => r.json())
       .then((d: RankedStats) => setStats(d))
       .catch(() => { if (!ctrl.signal.aborted) setStatsError(true) })
@@ -99,7 +102,7 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
       {activated.has('stats') && (
         <div className={cn('space-y-4', tab !== 'stats' && 'hidden')}>
           <LpHistoryChart characters={stats?.characters ?? null} error={statsError} />
-          <MatchupChart rows={stats?.rows ?? null} totalBattles={stats?.totalBattles ?? 0} error={statsError} />
+          <MatchupChart rows={stats?.rows ?? null} totalBattles={stats?.totalBattles ?? 0} seasonId={stats?.seasonId ?? null} error={statsError} />
         </div>
       )}
     </div>
