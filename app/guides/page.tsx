@@ -1,21 +1,37 @@
-import Image from 'next/image'
-import { BookOpen, Swords, Info, ExternalLink, CirclePlay } from 'lucide-react'
+import Link from 'next/link'
+import { BookOpen, Swords, Info, Dumbbell, Users, ArrowRight } from 'lucide-react'
+import { LinkCard } from '@/components/link-card'
+import { SectionHeader } from '@/components/section-header'
+import { VideoCard } from '@/components/video-card'
 
 export const metadata = {
   title: 'Guides - Shoryu',
   description: 'Street Fighter 6 guides, frame data, mechanics, and learning resources.',
 }
 
-const TECHS = [
-  { title: 'Tips',                    url: 'https://www.youtube.com/watch?v=hpsOwdzfWag' },
-  { title: 'Choose a main',           url: 'https://www.youtube.com/watch?v=t7WcJbVt1a4' },
-  { title: 'Warmup Drills',           url: 'https://www.youtube.com/watch?v=KTIeXU96IeE' },
-  { title: 'Drive Rush OS',           url: 'https://www.youtube.com/watch?v=EZ5pL0qopAE' },
-  { title: 'Delay Tech on wakeup',    url: 'https://www.youtube.com/watch?v=g8LYoF0S-Lo' },
-  { title: 'Concept of delaying',     url: 'https://www.youtube.com/watch?v=54FCpNJrJ1o' },
-  { title: 'Starter Guide',           url: 'https://www.youtube.com/watch?v=MK-AJyD1XKk' },
-  { title: 'Beginners Guide',         url: 'https://www.youtube.com/watch?v=seXtzdiKi4Y' },
-  { title: 'Neutral Guide',           url: 'https://www.youtube.com/watch?v=rUNWK7Aq73c' },
+const START_HERE = [
+  { title: 'Beginners Guide', url: 'https://www.youtube.com/watch?v=seXtzdiKi4Y' },
+  { title: 'Starter Guide',   url: 'https://www.youtube.com/watch?v=MK-AJyD1XKk' },
+  { title: 'Tips',            url: 'https://www.youtube.com/watch?v=hpsOwdzfWag' },
+  { title: 'Choose a Main',   url: 'https://www.youtube.com/watch?v=t7WcJbVt1a4' },
+]
+
+const FUNDAMENTALS = [
+  { title: 'Neutral Guide', url: 'https://www.youtube.com/watch?v=rUNWK7Aq73c' },
+  { title: 'Warmup Drills', url: 'https://www.youtube.com/watch?v=KTIeXU96IeE' },
+]
+
+const TECH = [
+  { title: 'Drive Rush OS',        url: 'https://www.youtube.com/watch?v=EZ5pL0qopAE' },
+  { title: 'Delay Tech on Wakeup', url: 'https://www.youtube.com/watch?v=g8LYoF0S-Lo' },
+  { title: 'Concept of Delaying',  url: 'https://www.youtube.com/watch?v=54FCpNJrJ1o' },
+]
+
+const RESOURCES = [
+  { title: 'Supercombo Wiki',        desc: 'Community wiki with character pages, combos, and matchups.', domain: 'wiki.supercombo.gg',    url: 'https://wiki.supercombo.gg/w/Street_Fighter_6', icon: <BookOpen size={16} />, color: '#60a5fa' },
+  { title: 'Ultimate Frame Data',    desc: 'Frame data for every move of every character.',             domain: 'ultimateframedata.com', url: 'https://ultimateframedata.com/sf6',             icon: <Swords size={16} />,   color: '#f97316' },
+  { title: 'Fighting Game Glossary', desc: 'Plain-english definitions for FGC terms and mechanics.',    domain: 'glossary.infil.net',    url: 'https://glossary.infil.net/',                   icon: <Info size={16} />,     color: '#a78bfa' },
+  { title: "Gief's Gym",             desc: 'Structured training drills to build your fundamentals.',     domain: 'reddit.com',            url: 'https://www.reddit.com/r/StreetFighter/wiki/v/giefsgym/', icon: <Dumbbell size={16} />, color: '#ff4500' },
 ]
 
 function getVideoId(url: string): string | null {
@@ -23,71 +39,36 @@ function getVideoId(url: string): string | null {
   return m ? m[1] : null
 }
 
-interface LinkCardProps {
-  href: string
-  icon: React.ReactNode
-  title: string
-  domain: string
-  color?: string
+function thumbnailFor(url: string): string | null {
+  const id = getVideoId(url)
+  return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : null
 }
 
-function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
+function StepHeader({ n, title, hint }: { n: number; title: string; hint: string }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors"
-    >
-      <span className="shrink-0" style={color ? { color } : undefined}>{icon}</span>
-      <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium text-zinc-100 leading-tight">{title}</div>
-        <div className="text-xs text-zinc-300 truncate mt-0.5">{domain}</div>
+    <div className="flex items-center gap-3">
+      <span className="flex items-center justify-center w-9 h-9 -skew-x-12 bg-amber-400 shrink-0">
+        <span className="skew-x-12 font-bebas text-2xl text-zinc-950 leading-none">{n}</span>
+      </span>
+      <div className="min-w-0">
+        <h2 className="font-bebas text-2xl tracking-widest text-zinc-100 leading-none">{title}</h2>
+        <p className="text-xs text-zinc-400 mt-1 leading-snug">{hint}</p>
       </div>
-      <ExternalLink size={14} className="shrink-0 text-zinc-300 group-hover:text-zinc-200 transition-colors" />
-    </a>
-  )
-}
-
-function SectionHeader({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <span className="block w-1.5 h-6 -skew-x-12 bg-amber-400 shrink-0" />
-      <h2 className="font-bebas text-2xl tracking-widest text-zinc-100 leading-none">{children}</h2>
     </div>
   )
 }
 
-function VideoCard({ href, title, thumbnail }: { href: string; title: string; thumbnail: string | null }) {
+function VideoGrid({ videos }: { videos: { title: string; url: string }[] }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group rounded-none border border-zinc-800 bg-zinc-900 overflow-hidden hover:border-zinc-600 transition-colors"
-    >
-      <div className="relative w-full aspect-video bg-zinc-800">
-        {thumbnail && <Image src={thumbnail} alt={title} fill className="object-cover" unoptimized />}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
-          <CirclePlay size={36} className="text-white/80" />
-        </div>
-      </div>
-      <div className="flex items-center justify-between px-3 py-2 gap-2">
-        <span className="text-sm font-medium text-zinc-100 leading-tight truncate">{title}</span>
-        <ExternalLink size={13} className="shrink-0 text-zinc-300 group-hover:text-zinc-200 transition-colors" />
-      </div>
-    </a>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      {videos.map((v) => (
+        <VideoCard key={v.url} href={v.url} title={v.title} thumbnail={thumbnailFor(v.url)} />
+      ))}
+    </div>
   )
 }
 
 export default async function GuidesPage() {
-  const thumbMap = Object.fromEntries(
-    TECHS.map((v) => {
-      const id = getVideoId(v.url)
-      return [v.url, id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : null]
-    })
-  )
-
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-3">
@@ -95,27 +76,49 @@ export default async function GuidesPage() {
         <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Guides</h1>
       </div>
 
-      <div className="space-y-8">
-        <section className="space-y-3">
-          <SectionHeader>Guides &amp; Data</SectionHeader>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <LinkCard href="https://wiki.supercombo.gg/w/Street_Fighter_6" icon={<BookOpen size={16} />} title="Supercombo Wiki" domain="wiki.supercombo.gg" color="#60a5fa" />
-            <LinkCard href="https://ultimateframedata.com/sf6" icon={<Swords size={16} />} title="Ultimate Frame Data" domain="ultimateframedata.com" color="#f97316" />
-          </div>
+      <p className="text-sm text-zinc-300 max-w-2xl leading-relaxed">
+        New to Street Fighter 6? Follow the path below in order. Learn the basics, pick a
+        character, drill the fundamentals, then explore the deeper tech once you are comfortable.
+      </p>
+
+      <div className="space-y-10">
+        <section className="space-y-4">
+          <StepHeader n={1} title="Start Here" hint="Brand new to the game? Watch these first." />
+          <VideoGrid videos={START_HERE} />
         </section>
 
-        <section className="space-y-3">
-          <SectionHeader>Glossary</SectionHeader>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <LinkCard href="https://glossary.infil.net/" icon={<Info size={16} />} title="Fighting Game Glossary" domain="glossary.infil.net" color="#a78bfa" />
-          </div>
+        <section className="space-y-4">
+          <StepHeader n={2} title="Choose Your Character" hint="Find a main that clicks with you, then dig into their guides." />
+          <Link
+            href="/"
+            className="group flex items-center gap-4 rounded-none border border-amber-400/40 bg-amber-400/5 px-5 py-4 hover:border-amber-400 hover:bg-amber-400/10 transition-colors"
+          >
+            <Users size={22} className="shrink-0 text-amber-400" />
+            <div className="min-w-0 flex-1">
+              <div className="font-bebas text-xl tracking-wide text-zinc-100 leading-none">Browse the roster</div>
+              <div className="text-xs text-zinc-300 mt-1.5 leading-snug">
+                Open any character for guides, combos, okizeme, matchups and players to watch.
+              </div>
+            </div>
+            <ArrowRight size={18} className="shrink-0 text-amber-400 transition-transform group-hover:translate-x-0.5" />
+          </Link>
         </section>
 
-        <section className="space-y-3">
-          <SectionHeader>Techs</SectionHeader>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {TECHS.map((v) => (
-              <VideoCard key={v.url} href={v.url} title={v.title} thumbnail={thumbMap[v.url]} />
+        <section className="space-y-4">
+          <StepHeader n={3} title="Learn the Fundamentals" hint="The habits that carry every character and every matchup." />
+          <VideoGrid videos={FUNDAMENTALS} />
+        </section>
+
+        <section className="space-y-4">
+          <StepHeader n={4} title="Explore the Tech" hint="Comfortable with the basics? Level up with these concepts." />
+          <VideoGrid videos={TECH} />
+        </section>
+
+        <section className="space-y-3 pt-2">
+          <SectionHeader>Reference &amp; Tools</SectionHeader>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {RESOURCES.map((r) => (
+              <LinkCard key={r.url} href={r.url} icon={r.icon} title={r.title} desc={r.desc} domain={r.domain} color={r.color} />
             ))}
           </div>
         </section>

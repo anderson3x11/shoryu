@@ -3,9 +3,11 @@ import { BookOpen, Swords, FileSpreadsheet, MessagesSquare, ExternalLink, Trophy
 import type { TechSection } from '@/lib/constants/character-links'
 import { VideoCard } from '@/components/video-card'
 import { CharacterTechs } from '@/components/character-techs'
+import { LinkCard } from '@/components/link-card'
+import { SectionHeader } from '@/components/section-header'
 
-const TECH_ORDER = ['guides', 'combos', 'pressure', 'setups', 'techs'] as const
-const TECH_LABELS: Record<string, string> = { guides: 'Guides', combos: 'Combos', pressure: 'Pressure', setups: 'Setups', techs: 'Techs' }
+const TECH_ORDER = ['guides', 'combos', 'pressure', 'oki', 'matchup', 'techs'] as const
+const TECH_LABELS: Record<string, string> = { guides: 'Guides', combos: 'Combos', pressure: 'Pressure', oki: 'Okizeme', matchup: 'Matchups', techs: 'Tech' }
 import { CHARACTERS, getCharacterFullImageUrl, getCharacterHeaderY } from '@/lib/constants/characters'
 import { CHARACTER_LINKS } from '@/lib/constants/character-links'
 
@@ -48,41 +50,6 @@ async function getYoutubeThumbnail(url: string): Promise<string | null> {
   return null
 }
 
-interface LinkCardProps {
-  href: string
-  icon: React.ReactNode
-  title: string
-  domain: string
-  color?: string
-}
-
-function LinkCard({ href, icon, title, domain, color }: LinkCardProps) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors"
-    >
-      <span className="shrink-0" style={color ? { color } : undefined}>{icon}</span>
-      <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium text-zinc-100 leading-tight">{title}</div>
-        <div className="text-xs text-zinc-300 truncate mt-0.5">{domain}</div>
-      </div>
-      <ExternalLink size={14} className="shrink-0 text-zinc-300 group-hover:text-zinc-200 transition-colors" />
-    </a>
-  )
-}
-
-function SectionHeader({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <span className="block w-1.5 h-6 -skew-x-12 shrink-0" style={{ background: 'var(--accent)' }} />
-      <h2 className="font-bebas text-2xl tracking-widest text-zinc-100 leading-none">{children}</h2>
-    </div>
-  )
-}
-
 export default async function CharacterPage({ params }: CharacterPageProps) {
   const { name } = await params
   const char = CHARACTERS.find((c) => c.id === name)
@@ -96,7 +63,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   ].filter(Boolean) as { title: string; url: string }[]
 
   const allTechs: TechSection = { ...links.techs }
-  if (links.misterCrimson) allTechs.guides = [...(allTechs.guides ?? []), { title: 'Matchup Guide by Mister Crimson', url: links.misterCrimson }]
+  if (links.misterCrimson) allTechs.matchup = [...(allTechs.matchup ?? []), { title: 'Matchup Guide by Mister Crimson', url: links.misterCrimson }]
   if (links.videoGuides?.length) allTechs.guides = [...(allTechs.guides ?? []), ...links.videoGuides]
   if (links.techVideos?.length) allTechs.guides = [...(allTechs.guides ?? []), ...links.techVideos]
 

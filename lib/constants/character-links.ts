@@ -9,9 +9,9 @@ export interface TechSection {
   guides?: Video[];
   combos?: Video[];
   pressure?: Video[];
-  setups?: Video[];
-  techs?: Video[];
   oki?: Video[];
+  matchup?: Video[];
+  techs?: Video[];
 }
 
 export interface Player {
@@ -53,6 +53,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Burnout Pressure",
           url: "https://www.youtube.com/watch?v=MULDXBqT9Bw",
         },
+      ],
+      matchup: [
         {
           title: "Anti Ryu",
           url: "https://www.youtube.com/watch?v=aPVrSlCro80",
@@ -79,7 +81,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=XbNPhT0RjXo",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=rDRq2pc47vU" },
         {
           title: "+37 Setups",
@@ -138,6 +140,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Advanced Guide",
           url: "https://www.youtube.com/watch?v=kjaHOSlos1s",
         },
+      ],
+      matchup: [
         {
           title: "Anti Luke",
           url: "https://www.youtube.com/watch?v=DzsQ8r-W6tA",
@@ -164,7 +168,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=stFEsWpomv4",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Oki & Checkmates",
           url: "https://www.youtube.com/watch?v=2Rx3xgLE6Iw",
@@ -196,6 +200,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
     techs: {
       guides: [
         { title: "Guide", url: "https://www.youtube.com/watch?v=OepGnXGuFMg" },
+      ],
+      matchup: [
         {
           title: "Anti Kimberly",
           url: "https://www.youtube.com/watch?v=86Itgdy5Gr4",
@@ -222,7 +228,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=iBQ-C0MD7PM",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=A3rxVe1zYao" },
         {
           title: "Can Setups",
@@ -300,7 +306,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=mp3tG_Vdmlg",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=xj6Plxpys7c" },
         {
           title: "Safejumps",
@@ -339,6 +345,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Strategy",
           url: "https://www.youtube.com/watch?v=QNaLU5Ir-eQ",
         },
+      ],
+      matchup: [
         {
           title: "Anti Manon",
           url: "https://www.youtube.com/watch?v=wXDfNAGGyws",
@@ -357,7 +365,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=Iu4NsTGrLQo",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=xnpjmu15R7E" },
         {
           title: "Command Grab Oki",
@@ -405,7 +413,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=hA9ywfHu8hI",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=StqAGNdQHZk" },
         {
           title: "Safejumps",
@@ -452,6 +460,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "SA2 Guide",
           url: "https://www.youtube.com/watch?v=jrYrmIntHw0",
         },
+      ],
+      matchup: [
         {
           title: "Anti JP",
           url: "https://www.youtube.com/watch?v=rDLG7OIqRm4",
@@ -475,7 +485,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=hJQ2Im1F0aM",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Oki",
           url: "https://www.youtube.com/watch?v=jrYrmIntHw0&t=246s",
@@ -562,7 +572,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=aS0dE0mqdVI",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=oYoHVaZCIP8" },
       ],
       techs: [
@@ -614,7 +624,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=0HJMFBHckZM",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=dLzIr-bDsDU" },
         {
           title: "Safejumps",
@@ -667,7 +677,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=0416ZNuOLcY",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Safejumps",
           url: "https://www.youtube.com/watch?v=VYA-6-xU_tI",
@@ -719,7 +729,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=6TeTcVwtWGk",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=WXOUN0osZ3c" },
         {
           title: "Safe Jumps",
@@ -763,7 +773,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=zVvPNek15XI",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Sideswitch",
           url: "https://www.youtube.com/watch?v=1CaeEBDr5DM",
@@ -825,7 +835,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=2kBkizvG7eM&t=6496s",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Oki",
           url: "https://www.youtube.com/watch?v=2kBkizvG7eM&t=5600s",
@@ -892,7 +902,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=tqk-NiU33_8",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Light Eagle Oki",
           url: "https://www.youtube.com/watch?v=p00HtRA-Xc8",
@@ -955,6 +965,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Advanced SA2 Guide",
           url: "https://www.youtube.com/watch?v=DZDgSRQCIqU",
         },
+      ],
+      matchup: [
         {
           title: "Matchup Tips",
           url: "https://www.youtube.com/watch?v=CKUnN2DgwOQ",
@@ -981,7 +993,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=AB9NNnB9BNg",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=hANJQGOeX6Q" },
         {
           title: "Blanka-Chan Setups",
@@ -1023,6 +1035,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Space Traps",
           url: "https://www.youtube.com/watch?v=RKBL-KkuS04",
         },
+      ],
+      matchup: [
         {
           title: "Anti Juri",
           url: "https://www.youtube.com/watch?v=ke60KQg5mO8",
@@ -1049,7 +1063,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=Z-ehQUzFhoE",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=c1bxXMyC2P0" },
         {
           title: "Resets",
@@ -1090,6 +1104,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Advanced Guide",
           url: "https://www.youtube.com/watch?v=JUUIsc9X1RE",
         },
+      ],
+      matchup: [
         {
           title: "Anti Marisa",
           url: "https://www.youtube.com/watch?v=579V4VbAcdQ",
@@ -1115,7 +1131,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=TFbARdo-Bm8",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=bqx1dJQCxoI" },
         {
           title: "Enfold Oki",
@@ -1166,6 +1182,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Boom Loops Guide",
           url: "https://www.youtube.com/watch?v=wEGTkjRBhE0",
         },
+      ],
+      matchup: [
         {
           title: "Anti Guile",
           url: "https://www.youtube.com/watch?v=4UQfKQ_u538",
@@ -1192,7 +1210,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=Dgh8mGvE5-A",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=Gi0dHykM784" },
         {
           title: "Meaty Sonic Blade",
@@ -1244,6 +1262,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Anti Zoning Guide",
           url: "https://www.youtube.com/watch?v=XPFrZu0YcqA",
         },
+      ],
+      matchup: [
         {
           title: "Matchup Tips",
           url: "https://www.youtube.com/watch?v=nKIbtPyukAE",
@@ -1269,7 +1289,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=J1YH2zogEv8",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Sideswitch",
           url: "https://www.youtube.com/watch?v=y3qr3ntQFkU",
@@ -1299,6 +1319,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
     techs: {
       guides: [
         { title: "Intro", url: "https://www.youtube.com/watch?v=ZI5sAd5RyOw" },
+      ],
+      matchup: [
         {
           title: "Anti Honda",
           url: "https://www.youtube.com/watch?v=Ng_rt5kNfW4",
@@ -1313,7 +1335,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=Cw5D1hel1Gs",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=xDkaX6tv1Jc" },
         {
           title: "Side Switch",
@@ -1360,7 +1382,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=i4yG4l5PHGM",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Side Switch",
           url: "https://www.youtube.com/watch?v=24WPV4pRQlI",
@@ -1424,7 +1446,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=x5W5tbuNndc",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=n0FB-ASB1NU" },
         {
           title: "Raging Demon Setups",
@@ -1490,7 +1512,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=UjdgWKLsQtQ",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Sideswitch",
           url: "https://www.youtube.com/watch?v=FhbKdJ_G5N8",
@@ -1529,6 +1551,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Space Traps",
           url: "https://www.youtube.com/watch?v=INmYCRescoI",
         },
+      ],
+      matchup: [
         {
           title: "Anti Terry",
           url: "https://www.youtube.com/watch?v=4cG9ygRGzUg",
@@ -1547,7 +1571,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=Kvf3JDhlX8U",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Oki & Frame Traps",
           url: "https://www.youtube.com/watch?v=N0vm6S9RqHs",
@@ -1586,6 +1610,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
     techs: {
       guides: [
         { title: "Intro", url: "https://www.youtube.com/watch?v=H4m0P2YBAjM" },
+      ],
+      matchup: [
         {
           title: "Anti Mai",
           url: "https://www.youtube.com/watch?v=jaANNBXZVmA",
@@ -1628,7 +1654,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=Q-79y_Y38dc",
         },
       ],
-      setups: [
+      oki: [
         {
           title: "Oki & Setups",
           url: "https://www.youtube.com/watch?v=2nqeLIbdOPg",
@@ -1691,7 +1717,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=sSulkWxCToI&t=342s",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=V0FL4F70d98" },
         {
           title: "Meaties",
@@ -1760,7 +1786,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=Dpqwe6wOTqU",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=cfTAgI7LX1Q" },
         {
           title: "Meaty Fireball",
@@ -1826,7 +1852,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=npmfkY90CuY",
         },
       ],
-      setups: [
+      oki: [
         { title: "Oki", url: "https://www.youtube.com/watch?v=q6XFnRI9obc" },
         {
           title: "Oki pt.2",
@@ -1889,7 +1915,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=GEWPCeTQQ-A",
         },
       ],
-      setups: [
+      oki: [
         { title: "Setups", url: "https://www.youtube.com/watch?v=lVKZEkZTgXc" },
         {
           title: "Meaties",
@@ -1927,9 +1953,11 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
     techs: {
       guides: [
         { title: "Ingrid Guide", url: "https://www.youtube.com/watch?v=CemqJ5giO88" },
-        { title: "Anti Ingrid Guide", url: "https://www.youtube.com/watch?v=6kOWXT6fol0" },
         { title: "So you wanna learn Ingrid", url: "https://www.youtube.com/watch?v=mUzxSpeXXZY" },
         { title: "BrianF mastering Ingrid", url: "https://www.youtube.com/watch?v=k4Inl5ZTlIQ"},
+      ],
+      matchup: [
+        { title: "Anti Ingrid Guide", url: "https://www.youtube.com/watch?v=6kOWXT6fol0" },
       ],
       combos: [
         { title: "Essential Combos", url: "https://www.youtube.com/watch?v=L-e9zVpqueE" },
@@ -1937,7 +1965,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
         { title: "Combos and setups", url: "https://www.youtube.com/watch?v=QmUwizYjJNc" },
         { title: "Combos and conversions", url: "https://www.youtube.com/watch?v=oracUZ7upAE" },
       ],
-      setups: [
+      oki: [
         { title: "Safejump Shimmy setup", url: "https://www.youtube.com/watch?v=zx9p4cTrKh8" },
         { title: "Knockdown and Oki", url: "https://www.youtube.com/watch?v=Wey8M4nfeI4" },
       ],
