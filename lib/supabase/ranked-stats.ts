@@ -221,6 +221,87 @@ export function buildMatchupRows(battles: DBBattle[]): { rows: MatchupRow[]; tot
   return { rows, totalBattles: battles.length }
 }
 
+// One opponent the player has faced in ranked, aggregated across all synced battles.
+export interface Rival {
+  playerId: number
+  name: string | null   // resolved CFN name; null → the component shows a fallback
+  charId: number        // the opponent's most-played character (for the portrait)
+  charSlug: string
+  charName: string
+  wins: number
+  losses: number
+  total: number
+}
+
+export interface RivalsData {
+  mostPlayed: Rival[]
+  victims: Rival[]      // best win/loss differential (opponents you beat)
+  tormentors: Rival[]   // worst differential (opponents who beat you)
+}
+
+const RIVALS_LIST_SIZE = 6
+// Victims/tormentors need enough games to be a real pattern rather than one lucky/unlucky match.
+const RIVAL_MIN_GAMES = 3
+
+// Head-to-head records grouped by opponent, from the same synced DB battles as everything else
+// (no extra Buckler fetch). Names come from opp_name; rows synced before Rivals have none, so we
+// keep the most recent named sighting of each opponent and fall back in the UI.
+export function buildRivals(battles: DBBattle[]): RivalsData {
+  interface Acc {
+    playerId: number
+    name: string | null
+    nameAt: number                  // played_at (ms) of the kept name — keep the most recent
+    charCounts: Map<number, number>
+    wins: number
+    losses: number
+    total: number
+  }
+  const byOpp = new Map<number, Acc>()
+
+  for (const b of battles) {
+    if (!b.opp_player_id) continue
+    let a = byOpp.get(b.opp_player_id)
+    if (!a) {
+      a = { playerId: b.opp_player_id, name: null, nameAt: -Infinity, charCounts: new Map(), wins: 0, losses: 0, total: 0 }
+      byOpp.set(b.opp_player_id, a)
+    }
+    a.total++
+    if (b.result === 1) a.wins++
+    else a.losses++
+    if (b.opp_char_id) a.charCounts.set(b.opp_char_id, (a.charCounts.get(b.opp_char_id) ?? 0) + 1)
+    const at = new Date(b.played_at).getTime()
+    if (b.opp_name && at > a.nameAt) {
+      a.name = b.opp_name
+      a.nameAt = at
+    }
+  }
+
+  const rivals: Rival[] = [...byOpp.values()].map((a) => {
+    let topChar = 0, topN = -1
+    for (const [cid, n] of a.charCounts) if (n > topN) { topChar = cid; topN = n }
+    const char = getCharacterByBucklerId(topChar)
+    return {
+      playerId: a.playerId,
+      name: a.name,
+      charId: topChar,
+      charSlug: char?.slug ?? String(topChar),
+      charName: char?.name ?? String(topChar),
+      wins: a.wins,
+      losses: a.losses,
+      total: a.total,
+    }
+  })
+
+  const diff = (r: Rival) => r.wins - r.losses
+  const ranked = rivals.filter((r) => r.total >= RIVAL_MIN_GAMES)
+
+  return {
+    mostPlayed: [...rivals].sort((a, b) => b.total - a.total || diff(b) - diff(a)).slice(0, RIVALS_LIST_SIZE),
+    victims: ranked.filter((r) => diff(r) > 0).sort((a, b) => diff(b) - diff(a) || b.wins - a.wins).slice(0, RIVALS_LIST_SIZE),
+    tormentors: ranked.filter((r) => diff(r) < 0).sort((a, b) => diff(a) - diff(b) || b.losses - a.losses).slice(0, RIVALS_LIST_SIZE),
+  }
+}
+
 // Buckler's per-character arrays include aggregate pseudo-characters that must be skipped or every
 // game double-counts: 253 = "Any/All" (the row/rival total), 254 = Random.
 const MATCHUP_AGGREGATE_IDS = new Set([253, 254])

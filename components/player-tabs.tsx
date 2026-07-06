@@ -3,7 +3,7 @@
 import { useState, useEffect, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import { cn } from '@/lib/utils'
-import type { LpCharacter, MatchupRow, SessionData, CurrentByChar } from '@/lib/supabase/ranked-stats'
+import type { LpCharacter, MatchupRow, SessionData, CurrentByChar, RivalsData } from '@/lib/supabase/ranked-stats'
 
 // Code-split the tab panels: their JS (incl. recharts) loads only when a tab is first opened,
 // keeping the overview-only path light.
@@ -11,8 +11,9 @@ const MatchHistory   = dynamic(() => import('@/components/match-history').then(m
 const SessionSummary = dynamic(() => import('@/components/session-summary').then(m => m.SessionSummary))
 const LpHistoryChart = dynamic(() => import('@/components/lp-history-chart').then(m => m.LpHistoryChart))
 const MatchupChart   = dynamic(() => import('@/components/matchup-chart').then(m => m.MatchupChart))
+const Rivals         = dynamic(() => import('@/components/rivals').then(m => m.Rivals))
 
-type Tab = 'overview' | 'history' | 'stats'
+type Tab = 'overview' | 'history' | 'stats' | 'rivals'
 
 interface RankedStats {
   characters: LpCharacter[]
@@ -21,12 +22,14 @@ interface RankedStats {
   seasonId: number | null
   session: SessionData | null
   currentByChar: CurrentByChar
+  rivals: RivalsData
 }
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'history',  label: 'Recent Battles' },
   { id: 'stats',    label: 'Stats' },
+  { id: 'rivals',   label: 'Rivals' },
 ]
 
 interface PlayerTabsProps {
@@ -50,7 +53,7 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
 
   // Single ranked-stats fetch shared by both History (deltas) and Stats (charts + matchups).
   // Runs once, when either tab is first opened.
-  const needStats = activated.has('history') || activated.has('stats')
+  const needStats = activated.has('history') || activated.has('stats') || activated.has('rivals')
   useEffect(() => {
     if (!needStats) return
     const ctrl = new AbortController()
@@ -103,6 +106,12 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
         <div className={cn('space-y-4', tab !== 'stats' && 'hidden')}>
           <LpHistoryChart characters={stats?.characters ?? null} error={statsError} />
           <MatchupChart rows={stats?.rows ?? null} totalBattles={stats?.totalBattles ?? 0} seasonId={stats?.seasonId ?? null} error={statsError} />
+        </div>
+      )}
+
+      {activated.has('rivals') && (
+        <div className={cn(tab !== 'rivals' && 'hidden')}>
+          <Rivals data={stats?.rivals ?? null} error={statsError} />
         </div>
       )}
     </div>

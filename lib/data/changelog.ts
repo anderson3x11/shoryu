@@ -5,6 +5,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-07-06",
+    items: [
+      "New Rivals tab on player profiles: see the opponents you face the most, the ones you beat the most, and the ones who give you the most trouble",
+      "Player data now loads lighter and a little faster behind the scenes",
+    ],
+  },
+  {
     date: "2026-06-20",
     items: [
       "Fresh new look across the whole site: a sharper fighting-game style with a bold new accent color",

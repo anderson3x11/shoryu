@@ -18,12 +18,16 @@ create table if not exists battles (
   char_id       int,
   opp_player_id bigint,
   opp_char_id   int,
+  opp_name      text,         -- opponent CFN name at match time; null on rows synced before Rivals
   result        int,          -- 1 = win, 0 = loss
   mode          text,         -- 'rank'
   lp_after      int,          -- league_point at match time (>= 25000 = master)
   mr_after      int,          -- master_rating at match time (0 if not master)
   played_at     timestamptz
 );
+
+-- Added for the Rivals tab (2026-07). Existing rows stay null; names fill in as new battles sync.
+alter table battles add column if not exists opp_name text;
 
 create index if not exists battles_player_mode_played_idx
   on battles (player_id, mode, played_at desc);
@@ -82,5 +86,15 @@ create table if not exists player_profiles (
 
 -- NOTE: the matchup chart reads the current-phase matrix straight out of the cached profile above
 -- (12h TTL), so there is no separate matchup table. Cross-phase history was dropped (Buckler only
--- exposes the current phase). If player_phase_stats / player_peak were created for the earlier
--- cross-phase attempt, they are unused and can be dropped.
+-- exposes the current phase).
+
+-- ---------------------------------------------------------------------------
+-- Cleanup (2026-07-06). Dropped the two orphan tables left over from the
+-- abandoned cross-phase attempt (they were unused):
+-- ---------------------------------------------------------------------------
+drop table if exists player_phase_stats;
+drop table if exists player_peak;
+
+-- Snapshot retention: the *_snapshot tables gain one row per 12h cron run but the pages read only
+-- the newest, so /api/cron/sync now calls pruneSnapshots() to keep just the latest 3 rows each
+-- (see lib/supabase/snapshots.ts). One-time backfill of the historical bloat was done via the API.

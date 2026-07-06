@@ -8,6 +8,7 @@ export interface DBBattle {
   char_id: number
   opp_player_id: number
   opp_char_id: number
+  opp_name: string | null   // opponent CFN name; null on rows synced before Rivals
   result: number       // 1=win, 0=loss
   mode: string
   lp_after: number     // league_point at time of match (>= 25000 means master)
@@ -53,6 +54,7 @@ async function insertBattles(playerId: number, sid: number, battles: BucklerBatt
         char_id:       me.playing_character_id,
         opp_player_id: opp.player.short_id,
         opp_char_id:   opp.playing_character_id,
+        opp_name:      opp.player.fighter_id ?? null,
         result:        won ? 1 : 0,
         mode:          'rank',
         lp_after:      me.league_point ?? 0,

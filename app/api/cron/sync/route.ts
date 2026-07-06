@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getRanking, getPlayerProfileResult, getUsageRate } from '@/lib/buckler/client'
 import { supabase } from '@/lib/supabase/client'
-import { saveProSnapshot, saveRankingSnapshot, saveUsageSnapshot, type ProSnapshotEntry } from '@/lib/supabase/snapshots'
+import { saveProSnapshot, saveRankingSnapshot, saveUsageSnapshot, pruneSnapshots, type ProSnapshotEntry } from '@/lib/supabase/snapshots'
 import { PRO_PLAYERS } from '@/lib/data/pro-players'
 import type { BucklerRankingEntry } from '@/lib/buckler/types'
 
@@ -81,6 +81,9 @@ export async function GET(request: Request) {
     if (usageErr) console.error('[sync] usage_snapshot insert error:', usageErr)
     result.usage = usage.month
   }
+
+  // Drop stale snapshot rows so these tables don't grow unbounded (pages read only the newest).
+  await pruneSnapshots()
 
   return NextResponse.json({ ok: true, ...result })
 }

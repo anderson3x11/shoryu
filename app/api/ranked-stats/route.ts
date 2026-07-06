@@ -1,6 +1,6 @@
 import { syncAndGetRankedBattles } from '@/lib/supabase/battles'
 import { getCachedPlayerProfile } from '@/lib/supabase/player-cache'
-import { buildLpCharacters, buildMatchupRows, buildSession, matchupRowsFromMatrix, type CurrentByChar } from '@/lib/supabase/ranked-stats'
+import { buildLpCharacters, buildMatchupRows, buildRivals, buildSession, matchupRowsFromMatrix, type CurrentByChar } from '@/lib/supabase/ranked-stats'
 
 // Single sync feeding LP/MR history, the matchup matrix, and the latest session. The player
 // profile's History and Stats tabs share this one call instead of hitting /api/lp-history (3x)
@@ -38,8 +38,9 @@ export async function GET(req: Request) {
   if (rows.length === 0) ({ rows, totalBattles } = buildMatchupRows(battles))
 
   const session = buildSession(battles, characters, currentByChar)
+  const rivals = buildRivals(battles)
 
-  return Response.json({ characters, rows, totalBattles, seasonId, session, currentByChar }, {
+  return Response.json({ characters, rows, totalBattles, seasonId, session, currentByChar, rivals }, {
     headers: { 'Cache-Control': 's-maxage=43200, stale-while-revalidate=86400' },
   })
 }

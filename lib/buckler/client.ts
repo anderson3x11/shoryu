@@ -61,25 +61,90 @@ export class BucklerNotFoundError extends Error {
   }
 }
 
+// Buckler is a Next.js app. Rather than fetch the full HTML page and regex the __NEXT_DATA__
+// script out of it (heavier payload, more bot-obvious), we hit Next's own data endpoints:
+//   /6/buckler/_next/data/{buildId}/en/{path}.json  →  { pageProps: {...} }
+// The buildId changes whenever Buckler redeploys; we scrape it once from the homepage, cache it
+// in-process, and reactively re-scrape when a stale buildId surfaces as a 404.
+let buildIdPromise: Promise<string> | null = null
+
+async function scrapeBuildId(): Promise<string> {
+  const cookie = getSessionCookie()
+  const headers: Record<string, string> = {
+    'User-Agent': UA,
+    Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.9',
+  }
+  if (cookie) headers.Cookie = cookie
+
+  let res: Response
+  try {
+    // no-store so a redeploy-triggered re-scrape actually sees the new buildId (the in-process
+    // promise is what saves us from re-fetching the homepage on every call).
+    res = await paced(() => fetch(BUCKLER_BASE, { headers, cache: 'no-store' }))
+  } catch (e) {
+    throw new BucklerUnavailableError(`buildId fetch failed: ${e instanceof Error ? e.message : e}`)
+  }
+  if (!res.ok) throw new BucklerUnavailableError(`buildId fetch HTTP ${res.status}`)
+  const html = await res.text()
+  const m = html.match(/"buildId":"([^"]+)"/)
+  if (!m) throw new BucklerUnavailableError('buildId not found on homepage')
+  return m[1]
+}
+
+function ensureBuildId(): Promise<string> {
+  if (!buildIdPromise) {
+    buildIdPromise = scrapeBuildId().catch((e) => {
+      buildIdPromise = null // don't cache the failure — let the next call retry
+      throw e
+    })
+  }
+  return buildIdPromise
+}
+
+function refreshBuildId(): Promise<string> {
+  buildIdPromise = scrapeBuildId().catch((e) => {
+    buildIdPromise = null
+    throw e
+  })
+  return buildIdPromise
+}
+
+// Turn a Next route path ("profile/123", "ranking/master?page=1") into its data-endpoint URL,
+// inserting ".json" before any query string.
+function dataUrl(buildId: string, path: string): string {
+  const [pathname, query] = path.split('?')
+  return `${BUCKLER_BASE}/_next/data/${buildId}/en/${pathname}.json${query ? `?${query}` : ''}`
+}
+
 // Strict fetch: throws BucklerUnavailableError when Buckler/our session is unreachable, and
-// returns the page's (possibly empty) pageProps otherwise. A valid Buckler page that lacks
-// the requested record does NOT throw — that's a "not found", which the caller detects from
-// the returned shape.
+// returns the endpoint's (possibly empty) pageProps otherwise. A valid request for a record that
+// doesn't exist does NOT throw as "unavailable" — Buckler answers a bad id with HTTP 400, which
+// we surface as BucklerNotFoundError so callers can tell "no such record" from "source down".
 async function fetchPageDataOrThrow<T = unknown>(path: string, revalidate = 60): Promise<T> {
   const cookie = getSessionCookie()
   if (!cookie) {
     console.warn('[buckler] No session cookie — set BUCKLER_COOKIE in .env.local')
     throw new BucklerUnavailableError('No session cookie')
   }
+  return fetchData<T>(path, cookie, revalidate, true)
+}
+
+async function fetchData<T>(
+  path: string,
+  cookie: string,
+  revalidate: number,
+  allowBuildIdRetry: boolean
+): Promise<T> {
+  const buildId = await ensureBuildId()
 
   let res: Response
   try {
-    res = await paced(() => fetch(`${BUCKLER_BASE}${path}`, {
+    res = await paced(() => fetch(dataUrl(buildId, path), {
       headers: {
         'User-Agent': UA,
-        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        Accept: 'application/json, */*',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Accept-Encoding': 'identity',
         Cookie: cookie,
       },
       next: { revalidate },
@@ -88,31 +153,33 @@ async function fetchPageDataOrThrow<T = unknown>(path: string, revalidate = 60):
     throw new BucklerUnavailableError(`fetch failed: ${e instanceof Error ? e.message : e}`)
   }
 
+  // 404 = the buildId no longer exists (Buckler redeployed). Re-scrape it once and retry; a
+  // genuinely missing record answers 400 with a JSON body, not 404.
+  if (res.status === 404 && allowBuildIdRetry) {
+    await refreshBuildId()
+    return fetchData<T>(path, cookie, revalidate, false)
+  }
+
   if (!res.ok) {
-    // 400/404 = the record doesn't exist (unknown/malformed ID) → not-found, not a source
-    // problem. Everything else (notably 403 = dead session) → unavailable.
-    if (res.status === 400 || res.status === 404) {
-      throw new BucklerNotFoundError(`HTTP ${res.status}`)
-    }
-    // Expected, handled condition (callers show the unavailable fallback) — warn, not error,
-    // so it doesn't trip Next's dev "Console Error" overlay.
+    // 400 = the record doesn't exist (unknown/malformed ID) → not-found, not a source problem.
+    // Everything else (403 = dead session, a 404 that survived the buildId refresh, 5xx) →
+    // unavailable. Warn, not error, so it doesn't trip Next's dev "Console Error" overlay.
+    if (res.status === 400) throw new BucklerNotFoundError(`HTTP ${res.status}`)
     console.warn(`[buckler] ${path} → ${res.status} (source unavailable)`)
     throw new BucklerUnavailableError(`HTTP ${res.status}`)
   }
 
-  const html = await res.text()
-  const match = html.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/)
-  if (!match) {
-    // No app payload = a login / maintenance page: our session is no longer valid.
-    throw new BucklerUnavailableError('No __NEXT_DATA__ (session likely expired)')
-  }
-
+  let json: unknown
   try {
-    const data = JSON.parse(match[1])
-    return data.props?.pageProps as T
+    json = await res.json()
   } catch {
-    throw new BucklerUnavailableError('Malformed __NEXT_DATA__')
+    throw new BucklerUnavailableError('Malformed JSON')
   }
+  // A login / maintenance response won't carry pageProps: our session is no longer valid.
+  if (!json || typeof json !== 'object' || !('pageProps' in json)) {
+    throw new BucklerUnavailableError('No pageProps (session likely expired)')
+  }
+  return (json as { pageProps: T }).pageProps
 }
 
 // Best-effort variant: collapses source-unavailable into null. Used by list/aggregate
@@ -133,7 +200,7 @@ export async function searchPlayers(
   page = 1
 ): Promise<{ results: BucklerFighterBanner[]; totalPages: number }> {
   const params = new URLSearchParams({ fighter_id: query, page: String(page) })
-  const data = await fetchPageData<BucklerSearchPage>(`/en/fighterslist/search/result?${params}`, 600)
+  const data = await fetchPageData<BucklerSearchPage>(`fighterslist/search/result?${params}`, 600)
   return {
     results: data?.fighter_banner_list ?? [],
     totalPages: data?.total_page ?? 1,
@@ -141,7 +208,7 @@ export async function searchPlayers(
 }
 
 export async function getPlayerProfile(shortId: string | number): Promise<BucklerProfilePage | null> {
-  return fetchPageData<BucklerProfilePage>(`/en/profile/${shortId}`, 600)
+  return fetchPageData<BucklerProfilePage>(`profile/${shortId}`, 600)
 }
 
 export type PlayerProfileResult =
@@ -153,7 +220,7 @@ export type PlayerProfileResult =
 // so the page can render a retry-later fallback instead of a 404 when the cookie dies.
 export async function getPlayerProfileResult(shortId: string | number): Promise<PlayerProfileResult> {
   try {
-    const profile = await fetchPageDataOrThrow<BucklerProfilePage>(`/en/profile/${shortId}`, 600)
+    const profile = await fetchPageDataOrThrow<BucklerProfilePage>(`profile/${shortId}`, 600)
     if (!profile?.fighter_banner_info) return { status: 'notfound' }
     return { status: 'ok', profile }
   } catch (e) {
@@ -165,7 +232,7 @@ export async function getPlayerProfileResult(shortId: string | number): Promise<
 
 export async function getRanking(page = 1): Promise<BucklerRankingData | null> {
   const data = await fetchPageData<BucklerRankingPage>(
-    `/en/ranking/master?page=${page}`,
+    `ranking/master?page=${page}`,
     600
   )
   return data?.master_rating_ranking ?? null
@@ -180,7 +247,7 @@ export type RankingResult =
 // can show a retry-later fallback instead of a misleading "no data" message.
 export async function getRankingResult(page = 1): Promise<RankingResult> {
   try {
-    const data = await fetchPageDataOrThrow<BucklerRankingPage>(`/en/ranking/master?page=${page}`, 600)
+    const data = await fetchPageDataOrThrow<BucklerRankingPage>(`ranking/master?page=${page}`, 600)
     const ranking = data?.master_rating_ranking
     if (!ranking || (ranking.ranking_fighter_list?.length ?? 0) === 0) return { status: 'empty' }
     return { status: 'ok', data: ranking }
@@ -239,7 +306,7 @@ export async function getBattleLog(
   mode: 'rank' | 'casual' | 'hub' | 'custom' | 'extreme' = 'rank'
 ): Promise<BucklerBattleLogPage | null> {
   return fetchPageData<BucklerBattleLogPage>(
-    `/en/profile/${shortId}/battlelog/${mode}?page=${page}`,
+    `profile/${shortId}/battlelog/${mode}?page=${page}`,
     300
   )
 }
