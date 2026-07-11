@@ -2,6 +2,7 @@ import { getSessionCookie } from './auth'
 import type {
   BucklerFighterBanner,
   BucklerProfilePage,
+  BucklerPlayData,
   BucklerBattleLogPage,
   BucklerSearchPage,
   BucklerRankingPage,
@@ -298,6 +299,93 @@ export async function getUsageRate(): Promise<{ data: BucklerUsageRateData; mont
     }
   }
   return null
+}
+
+// The play page's mode/phase filter dropdowns don't re-render the page — they POST to
+// /api/profile/play/act/{action}. Unlike the SSR payload (whose character_win_rates and
+// matchup matrix are always mode "All"), these accept a battle-mode and season filter.
+// targetShortId MUST be a number: a string id answers HTTP 500.
+export const PLAY_ACT_MODES = {
+  1: 'all',
+  2: 'rank',
+  3: 'casual',
+  4: 'custom',
+  5: 'hub',
+} as const
+export type PlayActModeId = keyof typeof PLAY_ACT_MODES
+
+async function fetchPlayAct<T>(action: string, body: Record<string, unknown>): Promise<T> {
+  const cookie = getSessionCookie()
+  if (!cookie) {
+    console.warn('[buckler] No session cookie — set BUCKLER_COOKIE in .env.local')
+    throw new BucklerUnavailableError('No session cookie')
+  }
+
+  let res: Response
+  try {
+    res = await paced(() => fetch(`${BUCKLER_BASE}/api/profile/play/act/${action}`, {
+      method: 'POST',
+      headers: {
+        'User-Agent': UA,
+        Accept: 'application/json, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Content-Type': 'application/json',
+        Cookie: cookie,
+      },
+      body: JSON.stringify(body),
+      cache: 'no-store',
+    }))
+  } catch (e) {
+    throw new BucklerUnavailableError(`fetch failed: ${e instanceof Error ? e.message : e}`)
+  }
+
+  // 403 = dead session ({"message":"AuthError"}), 500 = malformed body/unknown id.
+  if (!res.ok) {
+    console.warn(`[buckler] play/act/${action} → ${res.status} (source unavailable)`)
+    throw new BucklerUnavailableError(`HTTP ${res.status}`)
+  }
+
+  let json: unknown
+  try {
+    json = await res.json()
+  } catch {
+    throw new BucklerUnavailableError('Malformed JSON')
+  }
+  if (!json || typeof json !== 'object' || !('response' in json)) {
+    throw new BucklerUnavailableError('No response payload')
+  }
+  return (json as { response: T }).response
+}
+
+export async function getPlayActWinRates(
+  shortId: string | number,
+  seasonId: number,
+  modeId: PlayActModeId
+): Promise<BucklerPlayData['character_win_rates']> {
+  const data = await fetchPlayAct<Pick<BucklerPlayData, 'character_win_rates'>>('characterwinrate', {
+    targetShortId: Number(shortId),
+    targetSeasonId: seasonId,
+    targetModeId: modeId,
+    lang: 'en',
+  })
+  return data.character_win_rates ?? []
+}
+
+export async function getPlayActMatchupMatrix(
+  shortId: string | number,
+  seasonId: number,
+  modeId: PlayActModeId
+): Promise<BucklerPlayData['character_win_rates_by_rival_character']> {
+  const data = await fetchPlayAct<Pick<BucklerPlayData, 'character_win_rates_by_rival_character'>>(
+    'characterwinratebyrivalcharacter',
+    {
+      targetShortId: Number(shortId),
+      targetSeasonId: seasonId,
+      targetModeId: modeId,
+      lang: 'en',
+    }
+  )
+  return data.character_win_rates_by_rival_character ?? []
 }
 
 export async function getBattleLog(

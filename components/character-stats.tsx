@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useSyncExternalStore } from 'react'
 import Image from 'next/image'
 import { Card, CardTitle } from '@/components/ui/card'
 import { getRankImageUrl, getRank, TIER_COLORS, showsMasterRating, getEffectiveRankId } from '@/lib/constants/ranks'
 import { getCharacterByBucklerId, getCharacterImageUrl } from '@/lib/constants/characters'
+import { getWinrateMode, getServerWinrateMode, setWinrateMode, subscribeWinrateMode, type WinrateModeId } from '@/lib/constants/winrate-modes'
+import { WinrateModeButtons } from '@/components/winrate-mode-buttons'
 import type { BucklerLeagueInfo } from '@/lib/buckler'
 
 export interface PhaseCharInfo {
@@ -26,8 +28,9 @@ export interface WinRateEntry {
 }
 
 interface CharacterStatsProps {
+  playerId: string
   phases: PhaseData[]
-  winRates?: WinRateEntry[]
+  winRates?: WinRateEntry[]   // mode "All", straight from the cached profile
 }
 
 const VISIBLE_ROWS = 5
@@ -86,9 +89,36 @@ function RankBadge({ li }: { li: BucklerLeagueInfo }) {
   )
 }
 
-export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
-  const winRateMap = new Map(winRates?.map(w => [w.character_id, w]) ?? [])
+export function CharacterStats({ playerId, phases, winRates }: CharacterStatsProps) {
   const [activePhaseId, setActivePhaseId] = useState(phases[0]?.id ?? '')
+
+  // Battle-mode filter. Mode 1 ("All") is the winRates prop; other modes are fetched once and
+  // kept per mode, so toggling back and forth costs a single request each.
+  const mode = useSyncExternalStore(subscribeWinrateMode, getWinrateMode, getServerWinrateMode)
+  const [byMode, setByMode] = useState<Partial<Record<WinrateModeId, WinRateEntry[]>>>({})
+  const [failed, setFailed] = useState(false)
+
+  useEffect(() => {
+    if (mode === 1 || byMode[mode] || failed) return
+    const ctrl = new AbortController()
+    fetch(`/api/winrates?id=${playerId}&mode=${mode}&kind=chars`, { signal: ctrl.signal })
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
+      .then((d: { winRates: WinRateEntry[] }) => setByMode((prev) => ({ ...prev, [mode]: d.winRates })))
+      .catch(() => { if (!ctrl.signal.aborted) setFailed(true) })
+    return () => ctrl.abort()
+  }, [mode, byMode, failed, playerId])
+
+  function selectMode(m: WinrateModeId) {
+    setFailed(false)
+    setWinrateMode(m)
+  }
+
+  const activeWinRates = mode === 1 ? winRates : byMode[mode]
+  const loading = mode !== 1 && !byMode[mode] && !failed
+  const winRateMap = new Map(activeWinRates?.map(w => [w.character_id, w]) ?? [])
 
   const activePhase = phases.find((p) => p.id === activePhaseId) ?? phases[0]
   const displayed = activePhase ? sortByBest(activePhase.chars, winRateMap) : []
@@ -102,9 +132,9 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
           <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">Characters</CardTitle>
         </div>
 
-        {phases.length > 1 && (
-          <div className="flex gap-1 flex-wrap justify-end">
-            {phases.map((p) => (
+        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+          {phases.length > 1 &&
+            phases.map((p) => (
               <button
                 key={p.id}
                 onClick={() => setActivePhaseId(p.id)}
@@ -117,9 +147,16 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
                 {p.label}
               </button>
             ))}
-          </div>
-        )}
+          {loading && (
+            <div className="w-3 h-3 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
+          )}
+          <WinrateModeButtons value={mode} onChange={selectMode} />
+        </div>
       </div>
+
+      {failed && (
+        <p className="px-4 pb-2 text-xs text-zinc-400 flex-shrink-0">Win rates unavailable for this mode.</p>
+      )}
 
       {/* List — fills remaining card height, scrolls when content exceeds it */}
       <div className="relative flex-1 min-h-0">
@@ -161,7 +198,14 @@ export function CharacterStats({ phases, winRates }: CharacterStatsProps) {
 
                   {(() => {
                     const wr = winRateMap.get(c.character_id)
-                    if (!wr || wr.battle_count === 0) return <div />
+                    if (loading) return <div />
+                    if (!wr || wr.battle_count === 0) {
+                      return (
+                        <div className="flex items-center justify-center">
+                          <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">No games</p>
+                        </div>
+                      )
+                    }
                     const losses = wr.battle_count - wr.win_count
                     const rate = (wr.win_count / wr.battle_count) * 100
                     return (
