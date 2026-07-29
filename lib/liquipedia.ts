@@ -172,18 +172,26 @@ function parse(html: string): TournamentYear[] {
 export const getTournaments = unstable_cache(
   async (): Promise<TournamentYear[]> => {
     try {
+      // Liquipedia now puts the raw HTML pages behind a Cloudflare challenge (403).
+      // Their MediaWiki API is the sanctioned path and returns the same rendered
+      // page HTML in parse.text['*']. Cached daily, so we stay well within the
+      // API rate limits. A descriptive User-Agent with contact is required.
+      const page = encodeURIComponent('Street_Fighter_6/Tier_1_Tournaments')
       const res = await fetch(
-        'https://liquipedia.net/fighters/Street_Fighter_6/Tier_1_Tournaments',
+        `https://liquipedia.net/fighters/api.php?action=parse&page=${page}&prop=text&format=json`,
         {
           cache: 'no-store',
           headers: {
-            'User-Agent': 'Shoryu/1.0 (+https://shoryu.site)',
+            'User-Agent': 'Shoryu/1.0 (https://shoryu.site; https://x.com/shoryuapp)',
+            'Accept-Encoding': 'gzip',
             'Accept-Language': 'en-US,en;q=0.9',
           },
         }
       )
       if (!res.ok) return []
-      const html = await res.text()
+      const json = await res.json()
+      const html: string | undefined = json?.parse?.text?.['*'] ?? json?.parse?.text
+      if (!html) return []
       return parse(html)
     } catch {
       return []
