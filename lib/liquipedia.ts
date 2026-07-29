@@ -169,34 +169,43 @@ function parse(html: string): TournamentYear[] {
     .map(([year, tournaments]) => ({ year, tournaments }))
 }
 
-export const getTournaments = unstable_cache(
-  async (): Promise<TournamentYear[]> => {
-    try {
-      // Liquipedia now puts the raw HTML pages behind a Cloudflare challenge (403).
-      // Their MediaWiki API is the sanctioned path and returns the same rendered
-      // page HTML in parse.text['*']. Cached daily, so we stay well within the
-      // API rate limits. A descriptive User-Agent with contact is required.
-      const page = encodeURIComponent('Street_Fighter_6/Tier_1_Tournaments')
-      const res = await fetch(
-        `https://liquipedia.net/fighters/api.php?action=parse&page=${page}&prop=text&format=json`,
-        {
-          cache: 'no-store',
-          headers: {
-            'User-Agent': 'Shoryu/1.0 (https://shoryu.site; https://x.com/shoryuapp)',
-            'Accept-Encoding': 'gzip',
-            'Accept-Language': 'en-US,en;q=0.9',
-          },
-        }
-      )
-      if (!res.ok) return []
-      const json = await res.json()
-      const html: string | undefined = json?.parse?.text?.['*'] ?? json?.parse?.text
-      if (!html) return []
-      return parse(html)
-    } catch {
-      return []
+// Liquipedia now puts the raw HTML pages behind a Cloudflare challenge (403).
+// Their MediaWiki API is the sanctioned path and returns the same rendered page
+// HTML in parse.text['*']. A descriptive User-Agent with contact is required.
+// Throws on failure so unstable_cache does NOT cache an empty result for a day.
+async function fetchTournamentsFromApi(): Promise<TournamentYear[]> {
+  const page = encodeURIComponent('Street_Fighter_6/Tier_1_Tournaments')
+  const res = await fetch(
+    `https://liquipedia.net/fighters/api.php?action=parse&page=${page}&prop=text&format=json`,
+    {
+      cache: 'no-store',
+      headers: {
+        'User-Agent': 'Shoryu/1.0 (https://shoryu.site; https://x.com/shoryuapp)',
+        'Accept-Language': 'en-US,en;q=0.9',
+      },
     }
-  },
-  ['liquipedia-tournaments'],
-  { revalidate: 86400, tags: ['tournaments'] }
-)
+  )
+  if (!res.ok) throw new Error(`Liquipedia API ${res.status}`)
+  const json = await res.json()
+  const html: string | undefined = json?.parse?.text?.['*'] ?? json?.parse?.text
+  if (!html) throw new Error('Liquipedia API returned no HTML')
+  const years = parse(html)
+  if (years.length === 0) throw new Error('Liquipedia API parsed to 0 tournaments')
+  return years
+}
+
+// v2 key busts any stale empty result cached by the previous (HTML-scraping) build.
+const cachedTournaments = unstable_cache(fetchTournamentsFromApi, ['liquipedia-tournaments-v2'], {
+  revalidate: 86400,
+  tags: ['tournaments'],
+})
+
+export async function getTournaments(): Promise<TournamentYear[]> {
+  try {
+    return await cachedTournaments()
+  } catch {
+    // Failures are not cached, so the next request retries instead of showing
+    // empty for a full day.
+    return []
+  }
+}
