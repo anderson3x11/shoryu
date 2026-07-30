@@ -34,12 +34,12 @@ jobs:
 
       - name: Commit if changed
         run: |
-          if git diff --quiet -- lib/data/tournaments.json; then
+          git add lib/data/tournaments.json public/liquipedia
+          if git diff --cached --quiet; then
             echo "No tournament changes — nothing to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add lib/data/tournaments.json
           git commit -m "chore: refresh tournaments snapshot"
           git push

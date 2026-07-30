@@ -9,8 +9,10 @@ export const metadata = {
   description: 'Street Fighter 6 Tier 1 tournament results, prize pools, and top players.',
 }
 
-function proxy(url: string) {
-  return `/api/lp-icon?url=${encodeURIComponent(url)}`
+// Snapshot images are local (/liquipedia/...); live-fetched data still carries
+// Liquipedia URLs, which must go through the Referer-proxy to avoid hotlink blocks.
+function imgSrc(url: string) {
+  return url.startsWith('http') ? `/api/lp-icon?url=${encodeURIComponent(url)}` : url
 }
 
 function PlayerCell({ player, className }: { player: Player; className?: string }) {
@@ -23,11 +25,11 @@ function PlayerCell({ player, className }: { player: Player; className?: string 
     >
       {player.flagUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={proxy(player.flagUrl)} alt={player.flagAlt ?? ''} className="h-3 w-auto object-contain shrink-0" />
+        <img src={imgSrc(player.flagUrl)} alt={player.flagAlt ?? ''} className="h-3 w-auto object-contain shrink-0" />
       )}
       {player.charUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={proxy(player.charUrl)} alt={player.charAlt ?? ''} className="h-5 w-5 object-contain rounded-none shrink-0" />
+        <img src={imgSrc(player.charUrl)} alt={player.charAlt ?? ''} className="h-5 w-5 object-contain rounded-none shrink-0" />
       )}
       {player.name}
     </a>
@@ -47,7 +49,7 @@ function TournamentRow({ t }: { t: Tournament }) {
           <span className="inline-flex items-center justify-center w-8 h-5 shrink-0">
             {t.iconUrl && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={proxy(t.iconUrl)} alt="" className="max-w-full max-h-full object-contain" />
+              <img src={imgSrc(t.iconUrl)} alt="" className="max-w-full max-h-full object-contain" />
             )}
           </span>
           {t.name}
