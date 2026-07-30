@@ -2,10 +2,7 @@ import { ExternalLink } from 'lucide-react'
 import { getTournaments } from '@/lib/liquipedia'
 import type { Player, Tournament, TournamentYear } from '@/lib/liquipedia'
 
-// Fetch at request time on the running server (which can reach Liquipedia),
-// not at build time (where the build container's egress may be blocked). The
-// actual Liquipedia hit is still throttled to daily by unstable_cache.
-export const dynamic = 'force-dynamic'
+export const revalidate = 86400
 
 export const metadata = {
   title: 'Tournaments',

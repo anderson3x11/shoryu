@@ -1,0 +1,1441 @@
+[
+  {
+    "year": 2027,
+    "tournaments": [
+      {
+        "name": "Street Fighter League Pro-JP 2026",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/Japan/2026",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/5/5d/Street_Fighter_League_Japan_2022_allmode.png/50px-Street_Fighter_League_Japan_2022_allmode.png",
+        "date": "Aug 25 - Feb 23, 2027",
+        "prizePool": null,
+        "location": "Japan",
+        "winner": null,
+        "runnerUp": null
+      }
+    ]
+  },
+  {
+    "year": 2026,
+    "tournaments": [
+      {
+        "name": "Esports Nations Cup 2026",
+        "url": "https://liquipedia.net/fighters/Esports_Nations_Cup/2026/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/0/02/Esports_Nations_Cup_icon_darkmode.png/50px-Esports_Nations_Cup_icon_darkmode.png",
+        "date": "Nov 18 - 22, 2026",
+        "prizePool": "$880,000",
+        "location": "Riyadh",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Evolution Championship Series: France 2026",
+        "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2026/France/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/2/2e/EVO_France_icon_allmode.png/50px-EVO_France_icon_allmode.png",
+        "date": "Oct 9 - 11, 2026",
+        "prizePool": null,
+        "location": "France",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Ultimate Fighting Arena 2026",
+        "url": "https://liquipedia.net/fighters/Ultimate_Fighting_Arena/2026/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/f/f2/Ultimate_Fighting_Arena_2024_allmode.png/50px-Ultimate_Fighting_Arena_2024_allmode.png",
+        "date": "Sep 11 - 13, 2026",
+        "prizePool": null,
+        "location": "Paris",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Topanga Championship 7",
+        "url": "https://liquipedia.net/fighters/Topanga_Championship/7",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/7/70/Topanga_icon_allmode.png/50px-Topanga_icon_allmode.png",
+        "date": "Jun 10 - Aug 23, 2026",
+        "prizePool": "$92,544.60",
+        "location": "Tokyo",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "CEO 2026",
+        "url": "https://liquipedia.net/fighters/Community_Effort_Orlando/2026/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/0/00/Community_Effort_Orlando_2017_icon_allmode.png/50px-Community_Effort_Orlando_2017_icon_allmode.png",
+        "date": "Aug 14 - 16, 2026",
+        "prizePool": null,
+        "location": "Orlando, FL",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Esports World Cup 2026",
+        "url": "https://liquipedia.net/fighters/Esports_World_Cup/2026/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/5/5f/Esports_World_Cup_icon_darkmode.png/50px-Esports_World_Cup_icon_darkmode.png",
+        "date": "Jul 29 - Aug 1, 2026",
+        "prizePool": "$1,000,000",
+        "location": "Paris",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Esports World Cup 2026 Last Chance Qualifier",
+        "url": "https://liquipedia.net/fighters/Esports_World_Cup/2026/SF6/Last_Chance_Qualifier",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/5/5f/Esports_World_Cup_icon_darkmode.png/50px-Esports_World_Cup_icon_darkmode.png",
+        "date": "Jul 24 - 26, 2026",
+        "prizePool": "$50,000",
+        "location": "Paris",
+        "winner": {
+          "name": "Dual Kevin",
+          "url": "https://liquipedia.net/fighters/Dual_Kevin",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Rashid_SF6_icon.png/36px-Rashid_SF6_icon.png",
+          "charAlt": "Rashid"
+        },
+        "runnerUp": {
+          "name": "Hibiki",
+          "url": "https://liquipedia.net/fighters/Hibiki",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/4/45/Lily_SF6_icon.png/36px-Lily_SF6_icon.png",
+          "charAlt": "Lily"
+        }
+      },
+      {
+        "name": "Battle Arena Melbourne 16",
+        "url": "https://liquipedia.net/fighters/Battle_Arena_Melbourne/16/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/0/03/Battle_Arena_Melbourne_12_allmode.png/50px-Battle_Arena_Melbourne_12_allmode.png",
+        "date": "Jul 11 - 12, 2026",
+        "prizePool": "$6,754.21",
+        "location": "Melbourne",
+        "winner": {
+          "name": "Hinao",
+          "url": "https://liquipedia.net/fighters/Hinao",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ab/Ryu_SF6_icon.png/36px-Ryu_SF6_icon.png",
+          "charAlt": "Ryu"
+        },
+        "runnerUp": {
+          "name": "cosa",
+          "url": "https://liquipedia.net/fighters/Kabe",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Akuma_SF6_icon.png/36px-Akuma_SF6_icon.png",
+          "charAlt": "Akuma"
+        }
+      },
+      {
+        "name": "Evolution Championship Series 2026",
+        "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2026/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/d/dc/Evolution_Championship_Series_icon_allmode.png/50px-Evolution_Championship_Series_icon_allmode.png",
+        "date": "Jun 26 - 28, 2026",
+        "prizePool": "$100,000",
+        "location": "Las Vegas, NV",
+        "winner": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        },
+        "runnerUp": {
+          "name": "Shigematsu",
+          "url": "https://liquipedia.net/fighters/Shigematsu",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        }
+      },
+      {
+        "name": "Blink Respawn 2026",
+        "url": "https://liquipedia.net/fighters/Blink_Respawn/2026/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/0/0a/Blink_Esports_small_logo.png",
+        "date": "Jun 6 - 7, 2026",
+        "prizePool": "$11,200",
+        "location": "Santo Domingo",
+        "winner": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        },
+        "runnerUp": {
+          "name": "NoahTheProdigy",
+          "url": "https://liquipedia.net/fighters/NoahTheProdigy",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        }
+      },
+      {
+        "name": "Combo Breaker 2026",
+        "url": "https://liquipedia.net/fighters/Combo_Breaker/2026/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/33/Combo_Breaker_2023_icon_allmode.png/50px-Combo_Breaker_2023_icon_allmode.png",
+        "date": "May 22 - 24, 2026",
+        "prizePool": null,
+        "location": "Schaumburg, IL",
+        "winner": {
+          "name": "Xiaohai",
+          "url": "https://liquipedia.net/fighters/Xiao_Hai",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/0/01/Cn_hd.png/36px-Cn_hd.png",
+          "flagAlt": "China",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/7/7f/Mai_SF6_icon.png/36px-Mai_SF6_icon.png",
+          "charAlt": "Mai"
+        },
+        "runnerUp": {
+          "name": "Hinao",
+          "url": "https://liquipedia.net/fighters/Hinao",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/5/50/Sagat_SF6_icon.png/36px-Sagat_SF6_icon.png",
+          "charAlt": "Sagat"
+        }
+      },
+      {
+        "name": "DreamHack Atlanta 2026",
+        "url": "https://liquipedia.net/fighters/DreamHack/2026/Atlanta/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/3e/DH_Fighters_Icon_darkmode.png/50px-DH_Fighters_Icon_darkmode.png",
+        "date": "May 16 - 17, 2026",
+        "prizePool": "$50,000",
+        "location": "Atlanta, GA",
+        "winner": {
+          "name": "Kobayan",
+          "url": "https://liquipedia.net/fighters/Kobayan",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Zangief_SF6_icon.png/36px-Zangief_SF6_icon.png",
+          "charAlt": "Zangief"
+        },
+        "runnerUp": {
+          "name": "Nephew",
+          "url": "https://liquipedia.net/fighters/Nephew",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/0/00/Juri_SF6_icon.png/36px-Juri_SF6_icon.png",
+          "charAlt": "Juri"
+        }
+      },
+      {
+        "name": "Evolution Championship Series: Japan 2026",
+        "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2026/Japan/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/e/ea/EVO_Japan_icon_allmode.png/50px-EVO_Japan_icon_allmode.png",
+        "date": "May 1 - 3, 2026",
+        "prizePool": null,
+        "location": "Tokyo",
+        "winner": {
+          "name": "Yamaguchi",
+          "url": "https://liquipedia.net/fighters/Yamaguchi",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/7/7f/Mai_SF6_icon.png/36px-Mai_SF6_icon.png",
+          "charAlt": "Mai"
+        },
+        "runnerUp": {
+          "name": "Punk",
+          "url": "https://liquipedia.net/fighters/Punk",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/2/28/Cammy_SF6_icon.png/36px-Cammy_SF6_icon.png",
+          "charAlt": "Cammy"
+        }
+      },
+      {
+        "name": "DreamHack Birmingham 2026",
+        "url": "https://liquipedia.net/fighters/DreamHack/2026/Birmingham/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/3e/DH_Fighters_Icon_darkmode.png/50px-DH_Fighters_Icon_darkmode.png",
+        "date": "Mar 28 - 29, 2026",
+        "prizePool": "$50,000",
+        "location": "Birmingham",
+        "winner": {
+          "name": "gachikun",
+          "url": "https://liquipedia.net/fighters/Gachikun",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Rashid_SF6_icon.png/36px-Rashid_SF6_icon.png",
+          "charAlt": "Rashid"
+        },
+        "runnerUp": {
+          "name": "Micky",
+          "url": "https://liquipedia.net/fighters/Micky",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/4/41/Hk_hd.png/36px-Hk_hd.png",
+          "flagAlt": "Hong Kong",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/7/7f/Mai_SF6_icon.png/36px-Mai_SF6_icon.png",
+          "charAlt": "Mai"
+        }
+      },
+      {
+        "name": "Street Fighter League World Championship 2025",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/World_Championship/2025",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/a/ac/Street_Fighter_League_World_Championship_2025_allmode.png/34px-Street_Fighter_League_World_Championship_2025_allmode.png",
+        "date": "Mar 13 - 15, 2026",
+        "prizePool": "$200,000",
+        "location": "Tokyo",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Capcom Cup 12",
+        "url": "https://liquipedia.net/fighters/Capcom_Cup/12",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Capcom_Cup_12_allmode.png/44px-Capcom_Cup_12_allmode.png",
+        "date": "Mar 11 - 14, 2026",
+        "prizePool": "$1,282,000",
+        "location": "Tokyo",
+        "winner": {
+          "name": "Sahara",
+          "url": "https://liquipedia.net/fighters/Sahara",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/11/Ed_SF6_icon.png/36px-Ed_SF6_icon.png",
+          "charAlt": "Ed"
+        },
+        "runnerUp": {
+          "name": "Kilzyou",
+          "url": "https://liquipedia.net/fighters/Kilzyou",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/4/40/Fr_hd.png/36px-Fr_hd.png",
+          "flagAlt": "France",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/7/7f/Mai_SF6_icon.png/36px-Mai_SF6_icon.png",
+          "charAlt": "Mai"
+        }
+      },
+      {
+        "name": "Street Fighter League Pro-JP 2025",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/Japan/2025",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/2/2f/Street_Fighter_League_Pro-JP_2025_allmode.png/45px-Street_Fighter_League_Pro-JP_2025_allmode.png",
+        "date": "Aug 29 - Jan 31, 2026",
+        "prizePool": "$96,933.64",
+        "location": "Japan",
+        "winner": null,
+        "runnerUp": null
+      }
+    ]
+  },
+  {
+    "year": 2025,
+    "tournaments": [
+      {
+        "name": "Street Fighter League Pro-US 2025",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/United_States/2025",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/d/dd/Street_Fighter_League_Pro-US_2025_allmode.png/45px-Street_Fighter_League_Pro-US_2025_allmode.png",
+        "date": "Nov 13 - Dec 7, 2025",
+        "prizePool": "$100,000",
+        "location": "United States",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Street Fighter League Pro-EU 2025",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/Europe/2025",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/d/d3/Street_Fighter_League_Pro-EU_2025_allmode.png/47px-Street_Fighter_League_Pro-EU_2025_allmode.png",
+        "date": "Nov 22 - 29, 2025",
+        "prizePool": "$100,000",
+        "location": "Europe",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "FightClub Championship VI Chengdu",
+        "url": "https://liquipedia.net/fighters/FightClub_Championship/6/Chengdu",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/d/dc/FightClub_Championship_VI_allmode.png/50px-FightClub_Championship_VI_allmode.png",
+        "date": "Oct 31 - Nov 2, 2025",
+        "prizePool": "$9,975.55",
+        "location": "Chengdu",
+        "winner": {
+          "name": "Hinao",
+          "url": "https://liquipedia.net/fighters/Hinao",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        },
+        "runnerUp": {
+          "name": "Jojotaro",
+          "url": "https://liquipedia.net/fighters/Jojotaro",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Akuma_SF6_icon.png/36px-Akuma_SF6_icon.png",
+          "charAlt": "Akuma"
+        }
+      },
+      {
+        "name": "Evolution Championship Series: France 2025",
+        "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2025/France/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/2/2e/EVO_France_icon_allmode.png/50px-EVO_France_icon_allmode.png",
+        "date": "Oct 10 - 12, 2025",
+        "prizePool": "$26,722.31",
+        "location": "Nice",
+        "winner": {
+          "name": "Leshar",
+          "url": "https://liquipedia.net/fighters/Leshar",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8c/Kr_hd.png/36px-Kr_hd.png",
+          "flagAlt": "South Korea",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/11/Ed_SF6_icon.png/36px-Ed_SF6_icon.png",
+          "charAlt": "Ed"
+        },
+        "runnerUp": {
+          "name": "Blaz",
+          "url": "https://liquipedia.net/fighters/Blaz",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8a/Cl_hd.png/36px-Cl_hd.png",
+          "flagAlt": "Chile",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ab/Ryu_SF6_icon.png/36px-Ryu_SF6_icon.png",
+          "charAlt": "Ryu"
+        }
+      },
+      {
+        "name": "Ultimate Fighting Arena 2025",
+        "url": "https://liquipedia.net/fighters/Ultimate_Fighting_Arena/2025/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/f/f2/Ultimate_Fighting_Arena_2024_allmode.png/50px-Ultimate_Fighting_Arena_2024_allmode.png",
+        "date": "Sep 13 - 14, 2025",
+        "prizePool": "$10,942.33",
+        "location": "Paris",
+        "winner": {
+          "name": "Sahara",
+          "url": "https://liquipedia.net/fighters/Sahara",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/11/Ed_SF6_icon.png/36px-Ed_SF6_icon.png",
+          "charAlt": "Ed"
+        },
+        "runnerUp": {
+          "name": "kingsvega",
+          "url": "https://liquipedia.net/fighters/Kingsvega",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        }
+      },
+      {
+        "name": "Esports World Cup 2025",
+        "url": "https://liquipedia.net/fighters/Esports_World_Cup/2025/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/5/5f/Esports_World_Cup_icon_darkmode.png/50px-Esports_World_Cup_icon_darkmode.png",
+        "date": "Aug 20 - 23, 2025",
+        "prizePool": "$1,000,000",
+        "location": "Riyadh",
+        "winner": {
+          "name": "Xiaohai",
+          "url": "https://liquipedia.net/fighters/Xiao_Hai",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/0/01/Cn_hd.png/36px-Cn_hd.png",
+          "flagAlt": "China",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/e/e0/M._Bison_SF6_icon.png/36px-M._Bison_SF6_icon.png",
+          "charAlt": "M. Bison"
+        },
+        "runnerUp": {
+          "name": "Blaz",
+          "url": "https://liquipedia.net/fighters/Blaz",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8a/Cl_hd.png/36px-Cl_hd.png",
+          "flagAlt": "Chile",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ab/Ryu_SF6_icon.png/36px-Ryu_SF6_icon.png",
+          "charAlt": "Ryu"
+        }
+      },
+      {
+        "name": "Esports World Cup 2025 Last Chance Qualifier",
+        "url": "https://liquipedia.net/fighters/Esports_World_Cup/2025/SF6/Last_Chance_Qualifier",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/5/5f/Esports_World_Cup_icon_darkmode.png/50px-Esports_World_Cup_icon_darkmode.png",
+        "date": "Aug 14 - 16, 2025",
+        "prizePool": "$50,000",
+        "location": "Riyadh",
+        "winner": {
+          "name": "Hurricane",
+          "url": "https://liquipedia.net/fighters/Hurricane",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/0/04/Cm_hd.png/36px-Cm_hd.png",
+          "flagAlt": "Cameroon",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/2/28/Cammy_SF6_icon.png/36px-Cammy_SF6_icon.png",
+          "charAlt": "Cammy"
+        },
+        "runnerUp": {
+          "name": "Hikaru",
+          "url": "https://liquipedia.net/fighters/Hikaru",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/d/df/AKI_SF6_icon.png/36px-AKI_SF6_icon.png",
+          "charAlt": "A.K.I."
+        }
+      },
+      {
+        "name": "Evolution Championship Series 2025",
+        "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2025/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/d/dc/Evolution_Championship_Series_icon_allmode.png/50px-Evolution_Championship_Series_icon_allmode.png",
+        "date": "Aug 1 - 3, 2025",
+        "prizePool": null,
+        "location": "Las Vegas, NV",
+        "winner": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        },
+        "runnerUp": {
+          "name": "Kakeru",
+          "url": "https://liquipedia.net/fighters/Kakeru",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/d/d9/JP_SF6_icon.png/36px-JP_SF6_icon.png",
+          "charAlt": "JP"
+        }
+      },
+      {
+        "name": "Blink Respawn 2025",
+        "url": "https://liquipedia.net/fighters/Blink_Respawn/2025/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/0/0a/Blink_Esports_small_logo.png",
+        "date": "Jul 18 - 20, 2025",
+        "prizePool": "$16,700",
+        "location": "Santo Domingo",
+        "winner": {
+          "name": "Fuudo",
+          "url": "https://liquipedia.net/fighters/Fuudo",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/5/59/Dee_Jay_SF6_icon.png/36px-Dee_Jay_SF6_icon.png",
+          "charAlt": "Dee Jay"
+        },
+        "runnerUp": {
+          "name": "Momochi",
+          "url": "https://liquipedia.net/fighters/Momochi",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/11/Ed_SF6_icon.png/36px-Ed_SF6_icon.png",
+          "charAlt": "Ed"
+        }
+      },
+      {
+        "name": "Topanga Championship 6",
+        "url": "https://liquipedia.net/fighters/Topanga_Championship/6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/7/70/Topanga_icon_allmode.png/50px-Topanga_icon_allmode.png",
+        "date": "May 29 - Jul 13, 2025",
+        "prizePool": "$27,138.69",
+        "location": "Tokyo",
+        "winner": {
+          "name": "Fuudo",
+          "url": "https://liquipedia.net/fighters/Fuudo",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/5/59/Dee_Jay_SF6_icon.png/36px-Dee_Jay_SF6_icon.png",
+          "charAlt": "Dee Jay"
+        },
+        "runnerUp": {
+          "name": "Torimeshi",
+          "url": "https://liquipedia.net/fighters/Torimeshi",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/c5/Dhalsim_SF6_icon.png/36px-Dhalsim_SF6_icon.png",
+          "charAlt": "Dhalsim"
+        }
+      },
+      {
+        "name": "CEO 2025",
+        "url": "https://liquipedia.net/fighters/Community_Effort_Orlando/2025/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/0/00/Community_Effort_Orlando_2017_icon_allmode.png/50px-Community_Effort_Orlando_2017_icon_allmode.png",
+        "date": "Jun 13 - 15, 2025",
+        "prizePool": null,
+        "location": "Orlando, FL",
+        "winner": {
+          "name": "Leshar",
+          "url": "https://liquipedia.net/fighters/Leshar",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8c/Kr_hd.png/36px-Kr_hd.png",
+          "flagAlt": "South Korea",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/7/7f/Mai_SF6_icon.png/36px-Mai_SF6_icon.png",
+          "charAlt": "Mai"
+        },
+        "runnerUp": {
+          "name": "NL",
+          "url": "https://liquipedia.net/fighters/NL",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8c/Kr_hd.png/36px-Kr_hd.png",
+          "flagAlt": "South Korea",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Akuma_SF6_icon.png/36px-Akuma_SF6_icon.png",
+          "charAlt": "Akuma"
+        }
+      },
+      {
+        "name": "Combo Breaker 2025",
+        "url": "https://liquipedia.net/fighters/Combo_Breaker/2025/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/33/Combo_Breaker_2023_icon_allmode.png/50px-Combo_Breaker_2023_icon_allmode.png",
+        "date": "May 23 - 25, 2025",
+        "prizePool": null,
+        "location": "Schaumburg, IL",
+        "winner": {
+          "name": "Leshar",
+          "url": "https://liquipedia.net/fighters/Leshar",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8c/Kr_hd.png/36px-Kr_hd.png",
+          "flagAlt": "South Korea",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/7/7f/Mai_SF6_icon.png/36px-Mai_SF6_icon.png",
+          "charAlt": "Mai"
+        },
+        "runnerUp": {
+          "name": "Itabashi Zangief",
+          "url": "https://liquipedia.net/fighters/Itabashi_Zangief",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Zangief_SF6_icon.png/36px-Zangief_SF6_icon.png",
+          "charAlt": "Zangief"
+        }
+      },
+      {
+        "name": "Asian Champions League 2025",
+        "url": "https://liquipedia.net/fighters/Asian_Champions_League/2025",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/d/db/Hero_Esports_Asian_Champions_League_icon_allmode.png/46px-Hero_Esports_Asian_Champions_League_icon_allmode.png",
+        "date": "May 17 - 18, 2025",
+        "prizePool": "$30,000",
+        "location": "Shanghai",
+        "winner": {
+          "name": "Tokido",
+          "url": "https://liquipedia.net/fighters/Tokido",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/cd/Ken_SF6_icon.png/36px-Ken_SF6_icon.png",
+          "charAlt": "Ken"
+        },
+        "runnerUp": {
+          "name": "Higuchi",
+          "url": "https://liquipedia.net/fighters/Higuchi",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/6/67/Guile_SF6_icon.png/36px-Guile_SF6_icon.png",
+          "charAlt": "Guile"
+        }
+      },
+      {
+        "name": "Evolution Championship Series: Japan 2025",
+        "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2025/Japan/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/e/ea/EVO_Japan_icon_allmode.png/50px-EVO_Japan_icon_allmode.png",
+        "date": "May 9 - 11, 2025",
+        "prizePool": "$24,075.25",
+        "location": "Tokyo",
+        "winner": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        },
+        "runnerUp": {
+          "name": "Ryukichi",
+          "url": "https://liquipedia.net/fighters/Ryukichi",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/cd/Ken_SF6_icon.png/36px-Ken_SF6_icon.png",
+          "charAlt": "Ken"
+        }
+      },
+      {
+        "name": "Red Bull Kumite 2025",
+        "url": "https://liquipedia.net/fighters/Red_Bull_Kumite/2025",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/1/11/Red_Bull_Kumite_2025_allmode.png/47px-Red_Bull_Kumite_2025_allmode.png",
+        "date": "Apr 6, 2025",
+        "prizePool": "$54,797.52",
+        "location": "Paris",
+        "winner": {
+          "name": "Big Bird",
+          "url": "https://liquipedia.net/fighters/Big_Bird",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/b/bc/Ae_hd.png/36px-Ae_hd.png",
+          "flagAlt": "United Arab Emirates",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Rashid_SF6_icon.png/36px-Rashid_SF6_icon.png",
+          "charAlt": "Rashid"
+        },
+        "runnerUp": {
+          "name": "EndingWalker",
+          "url": "https://liquipedia.net/fighters/EndingWalker",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/5/5e/Gb_hd.png/36px-Gb_hd.png",
+          "flagAlt": "United Kingdom",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ab/Ryu_SF6_icon.png/36px-Ryu_SF6_icon.png",
+          "charAlt": "Ryu"
+        }
+      },
+      {
+        "name": "Street Fighter League World Championship 2024",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/World_Championship/2024",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/7/7c/Street_Fighter_League_World_Championship_2024_allmode.png/43px-Street_Fighter_League_World_Championship_2024_allmode.png",
+        "date": "Mar 9, 2025",
+        "prizePool": "$150,000",
+        "location": "Tokyo",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Capcom Cup 11",
+        "url": "https://liquipedia.net/fighters/Capcom_Cup/11",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/c/c6/Capcom_Cup_11_allmode.png/44px-Capcom_Cup_11_allmode.png",
+        "date": "Mar 5 - 8, 2025",
+        "prizePool": "$1,282,000",
+        "location": "Tokyo",
+        "winner": {
+          "name": "Kakeru",
+          "url": "https://liquipedia.net/fighters/Kakeru",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/d/d9/JP_SF6_icon.png/36px-JP_SF6_icon.png",
+          "charAlt": "JP"
+        },
+        "runnerUp": {
+          "name": "Blaz",
+          "url": "https://liquipedia.net/fighters/Blaz",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8a/Cl_hd.png/36px-Cl_hd.png",
+          "flagAlt": "Chile",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ab/Ryu_SF6_icon.png/36px-Ryu_SF6_icon.png",
+          "charAlt": "Ryu"
+        }
+      },
+      {
+        "name": "Street Fighter League Pro-US 2024",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/United_States/2024",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/3a/Street_Fighter_League_Pro-US_2024_allmode.png/45px-Street_Fighter_League_Pro-US_2024_allmode.png",
+        "date": "Oct 16 - Feb 22, 2025",
+        "prizePool": "$75,000",
+        "location": "United States",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Street Fighter League Pro-JP 2024",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/Japan/2024",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/5/5d/Street_Fighter_League_Pro-JP_2024_allmode.png/45px-Street_Fighter_League_Pro-JP_2024_allmode.png",
+        "date": "Aug 16 - Feb 11, 2025",
+        "prizePool": "$52,696.24",
+        "location": "Japan",
+        "winner": null,
+        "runnerUp": null
+      }
+    ]
+  },
+  {
+    "year": 2024,
+    "tournaments": [
+      {
+        "name": "Kings of the World",
+        "url": "https://liquipedia.net/fighters/Kings_of_the_World/2024",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/4/46/Kings_of_the_World_darkmode.png/50px-Kings_of_the_World_darkmode.png",
+        "date": "Dec 14 - 15, 2024",
+        "prizePool": "$5,200",
+        "location": "London",
+        "winner": {
+          "name": "Armperor",
+          "url": "https://liquipedia.net/fighters/Armperor",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8c/Kr_hd.png/36px-Kr_hd.png",
+          "flagAlt": "South Korea",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/cd/Ken_SF6_icon.png/36px-Ken_SF6_icon.png",
+          "charAlt": "Ken"
+        },
+        "runnerUp": {
+          "name": "Kilzyou",
+          "url": "https://liquipedia.net/fighters/Kilzyou",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/4/40/Fr_hd.png/36px-Fr_hd.png",
+          "flagAlt": "France",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/0/00/Juri_SF6_icon.png/36px-Juri_SF6_icon.png",
+          "charAlt": "Juri"
+        }
+      },
+      {
+        "name": "Street Fighter League Pro-EU 2024",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/Europe/2024",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/36/Street_Fighter_League_Pro-EU_2024_allmode.png/47px-Street_Fighter_League_Pro-EU_2024_allmode.png",
+        "date": "Nov 15 - 26, 2024",
+        "prizePool": "$78,348.21",
+        "location": "Europe",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Blink Respawn 2024",
+        "url": "https://liquipedia.net/fighters/Blink_Respawn/2024/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/0/0a/Blink_Esports_small_logo.png",
+        "date": "Nov 9 - 10, 2024",
+        "prizePool": "$6,000",
+        "location": "Santo Domingo",
+        "winner": {
+          "name": "NoahTheProdigy",
+          "url": "https://liquipedia.net/fighters/NoahTheProdigy",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        },
+        "runnerUp": {
+          "name": "Dual Kevin",
+          "url": "https://liquipedia.net/fighters/Dual_Kevin",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Rashid_SF6_icon.png/36px-Rashid_SF6_icon.png",
+          "charAlt": "Rashid"
+        }
+      },
+      {
+        "name": "CPT 2024: Japan Super Premier",
+        "url": "https://liquipedia.net/fighters/Capcom_Pro_Tour/2024/Super_Premier/Japan",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/a/aa/CPT_2024_Japan_Super_Premier_allmode.png/50px-CPT_2024_Japan_Super_Premier_allmode.png",
+        "date": "Nov 2 - 3, 2024",
+        "prizePool": null,
+        "location": "Tokyo",
+        "winner": {
+          "name": "Tokido",
+          "url": "https://liquipedia.net/fighters/Tokido",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/cd/Ken_SF6_icon.png/36px-Ken_SF6_icon.png",
+          "charAlt": "Ken"
+        },
+        "runnerUp": {
+          "name": "Leshar",
+          "url": "https://liquipedia.net/fighters/Leshar",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8c/Kr_hd.png/36px-Kr_hd.png",
+          "flagAlt": "South Korea",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/11/Ed_SF6_icon.png/36px-Ed_SF6_icon.png",
+          "charAlt": "Ed"
+        }
+      },
+      {
+        "name": "CPT 2024: Singapore Super Premier",
+        "url": "https://liquipedia.net/fighters/Capcom_Pro_Tour/2024/Super_Premier/Singapore",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/0/0b/CPT_2024_Singapore_Super_Premier_allmode.png/50px-CPT_2024_Singapore_Super_Premier_allmode.png",
+        "date": "Oct 18 - 20, 2024",
+        "prizePool": "$18,400",
+        "location": "Singapore",
+        "winner": {
+          "name": "Shuto",
+          "url": "https://liquipedia.net/fighters/Shuto",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Akuma_SF6_icon.png/36px-Akuma_SF6_icon.png",
+          "charAlt": "Akuma"
+        },
+        "runnerUp": {
+          "name": "Nephew",
+          "url": "https://liquipedia.net/fighters/Nephew",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/0/00/Juri_SF6_icon.png/36px-Juri_SF6_icon.png",
+          "charAlt": "Juri"
+        }
+      },
+      {
+        "name": "East Coast Throwdown 2024",
+        "url": "https://liquipedia.net/fighters/East_Coast_Throwdown/2024/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/4/4f/East_Coast_Throwdown_Banner.png/50px-East_Coast_Throwdown_Banner.png",
+        "date": "Oct 11 - 13, 2024",
+        "prizePool": "$11,410",
+        "location": "Hartford, CT",
+        "winner": {
+          "name": "Itabashi Zangief",
+          "url": "https://liquipedia.net/fighters/Itabashi_Zangief",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Zangief_SF6_icon.png/36px-Zangief_SF6_icon.png",
+          "charAlt": "Zangief"
+        },
+        "runnerUp": {
+          "name": "iDom",
+          "url": "https://liquipedia.net/fighters/IDom",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/f/ff/Manon_SF6_icon.png/36px-Manon_SF6_icon.png",
+          "charAlt": "Manon"
+        }
+      },
+      {
+        "name": "Ultimate Fighting Arena 2024",
+        "url": "https://liquipedia.net/fighters/Ultimate_Fighting_Arena/2024/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/f/f2/Ultimate_Fighting_Arena_2024_allmode.png/50px-Ultimate_Fighting_Arena_2024_allmode.png",
+        "date": "Sep 13 - 15, 2024",
+        "prizePool": "$11,084.63",
+        "location": "Aubervilliers",
+        "winner": {
+          "name": "Kusanagi",
+          "url": "https://liquipedia.net/fighters/Kusanagi_(French_Player)",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/4/40/Fr_hd.png/36px-Fr_hd.png",
+          "flagAlt": "France",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ab/Ryu_SF6_icon.png/36px-Ryu_SF6_icon.png",
+          "charAlt": "Ryu"
+        },
+        "runnerUp": {
+          "name": "xiaohai",
+          "url": "https://liquipedia.net/fighters/Xiao_Hai",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/0/01/Cn_hd.png/36px-Cn_hd.png",
+          "flagAlt": "China",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/2/28/Cammy_SF6_icon.png/36px-Cammy_SF6_icon.png",
+          "charAlt": "Cammy"
+        }
+      },
+      {
+        "name": "Cream City Convergence 2024",
+        "url": "https://liquipedia.net/fighters/Cream_City_Convergence/2024/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/9/9b/Cream_City_Convergence_allmode.png/50px-Cream_City_Convergence_allmode.png",
+        "date": "Aug 24, 2024",
+        "prizePool": "$8,230",
+        "location": "Milwaukee, WI",
+        "winner": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Zangief_SF6_icon.png/36px-Zangief_SF6_icon.png",
+          "charAlt": "Zangief"
+        },
+        "runnerUp": {
+          "name": "Dual Kevin",
+          "url": "https://liquipedia.net/fighters/Dual_Kevin",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Rashid_SF6_icon.png/36px-Rashid_SF6_icon.png",
+          "charAlt": "Rashid"
+        }
+      },
+      {
+        "name": "Esports World Cup 2024",
+        "url": "https://liquipedia.net/fighters/Esports_World_Cup/2024/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/5/5f/Esports_World_Cup_icon_darkmode.png/50px-Esports_World_Cup_icon_darkmode.png",
+        "date": "Aug 8 - 11, 2024",
+        "prizePool": "$1,000,000",
+        "location": "Riyadh",
+        "winner": {
+          "name": "Xiao Hai",
+          "url": "https://liquipedia.net/fighters/Xiao_Hai",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/0/01/Cn_hd.png/36px-Cn_hd.png",
+          "flagAlt": "China",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/e/e0/M._Bison_SF6_icon.png/36px-M._Bison_SF6_icon.png",
+          "charAlt": "M. Bison"
+        },
+        "runnerUp": {
+          "name": "Kawano",
+          "url": "https://liquipedia.net/fighters/Kawano",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Akuma_SF6_icon.png/36px-Akuma_SF6_icon.png",
+          "charAlt": "Akuma"
+        }
+      },
+      {
+        "name": "Esports World Cup 2024 Last Chance Qualifier",
+        "url": "https://liquipedia.net/fighters/Esports_World_Cup/2024/SF6/Last_Chance_Qualifier",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/5/5f/Esports_World_Cup_icon_darkmode.png/50px-Esports_World_Cup_icon_darkmode.png",
+        "date": "Aug 1 - 3, 2024",
+        "prizePool": null,
+        "location": "Riyadh",
+        "winner": {
+          "name": "Leshar",
+          "url": "https://liquipedia.net/fighters/Leshar",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/8/8c/Kr_hd.png/36px-Kr_hd.png",
+          "flagAlt": "South Korea",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/11/Ed_SF6_icon.png/36px-Ed_SF6_icon.png",
+          "charAlt": "Ed"
+        },
+        "runnerUp": {
+          "name": "pugera",
+          "url": "https://liquipedia.net/fighters/Pugera",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/e/e0/M._Bison_SF6_icon.png/36px-M._Bison_SF6_icon.png",
+          "charAlt": "M. Bison"
+        }
+      },
+      {
+        "name": "Evolution Championship Series 2024",
+        "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2024/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/d/dc/Evolution_Championship_Series_icon_allmode.png/50px-Evolution_Championship_Series_icon_allmode.png",
+        "date": "Jul 19 - 21, 2024",
+        "prizePool": "$52,790",
+        "location": "Las Vegas, NV",
+        "winner": {
+          "name": "Punk",
+          "url": "https://liquipedia.net/fighters/Punk",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/2/28/Cammy_SF6_icon.png/36px-Cammy_SF6_icon.png",
+          "charAlt": "Cammy"
+        },
+        "runnerUp": {
+          "name": "Big Bird",
+          "url": "https://liquipedia.net/fighters/Big_Bird",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/b/bc/Ae_hd.png/36px-Ae_hd.png",
+          "flagAlt": "United Arab Emirates",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Rashid_SF6_icon.png/36px-Rashid_SF6_icon.png",
+          "charAlt": "Rashid"
+        }
+      },
+      {
+        "name": "The MIXUP 2024",
+        "url": "https://liquipedia.net/fighters/The_MIXUP/2024/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/b/b6/The_MIXUP_darkmode.png/50px-The_MIXUP_darkmode.png",
+        "date": "Jul 13 - 14, 2024",
+        "prizePool": null,
+        "location": "Lyon",
+        "winner": {
+          "name": "AngryBird",
+          "url": "https://liquipedia.net/fighters/AngryBird",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/b/bc/Ae_hd.png/36px-Ae_hd.png",
+          "flagAlt": "United Arab Emirates",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/cd/Ken_SF6_icon.png/36px-Ken_SF6_icon.png",
+          "charAlt": "Ken"
+        },
+        "runnerUp": {
+          "name": "NoahTheProdigy",
+          "url": "https://liquipedia.net/fighters/NoahTheProdigy",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        }
+      },
+      {
+        "name": "Topanga Championship 5",
+        "url": "https://liquipedia.net/fighters/Topanga_Championship/5",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/7/70/Topanga_icon_allmode.png/50px-Topanga_icon_allmode.png",
+        "date": "Jun 19 - Jul 14, 2024",
+        "prizePool": "$25,265.45",
+        "location": "Japan",
+        "winner": {
+          "name": "Kobayan",
+          "url": "https://liquipedia.net/fighters/Kobayan",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Zangief_SF6_icon.png/36px-Zangief_SF6_icon.png",
+          "charAlt": "Zangief"
+        },
+        "runnerUp": {
+          "name": "Kakeru",
+          "url": "https://liquipedia.net/fighters/Kakeru",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Akuma_SF6_icon.png/36px-Akuma_SF6_icon.png",
+          "charAlt": "Akuma"
+        }
+      },
+      {
+        "name": "CEO 2024",
+        "url": "https://liquipedia.net/fighters/Community_Effort_Orlando/2024/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/0/00/Community_Effort_Orlando_2017_icon_allmode.png/50px-Community_Effort_Orlando_2017_icon_allmode.png",
+        "date": "Jun 28 - 30, 2024",
+        "prizePool": null,
+        "location": "Daytona Beach, FL",
+        "winner": {
+          "name": "Punk",
+          "url": "https://liquipedia.net/fighters/Punk",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/2/28/Cammy_SF6_icon.png/36px-Cammy_SF6_icon.png",
+          "charAlt": "Cammy"
+        },
+        "runnerUp": {
+          "name": "DCQ",
+          "url": "https://liquipedia.net/fighters/DingChunQiu",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/0/01/Cn_hd.png/36px-Cn_hd.png",
+          "flagAlt": "China",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/d/d9/JP_SF6_icon.png/36px-JP_SF6_icon.png",
+          "charAlt": "JP"
+        }
+      },
+      {
+        "name": "DreamHack Summer 2024",
+        "url": "https://liquipedia.net/fighters/DreamHack/2024/Summer/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/3e/DH_Fighters_Icon_darkmode.png/50px-DH_Fighters_Icon_darkmode.png",
+        "date": "Jun 14 - 16, 2024",
+        "prizePool": "$50,000",
+        "location": "Jönköping",
+        "winner": {
+          "name": "Big Bird",
+          "url": "https://liquipedia.net/fighters/Big_Bird",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/b/bc/Ae_hd.png/36px-Ae_hd.png",
+          "flagAlt": "United Arab Emirates",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Rashid_SF6_icon.png/36px-Rashid_SF6_icon.png",
+          "charAlt": "Rashid"
+        },
+        "runnerUp": {
+          "name": "Bonchan",
+          "url": "https://liquipedia.net/fighters/Bonchan",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        }
+      },
+      {
+        "name": "DreamHack Dallas 2024",
+        "url": "https://liquipedia.net/fighters/DreamHack/2024/Dallas/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/3e/DH_Fighters_Icon_darkmode.png/50px-DH_Fighters_Icon_darkmode.png",
+        "date": "May 31 - Jun 2, 2024",
+        "prizePool": "$50,000",
+        "location": "Dallas, TX",
+        "winner": {
+          "name": "gachikun",
+          "url": "https://liquipedia.net/fighters/Gachikun",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Rashid_SF6_icon.png/36px-Rashid_SF6_icon.png",
+          "charAlt": "Rashid"
+        },
+        "runnerUp": {
+          "name": "Problem X",
+          "url": "https://liquipedia.net/fighters/Problem_X",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/5/5e/Gb_hd.png/36px-Gb_hd.png",
+          "flagAlt": "United Kingdom",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        }
+      },
+      {
+        "name": "Combo Breaker 2024",
+        "url": "https://liquipedia.net/fighters/Combo_Breaker/2024/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/33/Combo_Breaker_2023_icon_allmode.png/50px-Combo_Breaker_2023_icon_allmode.png",
+        "date": "May 24 - 26, 2024",
+        "prizePool": null,
+        "location": "Schaumburg, IL",
+        "winner": {
+          "name": "ElChakotay",
+          "url": "https://liquipedia.net/fighters/ElChakotay",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/4/45/Lily_SF6_icon.png/36px-Lily_SF6_icon.png",
+          "charAlt": "Lily"
+        },
+        "runnerUp": {
+          "name": "NoahTheProdigy",
+          "url": "https://liquipedia.net/fighters/NoahTheProdigy",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        }
+      },
+      {
+        "name": "Evolution Championship Series: Japan 2024",
+        "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2024/Japan/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/e/ea/EVO_Japan_icon_allmode.png/50px-EVO_Japan_icon_allmode.png",
+        "date": "Apr 27 - 29, 2024",
+        "prizePool": "$12,642.70",
+        "location": "Tokyo",
+        "winner": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        },
+        "runnerUp": {
+          "name": "Kakeru",
+          "url": "https://liquipedia.net/fighters/Kakeru",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/d/d9/JP_SF6_icon.png/36px-JP_SF6_icon.png",
+          "charAlt": "JP"
+        }
+      },
+      {
+        "name": "Red Bull Kumite 2024",
+        "url": "https://liquipedia.net/fighters/Red_Bull_Kumite/2024/New_York",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/0/04/Red_Bull_Kumite_New_York_2024_allmode.png/50px-Red_Bull_Kumite_New_York_2024_allmode.png",
+        "date": "Mar 17, 2024",
+        "prizePool": "$50,000",
+        "location": "Brooklyn, NY",
+        "winner": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        },
+        "runnerUp": {
+          "name": "NuckleDu",
+          "url": "https://liquipedia.net/fighters/NuckleDu",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/6/67/Guile_SF6_icon.png/36px-Guile_SF6_icon.png",
+          "charAlt": "Guile"
+        }
+      },
+      {
+        "name": "Capcom Cup X",
+        "url": "https://liquipedia.net/fighters/Capcom_Cup/10",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/1/18/Capcom_Cup_X_allmode.png/46px-Capcom_Cup_X_allmode.png",
+        "date": "Feb 21 - 25, 2024",
+        "prizePool": "$1,734,000",
+        "location": "Los Angeles, CA",
+        "winner": {
+          "name": "UMA",
+          "url": "https://liquipedia.net/fighters/Kagami",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/6/65/Tw_hd.png/36px-Tw_hd.png",
+          "flagAlt": "Taiwan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/0/00/Juri_SF6_icon.png/36px-Juri_SF6_icon.png",
+          "charAlt": "Juri"
+        },
+        "runnerUp": {
+          "name": "Chris Wong",
+          "url": "https://liquipedia.net/fighters/Chris_Wong",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/4/41/Hk_hd.png/36px-Hk_hd.png",
+          "flagAlt": "Hong Kong",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        }
+      },
+      {
+        "name": "Street Fighter League World Championship 2023",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/World_Championship/2023",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/7/73/Street_Fighter_League_World_Championship_2023_allmode.png/34px-Street_Fighter_League_World_Championship_2023_allmode.png",
+        "date": "Feb 24, 2024",
+        "prizePool": "$150,000",
+        "location": "Los Angeles, CA",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Capcom Cup X Last Chance Qualifier",
+        "url": "https://liquipedia.net/fighters/Capcom_Cup/10/Last_Chance_Qualifier",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/9/9f/Capcom_Cup_X_LCQ_allmode.png/44px-Capcom_Cup_X_LCQ_allmode.png",
+        "date": "Feb 16 - 18, 2024",
+        "prizePool": null,
+        "location": "Los Angeles, CA",
+        "winner": {
+          "name": "Problem X",
+          "url": "https://liquipedia.net/fighters/Problem_X",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/5/5e/Gb_hd.png/36px-Gb_hd.png",
+          "flagAlt": "United Kingdom",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        },
+        "runnerUp": {
+          "name": "Punk",
+          "url": "https://liquipedia.net/fighters/Punk",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/2/28/Cammy_SF6_icon.png/36px-Cammy_SF6_icon.png",
+          "charAlt": "Cammy"
+        }
+      },
+      {
+        "name": "Street Fighter League Pro-EU 2023",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/Europe/2023",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/5/54/Street_Fighter_League_Pro-EU_2023_allmode.png/47px-Street_Fighter_League_Pro-EU_2023_allmode.png",
+        "date": "Nov 17 - Feb 1, 2024",
+        "prizePool": "$81,098.18",
+        "location": "London",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Street Fighter League Pro-JP 2023",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/Japan/2023",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Street_Fighter_League_Pro-JP_2023_allmode.png/46px-Street_Fighter_League_Pro-JP_2023_allmode.png",
+        "date": "Jul 7 - Jan 13, 2024",
+        "prizePool": "$55,223.81",
+        "location": "Japan",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Street Fighter League Pro-US 2023",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/United_States/2023",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/1/1d/SFL_Pro-US_2023_allmode.png/35px-SFL_Pro-US_2023_allmode.png",
+        "date": "Oct 18 - Jan 11, 2024",
+        "prizePool": "$75,000",
+        "location": "United States",
+        "winner": null,
+        "runnerUp": null
+      }
+    ]
+  },
+  {
+    "year": 2023,
+    "tournaments": [
+      {
+        "name": "FAV CUP 2023",
+        "url": "https://liquipedia.net/fighters/FAV_CUP/2023/Singles",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/f/f0/FAV_gaming_2022_darkmode.png/44px-FAV_gaming_2022_darkmode.png",
+        "date": "Dec 29, 2023",
+        "prizePool": "$7,068.84",
+        "location": "Tokorozawa",
+        "winner": {
+          "name": "AngryBird",
+          "url": "https://liquipedia.net/fighters/AngryBird",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/b/bc/Ae_hd.png/36px-Ae_hd.png",
+          "flagAlt": "United Arab Emirates",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/cd/Ken_SF6_icon.png/36px-Ken_SF6_icon.png",
+          "charAlt": "Ken"
+        },
+        "runnerUp": {
+          "name": "Tokido",
+          "url": "https://liquipedia.net/fighters/Tokido",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/cd/Ken_SF6_icon.png/36px-Ken_SF6_icon.png",
+          "charAlt": "Ken"
+        }
+      },
+      {
+        "name": "Ultimate Fighting Arena 2023",
+        "url": "https://liquipedia.net/fighters/Ultimate_Fighting_Arena/2023/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/f/f2/Ultimate_Fighting_Arena_2024_allmode.png/50px-Ultimate_Fighting_Arena_2024_allmode.png",
+        "date": "Nov 25 - 26, 2023",
+        "prizePool": "$7,664.48",
+        "location": "Paris",
+        "winner": {
+          "name": "Mister Crimson",
+          "url": "https://liquipedia.net/fighters/Mister_Crimson",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/4/40/Fr_hd.png/36px-Fr_hd.png",
+          "flagAlt": "France",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/c5/Dhalsim_SF6_icon.png/36px-Dhalsim_SF6_icon.png",
+          "charAlt": "Dhalsim"
+        },
+        "runnerUp": {
+          "name": "EndingWalker",
+          "url": "https://liquipedia.net/fighters/EndingWalker",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/5/5e/Gb_hd.png/36px-Gb_hd.png",
+          "flagAlt": "United Kingdom",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ab/Ryu_SF6_icon.png/36px-Ryu_SF6_icon.png",
+          "charAlt": "Ryu"
+        }
+      },
+      {
+        "name": "CPT 2023: France Offline",
+        "url": "https://liquipedia.net/fighters/Capcom_Pro_Tour/2023/France_Offline",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/7/7d/Capcom_Pro_Tour_2023_allmode.png/44px-Capcom_Pro_Tour_2023_allmode.png",
+        "date": "Nov 3 - 5, 2023",
+        "prizePool": "$37,000",
+        "location": "Paris",
+        "winner": {
+          "name": "Chris Wong",
+          "url": "https://liquipedia.net/fighters/Chris_Wong",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/4/41/Hk_hd.png/36px-Hk_hd.png",
+          "flagAlt": "Hong Kong",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        },
+        "runnerUp": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        }
+      },
+      {
+        "name": "CPT 2023: Singapore Offline",
+        "url": "https://liquipedia.net/fighters/Capcom_Pro_Tour/2023/Singapore_Offline",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/7/7d/Capcom_Pro_Tour_2023_allmode.png/44px-Capcom_Pro_Tour_2023_allmode.png",
+        "date": "Oct 20 - 22, 2023",
+        "prizePool": "$37,000",
+        "location": "Singapore",
+        "winner": {
+          "name": "gachikun",
+          "url": "https://liquipedia.net/fighters/Gachikun",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/a/ae/Rashid_SF6_icon.png/36px-Rashid_SF6_icon.png",
+          "charAlt": "Rashid"
+        },
+        "runnerUp": {
+          "name": "Chris Wong",
+          "url": "https://liquipedia.net/fighters/Chris_Wong",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/4/41/Hk_hd.png/36px-Hk_hd.png",
+          "flagAlt": "Hong Kong",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/9/9e/Luke_SF6_icon.png/36px-Luke_SF6_icon.png",
+          "charAlt": "Luke"
+        }
+      },
+      {
+        "name": "Gamers8 2023",
+        "url": "https://liquipedia.net/fighters/Gamers8/2023/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/3/34/Gamers8_icon_allmode.png/50px-Gamers8_icon_allmode.png",
+        "date": "Aug 10 - 13, 2023",
+        "prizePool": "$1,000,000",
+        "location": "Riyadh",
+        "winner": {
+          "name": "Kakeru",
+          "url": "https://liquipedia.net/fighters/Kakeru",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/f/fd/Jp_hd.png/36px-Jp_hd.png",
+          "flagAlt": "Japan",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/d/d9/JP_SF6_icon.png/36px-JP_SF6_icon.png",
+          "charAlt": "JP"
+        },
+        "runnerUp": {
+          "name": "AngryBird",
+          "url": "https://liquipedia.net/fighters/AngryBird",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/b/bc/Ae_hd.png/36px-Ae_hd.png",
+          "flagAlt": "United Arab Emirates",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/cd/Ken_SF6_icon.png/36px-Ken_SF6_icon.png",
+          "charAlt": "Ken"
+        }
+      },
+      {
+        "name": "Evolution Championship Series 2023",
+        "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2023/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/d/dc/Evolution_Championship_Series_icon_allmode.png/50px-Evolution_Championship_Series_icon_allmode.png",
+        "date": "Aug 4 - 6, 2023",
+        "prizePool": "$70,600",
+        "location": "Las Vegas, NV",
+        "winner": {
+          "name": "AngryBird",
+          "url": "https://liquipedia.net/fighters/AngryBird",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/b/bc/Ae_hd.png/36px-Ae_hd.png",
+          "flagAlt": "United Arab Emirates",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/c/cd/Ken_SF6_icon.png/36px-Ken_SF6_icon.png",
+          "charAlt": "Ken"
+        },
+        "runnerUp": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        }
+      },
+      {
+        "name": "Red Bull Kumite 2023",
+        "url": "https://liquipedia.net/fighters/Red_Bull_Kumite/2023/South_Africa",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/a/af/Red_Bull_Kumite_South_Africa_2023_allmode.png/50px-Red_Bull_Kumite_South_Africa_2023_allmode.png",
+        "date": "Jul 1 - 2, 2023",
+        "prizePool": "$50,000",
+        "location": "Pretoria",
+        "winner": {
+          "name": "Big Bird",
+          "url": "https://liquipedia.net/fighters/Big_Bird",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/b/bc/Ae_hd.png/36px-Ae_hd.png",
+          "flagAlt": "United Arab Emirates",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/0/0f/Marisa_SF6_icon.png/36px-Marisa_SF6_icon.png",
+          "charAlt": "Marisa"
+        },
+        "runnerUp": {
+          "name": "Akainu",
+          "url": "https://liquipedia.net/fighters/Akainu",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/4/40/Fr_hd.png/36px-Fr_hd.png",
+          "flagAlt": "France",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/6/67/Guile_SF6_icon.png/36px-Guile_SF6_icon.png",
+          "charAlt": "Guile"
+        }
+      },
+      {
+        "name": "CEO 2023",
+        "url": "https://liquipedia.net/fighters/Community_Effort_Orlando/2023/SF6",
+        "iconUrl": "https://liquipedia.net/commons/images/thumb/0/00/Community_Effort_Orlando_2017_icon_allmode.png/50px-Community_Effort_Orlando_2017_icon_allmode.png",
+        "date": "Jun 23 - 25, 2023",
+        "prizePool": null,
+        "location": "Daytona Beach, FL",
+        "winner": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/e/e9/Do_hd.png/36px-Do_hd.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/1/1e/Blanka_SF6_icon.png/36px-Blanka_SF6_icon.png",
+          "charAlt": "Blanka"
+        },
+        "runnerUp": {
+          "name": "Nephew",
+          "url": "https://liquipedia.net/fighters/Nephew",
+          "flagUrl": "https://liquipedia.net/commons/images/thumb/3/3b/Us_hd.png/36px-Us_hd.png",
+          "flagAlt": "United States",
+          "charUrl": "https://liquipedia.net/commons/images/thumb/0/00/Juri_SF6_icon.png/36px-Juri_SF6_icon.png",
+          "charAlt": "Juri"
+        }
+      }
+    ]
+  }
+]

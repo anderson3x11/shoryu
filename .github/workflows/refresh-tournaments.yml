@@ -1,0 +1,45 @@
+name: Refresh tournaments snapshot
+
+# Regenerates lib/data/tournaments.json from the Liquipedia API on a schedule.
+# Runs on GitHub's runners (whose IP can reach Liquipedia, unlike the prod VPS
+# whose datacenter IP is Cloudflare-challenged) and commits only when the data
+# changed — which then triggers the normal Coolify redeploy.
+
+on:
+  schedule:
+    - cron: '0 5 * * *' # daily at 05:00 UTC
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-tournaments
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The script exits non-zero (without writing) if the fetch/parse fails, so
+      # a bad run never commits an empty snapshot.
+      - name: Regenerate snapshot
+        run: npx -y tsx scripts/refresh-tournaments.ts
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- lib/data/tournaments.json; then
+            echo "No tournament changes — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/data/tournaments.json
+          git commit -m "chore: refresh tournaments snapshot"
+          git push
