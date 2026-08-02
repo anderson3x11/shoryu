@@ -74,8 +74,22 @@
         "date": "Jul 29 - Aug 1, 2026",
         "prizePool": "$1,000,000",
         "location": "Paris",
-        "winner": null,
-        "runnerUp": null
+        "winner": {
+          "name": "Craime",
+          "url": "https://liquipedia.net/fighters/Craime",
+          "flagUrl": "/liquipedia/725f75a928f38729.png",
+          "flagAlt": "Chile",
+          "charUrl": "/liquipedia/80d9e81db3182c76.png",
+          "charAlt": "Ryu"
+        },
+        "runnerUp": {
+          "name": "Hibiki",
+          "url": "https://liquipedia.net/fighters/Hibiki",
+          "flagUrl": "/liquipedia/c7ac4dbc00afbbc6.png",
+          "flagAlt": "Japan",
+          "charUrl": "/liquipedia/cd57c092ae0c5745.png",
+          "charAlt": "Lily"
+        }
       },
       {
         "name": "Esports World Cup 2026 Last Chance Qualifier",
