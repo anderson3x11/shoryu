@@ -31,20 +31,29 @@ async function fetchTournamentsFromApi(): Promise<TournamentYear[]> {
   return years
 }
 
-const cachedTournaments = unstable_cache(fetchTournamentsFromApi, ['liquipedia-tournaments-v3'], {
-  revalidate: 86400,
-  tags: ['tournaments'],
-})
-
-// The production host cannot reach Liquipedia (its datacenter IP is Cloudflare-
-// challenged) even though the API works fine elsewhere, so a live fetch there
-// fails. We ship a committed snapshot (regenerate with scripts/refresh-tournaments)
-// and only prefer live data when the host can actually reach the API.
-export async function getTournaments(): Promise<TournamentYear[]> {
-  try {
-    const live = await cachedTournaments()
-    return live.length ? live : (snapshot as TournamentYear[])
-  } catch {
+// The fallback to the committed snapshot has to happen INSIDE the cached function.
+// unstable_cache stores nothing when its callback rejects, so catching the failure
+// outside meant every dynamic render re-ran the fetch — and Liquipedia holds the
+// connection ~5.5s before answering 429, so that stall was paid on every request to
+// every non-prerendered page (the banner renders in the root layout). Returning the
+// snapshot instead of throwing gives the cache something to keep, capping the cost at
+// one slow render per revalidate window.
+const cachedTournaments = unstable_cache(
+  async (): Promise<TournamentYear[]> => {
+    try {
+      const live = await fetchTournamentsFromApi()
+      if (live.length) return live
+    } catch {
+      // fall through to the snapshot
+    }
     return snapshot as TournamentYear[]
-  }
+  },
+  ['liquipedia-tournaments-v4'],
+  { revalidate: 86400, tags: ['tournaments'] }
+)
+
+// Live Liquipedia data when the host can reach the API, the committed snapshot
+// otherwise (regenerate it with scripts/refresh-tournaments).
+export async function getTournaments(): Promise<TournamentYear[]> {
+  return cachedTournaments()
 }

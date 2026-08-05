@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { unstable_cache } from 'next/cache'
 import { getRankingSnapshot } from '@/lib/supabase/snapshots'
 import { ServiceUnavailable } from '@/components/service-unavailable'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
@@ -9,6 +10,13 @@ import type { BucklerRankingEntry } from '@/lib/buckler/types'
 export const revalidate = 300
 
 const PAGE_SIZE = 30
+
+// searchParams makes this page dynamic, so `revalidate` above never applies to the render
+// and the snapshot read ran per request — a 1.4 MB JSON blob pulled from Supabase just to
+// slice 30 rows out of it. Caching the read applies the same 5 minute window to the data.
+const cachedRanking = unstable_cache(getRankingSnapshot, ['ranking-snapshot'], {
+  revalidate: 300,
+})
 
 export const metadata = {
   title: 'Master Ranking',
@@ -75,7 +83,7 @@ export default async function RankingPage({
 
   // Served from the twice-daily sync snapshot in Supabase, paginated in-memory — no live
   // Buckler request per page load. Missing snapshot (sync never ran) → retry-later fallback.
-  const allPlayers = await getRankingSnapshot()
+  const allPlayers = await cachedRanking()
   if (!allPlayers) return <ServiceUnavailable />
   const totalPages = Math.max(1, Math.ceil(allPlayers.length / PAGE_SIZE))
   const players = allPlayers.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
