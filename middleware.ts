@@ -6,7 +6,11 @@ export function middleware(request: NextRequest) {
   const host = request.headers.get('host') ?? ''
   if (host.startsWith('www.')) {
     const url = request.nextUrl.clone()
-    url.host = host.slice(4)
+    // Assign hostname, not host: the `host` setter keeps the existing port when the value
+    // it's given has none, and behind the proxy nextUrl carries the container's internal
+    // listen port, which then leaked into the redirect as shoryu.site:3000.
+    url.hostname = host.slice(4).split(':')[0]
+    url.port = ''
     return NextResponse.redirect(url, 308)
   }
 
