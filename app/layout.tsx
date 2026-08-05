@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   },
   description: 'Street Fighter 6 player profiles, Master ranking, matchup charts, match history, and character guides.',
   metadataBase: new URL(BASE),
+  alternates: {
+    canonical: './',
+  },
   openGraph: {
     siteName: 'Shoryu',
     type: 'website',
