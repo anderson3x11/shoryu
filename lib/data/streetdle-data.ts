@@ -855,7 +855,6 @@ export const STREETDLE_CHARACTERS: StreedleCharacter[] = [
     archetype: ["Zoner"],
     inputType: "Motion",
   },
-  /*
   {
     id: "yasmine",
     name: "Yasmine",
@@ -864,9 +863,10 @@ export const STREETDLE_CHARACTERS: StreedleCharacter[] = [
     continent: "Asia",
     debut: "SF6",
     playableDebut: "SF6",
-    archetype: [""],
-    inputType: "",
+    archetype: ["Rushdown"],
+    inputType: "Motion",
   },
+  /*
   {
     id: "arjun",
     name: "Arjun",

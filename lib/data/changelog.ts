@@ -5,6 +5,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-08-05",
+    items: [
+      "Yasmine is in: she shows up on the character grid, in stats and matchups, and has her own page",
+      "Yasmine added to Streetdle's roster",
+    ],
+  },
+  {
     date: "2026-07-06",
     items: [
       "New Rivals tab on player profiles: see the opponents you face the most, the ones you beat the most, and the ones who give you the most trouble",

@@ -40,7 +40,7 @@ export const CHARACTERS: Character[] = [
   { id: 'cviper',   name: 'C. Viper',  slug: 'cviper',   bucklerCharId: 30, color: '#b03038', colorSecondary: '#e6ebf0' },
   { id: 'alex',     name: 'Alex',      slug: 'alex',     bucklerCharId: 31, color: '#3f8050', colorSecondary: '#b05048' },
   { id: 'ingrid', name: 'Ingrid', slug: 'ingrid', bucklerCharId: 32, color: '#b9a0e8', colorSecondary: '#d4a738' },
-  // { id: 'yasmine',   name: 'Yasmine',    slug: 'yasmine',   bucklerCharId: 33, color: '#b9a0e8', colorSecondary: '#d4a738' },
+  { id: 'yasmine',  name: 'Yasmine',   slug: 'yasmine',  bucklerCharId: 33, color: '#e8479f', colorSecondary: '#3f9fd8' },
   // { id: 'arjun',   name: 'Arjun',    slug: 'arjun',   bucklerCharId: 34, color: '#b9a0e8', colorSecondary: '#d4a738' },
   // { id: 'tifa',   name: 'Tifa',    slug: 'tifa',   bucklerCharId: 35, color: '#b9a0e8', colorSecondary: '#d4a738' },
   // { id: 'bosch',   name: 'Bosch',    slug: 'bosch',   bucklerCharId: 36, color: '#b9a0e8', colorSecondary: '#d4a738' },
@@ -72,7 +72,7 @@ const CHARACTER_HEADER_Y: Record<string, number> = {
   jp: 6, juri: 54, deejay: 16, cammy: 5, ryu: 12, honda: 42, blanka: 33,
   guile: 1, ken: 22, chunli: 23, zangief: 20, dhalsim: 18, rashid: 35,
   aki: 35, ed: 18, gouki: 25, vega: 15, terry: 20, mai: 39, elena: 72,
-  sagat: 15, cviper: 10, alex: 31, ingrid: 47,
+  sagat: 15, cviper: 10, alex: 31, ingrid: 47, yasmine: 15,
 }
 
 export function getCharacterHeaderY(id: string): number {
