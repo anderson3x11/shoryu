@@ -120,6 +120,17 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* SF6 notation colors, as used by the SuperCombo wiki and the FGC generally: they encode
+   which button an input uses, so they are data, not UI accent (amber stays the only accent).
+   Toned down from the wiki's values to sit on zinc-950 without vibrating. */
+.sc-l  { color: #7dd3e0; }  /* Light  */
+.sc-m  { color: #e8d24a; }  /* Medium */
+.sc-h  { color: #f08a8a; }  /* Heavy  */
+.sc-dr { color: #5cc97a; }  /* Drive (DI / DR / PP / KK) */
+.sc-od { color: #e070d8; }  /* OD */
+.sc-sa { color: #ee8ab4; }  /* Super Art */
+.sc-pc { color: #f0873a; }  /* Punish Counter */
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
