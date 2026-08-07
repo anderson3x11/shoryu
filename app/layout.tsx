@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${barlow.variable} ${martyric.variable} ${titleFont.variable} ${bebasNeue.variable}`}>
       <body className="antialiased min-h-screen flex flex-col bg-zinc-950 text-zinc-100" suppressHydrationWarning>
         <nav className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center gap-2 sm:gap-8">
+          <div className="max-w-[90rem] mx-auto px-3 sm:px-6 h-14 flex items-center gap-2 sm:gap-8">
             <Link href="/" className="flex items-center gap-2 flex-shrink-0">
               <span className="font-display text-2xl tracking-wider leading-none text-zinc-100">Shoryu</span>
               <Image src="/logo.png" alt="Shoryu" width={36} height={36} className="object-contain" />
@@ -79,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </nav>
         <TournamentBanner />
-        <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-8 flex flex-col">
+        <main className="flex-1 w-full max-w-[90rem] mx-auto px-6 py-8 flex flex-col">
           {children}
         </main>
         <SiteFooter />

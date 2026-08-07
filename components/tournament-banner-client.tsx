@@ -83,7 +83,7 @@ export function TournamentBannerClient({ candidates }: { candidates: BannerCandi
 
   return (
     <div ref={ref} className="sticky top-[57px] z-30 overflow-hidden border-b-2 border-amber-500/60 bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center gap-3 sm:gap-4">
+      <div className="max-w-[90rem] mx-auto px-3 sm:px-6 flex items-center gap-3 sm:gap-4">
         {/* Skewed countdown tag — echoes the beveled character tiles */}
         <div className="-skew-x-12 bg-amber-400 px-3 sm:px-4 py-1.5 flex items-center shrink-0">
           <span className="skew-x-12 flex items-center gap-1.5 font-bebas text-lg sm:text-xl tracking-wider leading-none text-zinc-950">
