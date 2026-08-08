@@ -8,8 +8,9 @@ name: Refresh tournaments snapshot
 on:
   schedule:
     # Weekly instead of daily — Liquipedia was rate-limiting requests, and tournaments mostly
-    # run on weekends anyway, so Monday morning is enough to pick up the past weekend's results.
-    - cron: '0 5 * * 1' # every Monday at 05:00 UTC
+    # run on weekends anyway. Monday evening (not morning) gives brackets time to be finalized
+    # before the scrape runs.
+    - cron: '0 20 * * 1' # every Monday at 20:00 UTC
   workflow_dispatch: {} # allow manual runs from the Actions tab
 
 permissions:
