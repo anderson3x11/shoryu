@@ -7,7 +7,9 @@ name: Refresh tournaments snapshot
 
 on:
   schedule:
-    - cron: '0 5 * * *' # daily at 05:00 UTC
+    # Weekly instead of daily — Liquipedia was rate-limiting requests, and tournaments mostly
+    # run on weekends anyway, so Monday morning is enough to pick up the past weekend's results.
+    - cron: '0 5 * * 1' # every Monday at 05:00 UTC
   workflow_dispatch: {} # allow manual runs from the Actions tab
 
 permissions:
