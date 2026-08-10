@@ -5,7 +5,7 @@
       {
         "name": "Street Fighter League Pro-JP 2026",
         "url": "https://liquipedia.net/fighters/Street_Fighter_League/Japan/2026",
-        "iconUrl": "/liquipedia/ab832c433634092f.png",
+        "iconUrl": "/liquipedia/03b2ab2fb23cd422.png",
         "date": "Aug 25 - Feb 23, 2027",
         "prizePool": null,
         "location": "Japan",
@@ -44,6 +44,16 @@
         "date": "Sep 11 - 13, 2026",
         "prizePool": null,
         "location": "Paris",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
+        "name": "Street Fighter League Pro-EMEAA 2026",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/EMEAA/2026",
+        "iconUrl": "/liquipedia/79fbaedba96a13d4.png",
+        "date": "Sep 2 - 6, 2026",
+        "prizePool": null,
+        "location": "EMEA",
         "winner": null,
         "runnerUp": null
       },
