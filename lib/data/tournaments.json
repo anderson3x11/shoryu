@@ -62,10 +62,24 @@
         "url": "https://liquipedia.net/fighters/Topanga_Championship/7",
         "iconUrl": "/liquipedia/5da54907607065d6.png",
         "date": "Jun 10 - Aug 23, 2026",
-        "prizePool": "$94,159.57",
+        "prizePool": "$94,354.43",
         "location": "Tokyo",
-        "winner": null,
-        "runnerUp": null
+        "winner": {
+          "name": "MenaRD",
+          "url": "https://liquipedia.net/fighters/MenaRD",
+          "flagUrl": "/liquipedia/06ed82b39fff863a.png",
+          "flagAlt": "Dominican Republic",
+          "charUrl": "/liquipedia/0b4d4868bfb965c1.png",
+          "charAlt": "Blanka"
+        },
+        "runnerUp": {
+          "name": "Higuchi",
+          "url": "https://liquipedia.net/fighters/Higuchi",
+          "flagUrl": "/liquipedia/c7ac4dbc00afbbc6.png",
+          "flagAlt": "Japan",
+          "charUrl": "/liquipedia/3a961f1971f44a1c.png",
+          "charAlt": "Guile"
+        }
       },
       {
         "name": "CEO 2026",
@@ -74,8 +88,22 @@
         "date": "Aug 14 - 16, 2026",
         "prizePool": null,
         "location": "Orlando, FL",
-        "winner": null,
-        "runnerUp": null
+        "winner": {
+          "name": "Tokido",
+          "url": "https://liquipedia.net/fighters/Tokido",
+          "flagUrl": "/liquipedia/c7ac4dbc00afbbc6.png",
+          "flagAlt": "Japan",
+          "charUrl": "/liquipedia/aa92e6e7e03a4e39.png",
+          "charAlt": "JP"
+        },
+        "runnerUp": {
+          "name": "Booce_Lee",
+          "url": "https://liquipedia.net/fighters/Booce",
+          "flagUrl": "/liquipedia/4c74097c6a1a38bc.png",
+          "flagAlt": "United States",
+          "charUrl": "/liquipedia/7c9529ea8b866f49.png",
+          "charAlt": "Terry"
+        }
       },
       {
         "name": "Esports World Cup 2026",
