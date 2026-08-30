@@ -76,7 +76,7 @@ export function PlayCounts({ playData }: PlayCountsProps) {
                 </div>
               </div>
               <span className="text-[11px] text-zinc-300 tabular-nums w-7 text-right flex-shrink-0">
-                {Math.round(pct)}%
+                {pct > 0 && pct < 1 ? '<1' : Math.round(pct)}%
               </span>
             </div>
           )
