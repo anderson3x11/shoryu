@@ -1,5 +1,6 @@
 import { getSessionCookie } from '@/lib/buckler/auth'
 import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,7 +13,14 @@ function getYYYYMM(offset = 0): string {
   return `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, '0')}`
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  // Guarded like /api/debug: this probes Buckler directly with our session cookie, uncached and
+  // outside the pacing queue, so an open endpoint would let anyone drive requests on our account.
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const cookie = getSessionCookie()
   if (!cookie) return NextResponse.json({ error: 'BUCKLER_COOKIE not set' })
 
