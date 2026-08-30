@@ -215,6 +215,7 @@ export function CharacterStats({ playerId, phases, winRates }: CharacterStatsPro
                           <span className="text-zinc-400"> / </span>
                           <span className="text-red-400">{losses}L</span>
                         </p>
+                        <p className="text-[11px] font-semibold tabular-nums uppercase tracking-wide text-zinc-400 leading-tight">{wr.battle_count} games</p>
                         <p className="text-sm font-semibold tabular-nums text-zinc-100">{rate.toFixed(1)}%</p>
                       </div>
                     )
