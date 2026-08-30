@@ -27,15 +27,24 @@ const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
 let requestQueue: Promise<unknown> = Promise.resolve()
 let lastStartedAt = 0
 
-function paced<T>(task: () => Promise<T>): Promise<T> {
+// The task gets an AbortSignal: on timeout the underlying fetch is actually cancelled, so the
+// queue never moves on while a dead request is still in flight (which would put two requests on
+// the wire at once, the very thing the serial queue exists to prevent).
+function paced<T>(task: (signal: AbortSignal) => Promise<T>): Promise<T> {
   const run = requestQueue.then(async () => {
     const wait = lastStartedAt + MIN_GAP_MS + Math.random() * JITTER_MS - Date.now()
     if (wait > 0) await sleep(wait)
     lastStartedAt = Date.now()
-    return Promise.race([
-      task(),
-      sleep(REQUEST_TIMEOUT_MS).then(() => Promise.reject(new Error('buckler request timed out'))),
-    ]) as Promise<T>
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT_MS)
+    try {
+      return await task(ctrl.signal)
+    } catch (e) {
+      if (ctrl.signal.aborted) throw new Error('buckler request timed out')
+      throw e
+    } finally {
+      clearTimeout(timer)
+    }
   })
   requestQueue = run.catch(() => {})
   return run
@@ -82,7 +91,7 @@ async function scrapeBuildId(): Promise<string> {
   try {
     // no-store so a redeploy-triggered re-scrape actually sees the new buildId (the in-process
     // promise is what saves us from re-fetching the homepage on every call).
-    res = await paced(() => fetch(BUCKLER_BASE, { headers, cache: 'no-store' }))
+    res = await paced((signal) => fetch(BUCKLER_BASE, { headers, cache: 'no-store', signal }))
   } catch (e) {
     throw new BucklerUnavailableError(`buildId fetch failed: ${e instanceof Error ? e.message : e}`)
   }
@@ -141,7 +150,7 @@ async function fetchData<T>(
 
   let res: Response
   try {
-    res = await paced(() => fetch(dataUrl(buildId, path), {
+    res = await paced((signal) => fetch(dataUrl(buildId, path), {
       headers: {
         'User-Agent': UA,
         Accept: 'application/json, */*',
@@ -149,6 +158,7 @@ async function fetchData<T>(
         Cookie: cookie,
       },
       next: { revalidate },
+      signal,
     }))
   } catch (e) {
     throw new BucklerUnavailableError(`fetch failed: ${e instanceof Error ? e.message : e}`)
@@ -267,7 +277,7 @@ async function fetchBucklerJson<T = unknown>(path: string, revalidate = 3600): P
   }
 
   try {
-    const res = await paced(() => fetch(`${BUCKLER_BASE}${path}`, {
+    const res = await paced((signal) => fetch(`${BUCKLER_BASE}${path}`, {
       headers: {
         'User-Agent': UA,
         Accept: 'application/json, */*',
@@ -275,6 +285,7 @@ async function fetchBucklerJson<T = unknown>(path: string, revalidate = 3600): P
         Cookie: cookie,
       },
       next: { revalidate },
+      signal,
     }))
 
     if (!res.ok) return null
@@ -323,7 +334,7 @@ async function fetchPlayAct<T>(action: string, body: Record<string, unknown>): P
 
   let res: Response
   try {
-    res = await paced(() => fetch(`${BUCKLER_BASE}/api/profile/play/act/${action}`, {
+    res = await paced((signal) => fetch(`${BUCKLER_BASE}/api/profile/play/act/${action}`, {
       method: 'POST',
       headers: {
         'User-Agent': UA,
@@ -334,6 +345,7 @@ async function fetchPlayAct<T>(action: string, body: Record<string, unknown>): P
       },
       body: JSON.stringify(body),
       cache: 'no-store',
+      signal,
     }))
   } catch (e) {
     throw new BucklerUnavailableError(`fetch failed: ${e instanceof Error ? e.message : e}`)
