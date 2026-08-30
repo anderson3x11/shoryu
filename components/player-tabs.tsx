@@ -37,9 +37,10 @@ interface PlayerTabsProps {
   shortId: number | string
   header: ReactNode
   overview: ReactNode
+  action?: ReactNode
 }
 
-export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsProps) {
+export function PlayerTabs({ playerId, shortId, header, overview, action }: PlayerTabsProps) {
   const [tab, setTab] = useState<Tab>('overview')
   // Tabs mount on first activation and stay mounted afterward, so switching back doesn't refetch.
   const [activated, setActivated] = useState<Set<Tab>>(() => new Set<Tab>(['overview']))
@@ -71,7 +72,7 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
       {/* Sticky tab bar — stays under the navbar (h-14) while scrolling. -mx-6 full-bleeds it past
           the main container's px-6 so scrolled content doesn't peek around the edges. */}
       <div className="sticky top-[calc(3.5rem+1px+var(--banner-h,0px))] z-30 -mx-6 px-6 py-2 bg-zinc-950/85 backdrop-blur-sm">
-        <div className="flex justify-center">
+        <div className="relative flex flex-wrap justify-center items-center gap-2">
           <div className="inline-flex gap-1 rounded-none bg-zinc-900 border border-zinc-800 p-1">
             {TABS.map((t) => (
               <button
@@ -88,6 +89,7 @@ export function PlayerTabs({ playerId, shortId, header, overview }: PlayerTabsPr
               </button>
             ))}
           </div>
+          {action && <div className="sm:absolute sm:right-0 sm:top-1/2 sm:-translate-y-1/2">{action}</div>}
         </div>
       </div>
 

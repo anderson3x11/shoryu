@@ -15,7 +15,7 @@ export function RefreshProfileButton({ playerId }: { playerId: string }) {
     setLoading(true)
     try {
       const res = await fetch(`/api/player/${playerId}/refresh`, { method: 'POST' })
-      if (res.status === 429) { setNote('Recently refreshed, try again later.'); setLoading(false); return }
+      if (res.status === 429) { setNote('Just refreshed.'); setLoading(false); return }
       if (!res.ok) { setNote('Refresh unavailable.'); setLoading(false); return }
       // Reload with a token the tabs append to their fetches, busting the 12h CDN caches once.
       window.location.href = `${window.location.pathname}?refreshed=${Date.now()}`
@@ -27,14 +27,15 @@ export function RefreshProfileButton({ playerId }: { playerId: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      {note && <span className="text-xs text-zinc-400">{note}</span>}
+      {note && <span className="text-xs text-zinc-400 whitespace-nowrap">{note}</span>}
       <button
         onClick={refresh}
         disabled={loading}
-        className="flex items-center gap-1.5 rounded-none border border-zinc-700 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-300 hover:border-amber-400 hover:text-amber-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        title="Refresh"
+        className="flex items-center gap-1.5 rounded-none border border-zinc-700 px-2 sm:px-2.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-300 hover:border-amber-400 hover:text-amber-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
         <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-        Refresh
+        <span className="hidden sm:inline">Refresh</span>
       </button>
     </div>
   )

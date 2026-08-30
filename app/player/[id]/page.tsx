@@ -52,13 +52,11 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
-        <RefreshProfileButton playerId={String(shortId)} />
-      </div>
       <PlayerTabs
         playerId={String(shortId)}
         shortId={shortId}
         header={<PlayerHeader banner={banner} />}
+        action={<RefreshProfileButton playerId={String(shortId)} />}
         overview={
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Relative wrapper: min-height on mobile (absolute child has no intrinsic height), desktop row height = PlayCounts height */}

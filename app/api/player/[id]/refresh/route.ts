@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache'
 import { getCachedPlayerProfile, getProfileFetchedAt } from '@/lib/supabase/player-cache'
 import { syncAndGetRankedBattles } from '@/lib/supabase/battles'
 
@@ -22,5 +23,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   // Also force a ranked-battle re-sync so the Stats charts + Recent Battles refresh, not just the
   // overview — otherwise they'd serve the 12h-cached data until the next natural sync.
   await syncAndGetRankedBattles(id, numId, true)
+  // The profile page is ISR (revalidate = 600) and its cache key ignores the query string, so
+  // without this purge the reload would keep serving the pre-refresh render for up to 10 minutes.
+  revalidatePath(`/player/${id}`)
   return Response.json({ ok: true })
 }
