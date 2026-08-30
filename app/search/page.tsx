@@ -70,7 +70,8 @@ function PlayerCard({ banner }: { banner: BucklerFighterBanner }) {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q, page: pageParam } = await searchParams
   const query = q?.trim() ?? ''
-  const page = Math.max(1, Number(pageParam ?? 1))
+  const parsedPage = Number(pageParam ?? 1)
+  const page = Number.isFinite(parsedPage) ? Math.max(1, Math.floor(parsedPage)) : 1
 
   const { results, totalPages } = query.length >= 2
     ? await searchPlayers(query, page)

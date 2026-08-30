@@ -59,7 +59,7 @@ function RankingCard({ entry }: { entry: BucklerRankingEntry }) {
         <p className="text-xs text-zinc-300">{entry.rating} MR</p>
       </div>
       {rank && (
-        <div className="relative flex-shrink-0" style={{ width: 80, height: 50 }}>
+        <div className="relative flex-shrink-0 w-16 h-10 sm:w-20 sm:h-[50px]">
           <Image
             src={getRankImageUrl(rankId)}
             alt={rank.name}
@@ -79,13 +79,16 @@ export default async function RankingPage({
   searchParams: Promise<{ page?: string }>
 }) {
   const { page: pageStr } = await searchParams
-  const page = Math.max(1, parseInt(pageStr ?? '1', 10))
+  const parsed = Number(pageStr ?? '1')
+  const requestedPage = Number.isFinite(parsed) ? Math.max(1, Math.floor(parsed)) : 1
 
   // Served from the twice-daily sync snapshot in Supabase, paginated in-memory — no live
   // Buckler request per page load. Missing snapshot (sync never ran) → retry-later fallback.
   const allPlayers = await cachedRanking()
   if (!allPlayers) return <ServiceUnavailable />
   const totalPages = Math.max(1, Math.ceil(allPlayers.length / PAGE_SIZE))
+  // Clamp rather than render an empty list for ?page=999 (or ?page=abc, which parsed to 1 above).
+  const page = Math.min(requestedPage, totalPages)
   const players = allPlayers.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   return (
