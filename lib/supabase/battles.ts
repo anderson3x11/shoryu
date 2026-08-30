@@ -95,6 +95,12 @@ async function getRankedBattlesFromDB(playerId: number): Promise<DBBattle[]> {
 // Buckler; the manual Refresh button (force=true) is the only path to fresher data.
 const SYNC_TTL_MS = 12 * 60 * 60 * 1000
 
+// How deep either sync path will page through the battle log. The incremental scan stops as soon
+// as a page contains a battle already stored, so a normal visit is still one request; this cap only
+// matters after a long unsynced run (a 40+ game session used to be cut off at 3 pages, losing the
+// oldest matches for good).
+const MAX_SYNC_PAGES = 10
+
 // Called by matchups and lp-history routes.
 // First visit: full sync up to 10 pages. Subsequent visits: incremental (usually 1 page),
 // but skipped entirely when the player was synced within SYNC_TTL_MS. `force` bypasses the TTL.
@@ -115,7 +121,7 @@ export async function syncAndGetRankedBattles(playerId: string, sid: number, for
   if (latestAt === null) {
     // First time — fetch all available pages up to cap
     const first = await getBattleLog(playerId, 1, 'rank')
-    const totalPages = Math.min(first?.total_page ?? 1, 10)
+    const totalPages = Math.min(first?.total_page ?? 1, MAX_SYNC_PAGES)
     const rest = totalPages > 1
       ? await Promise.all(Array.from({ length: totalPages - 1 }, (_, i) => getBattleLog(playerId, i + 2, 'rank')))
       : []
@@ -124,9 +130,9 @@ export async function syncAndGetRankedBattles(playerId: string, sid: number, for
       ...rest.flatMap(p => p?.replay_list ?? []),
     ])
   } else {
-    // Incremental — scan until we hit battles already in DB (usually just page 1)
+    // Incremental: page until we hit battles already in DB (usually just page 1)
     const fresh: BucklerBattle[] = []
-    for (let page = 1; page <= 3; page++) {
+    for (let page = 1; page <= MAX_SYNC_PAGES; page++) {
       const data = await getBattleLog(playerId, page, 'rank')
       if (!data?.replay_list?.length) break
       const newOnes = data.replay_list.filter(b => b.uploaded_at > latestAt)
