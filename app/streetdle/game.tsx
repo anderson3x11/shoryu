@@ -7,6 +7,7 @@ import {
   compareCharacters,
   getDailyCharacter,
   getDailyKey,
+  secondsUntilNextPuzzle,
   type StreedleCharacter,
   type GuessResults,
 } from '@/lib/data/streetdle-data'
@@ -154,6 +155,7 @@ export function StreedleGame() {
           <p className="text-green-400 font-semibold text-lg">
             Correct! You got it in {guessIds.length} {guessIds.length === 1 ? 'guess' : 'guesses'}.
           </p>
+          <NextPuzzleCountdown />
         </div>
       )}
 
@@ -166,6 +168,7 @@ export function StreedleGame() {
           <div>
             <p className="text-zinc-300 text-sm">The answer was</p>
             <p className="text-zinc-100 font-semibold text-2xl">{target.name}</p>
+            <NextPuzzleCountdown />
           </div>
         </div>
       )}
@@ -240,5 +243,26 @@ export function StreedleGame() {
         <div className="text-center py-16 text-zinc-400 text-lg">No guesses yet</div>
       )}
     </div>
+  )
+}
+
+// Ticks down to the 00:00 UTC rollover. Client-only (mounted state starts null) so the server
+// never renders a time that is already wrong by the time it reaches the browser.
+function NextPuzzleCountdown() {
+  const [left, setLeft] = useState<number | null>(null)
+  useEffect(() => {
+    setLeft(secondsUntilNextPuzzle())
+    const t = setInterval(() => setLeft(secondsUntilNextPuzzle()), 1000)
+    return () => clearInterval(t)
+  }, [])
+  if (left === null) return null
+  const h = Math.floor(left / 3600)
+  const m = Math.floor((left % 3600) / 60)
+  const sec = left % 60
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return (
+    <p className="text-zinc-400 text-sm mt-1 tabular-nums">
+      Next character in {pad(h)}:{pad(m)}:{pad(sec)}
+    </p>
   )
 }

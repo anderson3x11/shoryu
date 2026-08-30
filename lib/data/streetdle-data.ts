@@ -985,14 +985,40 @@ function getDayIndex(): number {
   return Math.floor((Date.now() - EPOCH) / (1000 * 60 * 60 * 24));
 }
 
+// Walking STREETDLE_CHARACTERS in order made every answer guessable from the previous day's, so
+// the roster is shuffled once with a fixed seed. Deterministic (same order for every player,
+// forever) and still a full cycle: no character repeats until all of them have been used.
+function shuffledRoster(): StreedleCharacter[] {
+  const arr = [...STREETDLE_CHARACTERS];
+  let seed = 0x5f3759df;
+  const rand = () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 0x100000000;
+  };
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+const DAILY_ORDER = shuffledRoster();
+
 export function getDailyCharacter(): StreedleCharacter {
   const idx = getDayIndex();
-  return STREETDLE_CHARACTERS[
-    ((idx % STREETDLE_CHARACTERS.length) + STREETDLE_CHARACTERS.length) %
-      STREETDLE_CHARACTERS.length
+  return DAILY_ORDER[
+    ((idx % DAILY_ORDER.length) + DAILY_ORDER.length) % DAILY_ORDER.length
   ];
 }
 
 export function getDailyKey(): string {
-  return `streetdle-v2-${getDayIndex()}`;
+  // v3: the answer order changed, so a v2 save would show yesterday's guesses against a new target.
+  return `streetdle-v3-${getDayIndex()}`;
+}
+
+// Seconds until the next puzzle (the day index rolls over at 00:00 UTC).
+export function secondsUntilNextPuzzle(): number {
+  const dayMs = 1000 * 60 * 60 * 24;
+  const nextRollover = EPOCH + (getDayIndex() + 1) * dayMs;
+  return Math.max(0, Math.floor((nextRollover - Date.now()) / 1000));
 }
