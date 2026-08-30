@@ -13,7 +13,10 @@ export async function GET(req: NextRequest) {
     return new NextResponse(null, { status: 400 })
   }
 
-  if (!parsed.hostname.endsWith(ALLOWED_HOST)) {
+  // Exact host or a subdomain of it. A bare endsWith would also accept "evilliquipedia.net",
+  // turning this into an open image proxy for any domain with that suffix.
+  const host = parsed.hostname.toLowerCase()
+  if (host !== ALLOWED_HOST && !host.endsWith(`.${ALLOWED_HOST}`)) {
     return new NextResponse(null, { status: 403 })
   }
 
