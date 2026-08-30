@@ -42,9 +42,13 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
 
   const char = characters?.find(c => c.charId === sel)
 
+  // The series carries both metrics (LP before a Master promotion, MR after). Draw only the one
+  // this chart is labelled with, or the axis would jump between ~20000 LP and ~1500 MR.
+  const metricPoints = char ? char.points.filter(p => p.master === char.isMaster) : []
+
   // Deduplicate by timestamp, filter zeros (pre-placement MR)
   const points = char
-    ? char.points
+    ? metricPoints
         .reduce<Array<{ at: number; lp: number }>>((acc, p) => {
           const last = acc[acc.length - 1]
           if (last && last.at === p.at) { last.lp = p.lp } else { acc.push({ ...p }) }
@@ -55,7 +59,7 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
 
   // First non-zero point after each zero-sequence = season reset
   const resetMarkers = char
-    ? char.points.reduce<number[]>((acc, p, i, arr) => {
+    ? metricPoints.reduce<number[]>((acc, p, i, arr) => {
         if (p.lp > 0 && i > 0 && arr[i - 1].lp === 0) acc.push(p.at)
         return acc
       }, [])
@@ -148,7 +152,7 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
               />
             </LineChart>
           </ResponsiveContainer>
-          <p className="text-[10px] text-zinc-400 text-right mt-1">Showing {points.length} of {char?.points.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
+          <p className="text-[10px] text-zinc-400 text-right mt-1">Showing {points.length} of {metricPoints.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
         </div>
         )
       })()}

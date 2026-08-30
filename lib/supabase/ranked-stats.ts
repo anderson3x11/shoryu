@@ -6,8 +6,9 @@ import { getCharacterByBucklerId } from '@/lib/constants/characters'
 // Both are computed from the same DBBattle[] set, so a single sync can feed both.
 
 export interface LpPoint {
-  at: number   // unix timestamp
-  lp: number   // master_rating if master, else league_point
+  at: number       // unix timestamp
+  lp: number       // master_rating if master, else league_point
+  master: boolean  // which metric `lp` holds, so a series spanning a promotion stays readable
 }
 
 export interface LpCharacter {
@@ -67,15 +68,20 @@ export function valueAfter(
   isMaster: boolean,
   current?: { lp: number; mr: number },
 ): number | null {
+  // Only a later point on the SAME metric can close this match out: across a Master promotion the
+  // value flips from LP to MR, and subtracting one from the other would invent a huge delta.
   for (let i = 0; i < series.points.length; i++) {
-    if (series.points[i].at > atSec) return series.points[i].lp
+    const p = series.points[i]
+    if (p.at > atSec && p.master === isMaster) return p.lp
   }
-  if (current) return isMaster ? current.mr : current.lp
+  // Nothing later on this metric: the live value stands in, but only when the character is still
+  // on that metric today (otherwise this is the promotion match, whose delta is unknowable).
+  if (current && series.isMaster === isMaster) return isMaster ? current.mr : current.lp
   return null
 }
 
 export function buildLpCharacters(battles: DBBattle[]): LpCharacter[] {
-  type RawPoint = LpPoint & { isMasterMatch: boolean }
+  type RawPoint = LpPoint
   const byChar: Record<number, { slug: string; name: string; isMaster: boolean; points: RawPoint[] }> = {}
 
   for (const b of battles) {
@@ -97,7 +103,7 @@ export function buildLpCharacters(battles: DBBattle[]): LpCharacter[] {
     byChar[b.char_id].points.push({
       at: Math.floor(new Date(b.played_at).getTime() / 1000),
       lp,
-      isMasterMatch,
+      master: isMasterMatch,
     })
   }
 
@@ -107,8 +113,9 @@ export function buildLpCharacters(battles: DBBattle[]): LpCharacter[] {
       charSlug: data.slug,
       charName: data.name,
       isMaster: data.isMaster,
-      points:   (data.isMaster ? data.points.filter(p => p.isMasterMatch) : data.points)
-                  .map(({ at, lp }) => ({ at, lp })),
+      // Both metrics stay in the series (the chart filters to the one it draws) so per-match
+      // deltas still resolve for the LP games of a character that later reached Master.
+      points:   data.points,
     }))
     .sort((a, b) => b.points.length - a.points.length)
 }
@@ -162,7 +169,7 @@ export function buildSession(
 
     const isMaster = b.lp_after >= 25000
     const series = seriesByChar.get(b.char_id)
-    if (!series || series.isMaster !== isMaster) continue
+    if (!series) continue
     const before = isMaster ? b.mr_after : b.lp_after   // Buckler stores the pre-match value
     const after = valueAfter(series, toSec(b.played_at), isMaster, currentByChar[b.char_id])
     if (after === null) continue

@@ -94,7 +94,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
 
   // Player-wide ranked LP/MR series per character, from the shared ranked-stats fetch.
   // Used as a reference for computing per-match deltas — including the oldest match on each page.
-  type LpSeries = { isMaster: boolean; points: { at: number; lp: number }[] }
+  type LpSeries = { isMaster: boolean; points: { at: number; lp: number; master: boolean }[] }
   const lpHistory = useMemo(() => {
     const m = new Map<number, LpSeries>()
     for (const c of lpCharacters ?? []) m.set(c.charId, { isMaster: c.isMaster, points: c.points })
@@ -187,7 +187,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
       if (!me.playing_character_id) continue
       const isMaster = me.league_point >= 25000
       const series = lpHistory.get(me.playing_character_id)
-      if (!series || series.isMaster !== isMaster) continue
+      if (!series) continue
       const before = isMaster ? me.master_rating : me.league_point
       const after = valueAfter(series, battle.uploaded_at, isMaster, currentByChar?.[me.playing_character_id])
       if (after === null) continue
