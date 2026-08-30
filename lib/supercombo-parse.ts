@@ -374,6 +374,9 @@ export function parseIntroduction(wikitext: string): Pick<CharacterWiki, 'overvi
     .split(/\n\s*\n/)
     .map((p) => rich(p))
     .filter((p) => p.replace(/<[^>]*>/g, '').length > 40)
+    // Editors leave bracketed TODOs in place of unwritten paragraphs ("[st HP, cr LK, etc]").
+    // They read as broken copy on the page, so they don't survive the snapshot.
+    .filter((p) => !/^\[[^\]]*\]$/.test(p.replace(/<[^>]*>/g, '').trim()))
 
   // The wiki opens by quoting Capcom's in-game character blurb. It isn't the wiki's own
   // writeup, so it's dropped rather than shown as body copy.
