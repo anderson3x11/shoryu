@@ -265,6 +265,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
           const me   = isP1 ? battle.player1_info : battle.player2_info
           const opp  = isP1 ? battle.player2_info : battle.player1_info
           const winner = getBattleWinner(battle)
+          const drawn  = winner === null   // equal rounds: neither player took the match
           const won    = (isP1 && winner === 1) || (!isP1 && winner === 2)
 
           const mySlug  = me.playing_character_tool_name
@@ -286,12 +287,12 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
               key={battle.replay_id}
               className="relative grid grid-cols-[1fr_auto_1fr] sm:grid-cols-[1fr_380px_1fr] items-center gap-3 sm:gap-6 px-3 sm:px-5 py-4 hover:bg-zinc-800/40 transition-colors"
             >
-              <div className={cn('absolute left-0 top-0 bottom-0 w-1', won ? 'bg-emerald-500' : 'bg-red-500')} />
+              <div className={cn('absolute left-0 top-0 bottom-0 w-1', drawn ? 'bg-zinc-500' : won ? 'bg-emerald-500' : 'bg-red-500')} />
 
               {/* LEFT — player side: W/L, rank, char name */}
               <div className="flex items-center gap-3 sm:gap-4 min-w-0 overflow-hidden">
-                <span className={cn('text-sm font-bold w-5 text-center flex-shrink-0', won ? 'text-emerald-400' : 'text-red-400')}>
-                  {won ? 'W' : 'L'}
+                <span className={cn('text-sm font-bold w-5 text-center flex-shrink-0', drawn ? 'text-zinc-400' : won ? 'text-emerald-400' : 'text-red-400')}>
+                  {drawn ? 'D' : won ? 'W' : 'L'}
                 </span>
 
                 <div className="relative w-14 h-[35px] sm:w-20 sm:h-[50px] flex-shrink-0">
@@ -312,7 +313,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
               <div className="flex items-center gap-3 sm:gap-5 px-2 sm:px-4 flex-shrink-0">
                 <div className={cn(
                   'relative w-14 h-14 sm:w-16 sm:h-16 overflow-hidden flex-shrink-0 transition-all',
-                  !won && 'grayscale opacity-50'
+                  !won && !drawn && 'grayscale opacity-50'
                 )}>
                   {mySlug && (
                     <Image src={getCharacterImageUrl(mySlug)} alt={me.playing_character_name}
@@ -358,7 +359,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
 
                 <div className={cn(
                   'relative w-14 h-14 sm:w-16 sm:h-16 overflow-hidden flex-shrink-0 transition-all',
-                  won && 'grayscale opacity-50'
+                  won && !drawn && 'grayscale opacity-50'
                 )}>
                   {oppSlug && (
                     <Image src={getCharacterImageUrl(oppSlug)} alt={opp.playing_character_name}

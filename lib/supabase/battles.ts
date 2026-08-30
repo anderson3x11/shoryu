@@ -9,7 +9,7 @@ export interface DBBattle {
   opp_player_id: number
   opp_char_id: number
   opp_name: string | null   // opponent CFN name; null on rows synced before Rivals
-  result: number       // 1=win, 0=loss
+  result: number      // 1 = win, 0 = loss, 2 = draw
   mode: string
   lp_after: number     // league_point at time of match (>= 25000 means master)
   mr_after: number     // master_rating at time of match (0 if not master)
@@ -47,7 +47,9 @@ async function insertBattles(playerId: number, sid: number, battles: BucklerBatt
       const me  = isP1 ? b.player1_info : b.player2_info
       const opp = isP1 ? b.player2_info : b.player1_info
       const winner = getBattleWinner(b)
-      const won = winner !== null && ((isP1 && winner === 1) || (!isP1 && winner === 2))
+      // 1 = win, 0 = loss, 2 = draw. A draw (equal rounds) is neither, so it must not be stored
+      // as a loss the way `winner !== null && ...` used to.
+      const result = winner === null ? 2 : ((isP1 && winner === 1) || (!isP1 && winner === 2)) ? 1 : 0
       return {
         replay_id:     b.replay_id,
         player_id:     playerId,
@@ -55,7 +57,7 @@ async function insertBattles(playerId: number, sid: number, battles: BucklerBatt
         opp_player_id: opp.player.short_id,
         opp_char_id:   opp.playing_character_id,
         opp_name:      opp.player.fighter_id ?? null,
-        result:        won ? 1 : 0,
+        result,
         mode:          'rank',
         lp_after:      me.league_point ?? 0,
         mr_after:      me.master_rating ?? 0,

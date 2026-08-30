@@ -19,7 +19,7 @@ create table if not exists battles (
   opp_player_id bigint,
   opp_char_id   int,
   opp_name      text,         -- opponent CFN name at match time; null on rows synced before Rivals
-  result        int,          -- 1 = win, 0 = loss
+  result        int,          -- 1 = win, 0 = loss, 2 = draw (equal rounds)
   mode          text,         -- 'rank'
   lp_after      int,          -- league_point at match time (>= 25000 = master)
   mr_after      int,          -- master_rating at match time (0 if not master)

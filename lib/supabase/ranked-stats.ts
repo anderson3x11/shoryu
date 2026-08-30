@@ -142,7 +142,9 @@ export function buildSession(
   const charStats = new Map<number, SessionChar>()
 
   for (const b of session) {
-    if (b.result === 1) wins++; else losses++
+    // result 2 = draw: counted in the session's match list but not as a win or a loss.
+    if (b.result === 1) wins++
+    else if (b.result === 0) losses++
     if (!b.char_id) continue
 
     let cs = charStats.get(b.char_id)
@@ -169,7 +171,7 @@ export function buildSession(
     cs.isMaster = isMaster
   }
 
-  const total = session.length
+  const total = wins + losses
   const newestAt = toSec(session[0].played_at)
   const oldestAt = toSec(session[session.length - 1].played_at)
   return {
@@ -188,6 +190,7 @@ export function buildMatchupRows(battles: DBBattle[]): { rows: MatchupRow[]; tot
     if (!b.char_id || !b.opp_char_id) continue
     if (!matrix[b.char_id]) matrix[b.char_id] = {}
     if (!matrix[b.char_id][b.opp_char_id]) matrix[b.char_id][b.opp_char_id] = { wins: 0, total: 0 }
+    if (b.result !== 0 && b.result !== 1) continue   // draw: not a win, not a loss
     matrix[b.char_id][b.opp_char_id].total++
     if (b.result === 1) matrix[b.char_id][b.opp_char_id].wins++
   }
@@ -265,9 +268,8 @@ export function buildRivals(battles: DBBattle[]): RivalsData {
       a = { playerId: b.opp_player_id, name: null, nameAt: -Infinity, charCounts: new Map(), wins: 0, losses: 0, total: 0 }
       byOpp.set(b.opp_player_id, a)
     }
-    a.total++
-    if (b.result === 1) a.wins++
-    else a.losses++
+    if (b.result === 1) { a.wins++; a.total++ }
+    else if (b.result === 0) { a.losses++; a.total++ }
     if (b.opp_char_id) a.charCounts.set(b.opp_char_id, (a.charCounts.get(b.opp_char_id) ?? 0) + 1)
     const at = new Date(b.played_at).getTime()
     if (b.opp_name && at > a.nameAt) {
