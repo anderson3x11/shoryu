@@ -22,7 +22,7 @@ export default function FaqPage() {
       <div>
         <div className="flex items-center gap-3 mb-3">
           <span className="block w-2 h-11 sm:h-14 -skew-x-12 bg-amber-400 shrink-0" />
-          <h1 className="font-bebas text-7xl">Q&amp;A</h1>
+          <h1 className="font-bebas text-5xl sm:text-7xl">Q&amp;A</h1>
         </div>
         <p className="text-zinc-300 leading-relaxed">
           Answers to the questions that come up most often. For a walkthrough of each page, see the{' '}

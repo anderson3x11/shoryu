@@ -82,7 +82,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-          <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Search</h1>
+          <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Search</h1>
         </div>
         {query && (
           <p className="text-sm text-zinc-300">

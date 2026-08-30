@@ -102,7 +102,7 @@ export default async function ProsPage() {
     <div className="space-y-8">
       <div className="flex items-center gap-3">
         <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-        <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
+        <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
       </div>
 
       <section className="space-y-3">

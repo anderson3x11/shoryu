@@ -8,7 +8,7 @@ export default async function HomePage() {
       <section className="flex flex-1 flex-col items-center justify-center space-y-6">
         <div className="text-center">
           <div className="flex items-center justify-center gap-4">
-            <h1 className="font-display text-7xl tracking-widest leading-none text-zinc-100">Shoryu</h1>
+            <h1 className="font-display text-5xl sm:text-7xl tracking-widest leading-none text-zinc-100">Shoryu</h1>
             <Image src="/logo.png" alt="Shoryu" width={80} height={80} className="object-contain" />
           </div>
           <p className="text-zinc-300 mt-3 text-sm tracking-wide">Street Fighter 6 stats, player profiles, and rankings</p>

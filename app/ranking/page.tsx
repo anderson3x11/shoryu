@@ -96,7 +96,7 @@ export default async function RankingPage({
       <div className="flex items-baseline justify-between">
         <div className="flex items-center gap-3">
           <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-          <h1 className="font-bebas text-6xl tracking-widest text-zinc-100">Master Ranking</h1>
+          <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Master Ranking</h1>
         </div>
         <span className="text-sm text-zinc-300">Page {page}</span>
       </div>
