@@ -15,13 +15,12 @@ export function SessionSummary({ session }: SessionSummaryProps) {
 
   // Computed client-side from newestAt so a cached response never shows a stale "ended X ago".
   const ageSec = Math.max(0, Math.floor(Date.now() / 1000) - session.newestAt)
-  const title = ageSec < 6 * 3600 ? 'Current Session' : 'Latest Session'
 
   return (
     <Card className="bg-zinc-900 border-zinc-800">
       <div className="px-4 sm:px-5 py-4 flex flex-col gap-4">
         <div className="flex items-center justify-between gap-3 flex-wrap">
-          <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">{title}</CardTitle>
+          <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">Last Session</CardTitle>
           <span className="text-xs text-zinc-300 tabular-nums">
             {fmtDuration(session.durationSec)} · ended {fmtAge(ageSec)}
           </span>
