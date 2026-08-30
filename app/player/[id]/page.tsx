@@ -1,6 +1,6 @@
 import { cache } from 'react'
 import { notFound } from 'next/navigation'
-import { getCachedPlayerProfile } from '@/lib/supabase/player-cache'
+import { getCachedPlayerProfile, getProfileFetchedAt } from '@/lib/supabase/player-cache'
 import { ServiceUnavailable } from '@/components/service-unavailable'
 import { PlayerHeader } from '@/components/player-header'
 import { RefreshProfileButton } from '@/components/refresh-profile-button'
@@ -44,6 +44,10 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
   const banner = profile.fighter_banner_info
   const shortId = banner?.personal_info?.short_id ?? id
 
+  // Age of the stored profile, so the Refresh button can say how old what you're reading is.
+  const numId = Number(shortId)
+  const fetchedAt = Number.isFinite(numId) ? await getProfileFetchedAt(numId) : null
+
   // Build phase list — currently only one phase available from profile page.
   // When Buckler exposes per-phase endpoints, add more PhaseData entries here.
   const phases: PhaseData[] = profile.play
@@ -56,7 +60,7 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
         playerId={String(shortId)}
         shortId={shortId}
         header={<PlayerHeader banner={banner} />}
-        action={<RefreshProfileButton playerId={String(shortId)} />}
+        action={<RefreshProfileButton playerId={String(shortId)} fetchedAt={fetchedAt} />}
         overview={
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Relative wrapper: min-height on mobile (absolute child has no intrinsic height), desktop row height = PlayCounts height */}
