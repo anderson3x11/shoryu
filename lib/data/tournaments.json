@@ -18,6 +18,16 @@
     "year": 2026,
     "tournaments": [
       {
+        "name": "Street Fighter League Pro-EMEAA 2026",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/EMEAA/2026",
+        "iconUrl": "/liquipedia/79fbaedba96a13d4.png",
+        "date": "Sep 2 - Oct 24, 2026",
+        "prizePool": "$100,000",
+        "location": "Los Angeles",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
         "name": "Evolution Championship Series: France 2026",
         "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2026/France/SF6",
         "iconUrl": "/liquipedia/ad5a156ff01d1fc0.png",
@@ -34,16 +44,6 @@
         "date": "Sep 11 - 13, 2026",
         "prizePool": null,
         "location": "Paris",
-        "winner": null,
-        "runnerUp": null
-      },
-      {
-        "name": "Street Fighter League Pro-EMEAA 2026",
-        "url": "https://liquipedia.net/fighters/Street_Fighter_League/EMEAA/2026",
-        "iconUrl": "/liquipedia/79fbaedba96a13d4.png",
-        "date": "Sep 2 - 6, 2026",
-        "prizePool": null,
-        "location": "Los Angeles",
         "winner": null,
         "runnerUp": null
       },
