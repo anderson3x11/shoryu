@@ -41,11 +41,25 @@
         "name": "Ultimate Fighting Arena 2026",
         "url": "https://liquipedia.net/fighters/Ultimate_Fighting_Arena/2026/SF6",
         "iconUrl": "/liquipedia/b2467d4e1a4553ad.png",
-        "date": "Sep 11 - 13, 2026",
-        "prizePool": null,
+        "date": "Sep 12 - 13, 2026",
+        "prizePool": "$10,847.01",
         "location": "Paris",
-        "winner": null,
-        "runnerUp": null
+        "winner": {
+          "name": "NoahTheProdigy",
+          "url": "https://liquipedia.net/fighters/NoahTheProdigy",
+          "flagUrl": "/liquipedia/4c74097c6a1a38bc.png",
+          "flagAlt": "United States",
+          "charUrl": "/liquipedia/6720e0afd8b2be64.png",
+          "charAlt": "Luke"
+        },
+        "runnerUp": {
+          "name": "Higuchi",
+          "url": "https://liquipedia.net/fighters/Higuchi",
+          "flagUrl": "/liquipedia/c7ac4dbc00afbbc6.png",
+          "flagAlt": "Japan",
+          "charUrl": "/liquipedia/3a961f1971f44a1c.png",
+          "charAlt": "Guile"
+        }
       },
       {
         "name": "Topanga Championship 7",
