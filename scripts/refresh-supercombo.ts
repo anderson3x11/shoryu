@@ -14,7 +14,7 @@ import type { CharacterWiki, Move, PatchEntry, Vitals } from '../lib/supercombo-
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const OUT_DIR = join(ROOT, 'lib', 'data', 'supercombo')
 const API = 'https://wiki.supercombo.gg/api.php'
-const UA = 'Shoryu/1.0 (https://shoryu.site; https://x.com/shoryuapp)'
+const UA = 'Shoryu/1.0 (https://shoryu.site; https://github.com/anderson3x11/shoryu)'
 
 // Our character ids -> the wiki's `chara` key / page name. Only the ones that differ.
 const WIKI_NAME: Record<string, string> = {

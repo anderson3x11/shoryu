@@ -17,7 +17,7 @@ async function fetchTournamentsFromApi(): Promise<TournamentYear[]> {
     {
       cache: 'no-store',
       headers: {
-        'User-Agent': 'Shoryu/1.0 (https://shoryu.site; https://x.com/shoryuapp)',
+        'User-Agent': 'Shoryu/1.0 (https://shoryu.site; https://github.com/anderson3x11/shoryu)',
         'Accept-Language': 'en-US,en;q=0.9',
       },
     }

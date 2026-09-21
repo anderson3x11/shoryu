@@ -95,12 +95,12 @@ export default function AboutPage() {
         </Link>
         <div className="flex items-center gap-4">
           <a
-            href="https://x.com/shoryuapp"
+            href="https://github.com/anderson3x11/shoryu"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
           >
-            Follow updates on X →
+            Source code on GitHub →
           </a>
           <p className="text-sm text-zinc-500">Made with love by anderson.</p>
         </div>

@@ -14,7 +14,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const IMG_DIR = join(ROOT, 'public', 'liquipedia')
 const IMG_PUBLIC = '/liquipedia'
 
-const UA = 'Shoryu/1.0 (https://shoryu.site; https://x.com/shoryuapp)'
+const UA = 'Shoryu/1.0 (https://shoryu.site; https://github.com/anderson3x11/shoryu)'
 
 const API =
   'https://liquipedia.net/fighters/api.php?action=parse&page=' +
