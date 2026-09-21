@@ -1,9 +1,9 @@
 name: Refresh tournaments snapshot
 
 # Regenerates lib/data/tournaments.json from the Liquipedia API on a schedule.
-# Runs on GitHub's runners (whose IP can reach Liquipedia, unlike the prod VPS
-# whose datacenter IP is Cloudflare-challenged) and commits only when the data
-# changed — which then triggers the normal Coolify redeploy.
+# Runs on GitHub's runners (whose IP can reach Liquipedia, unlike most
+# datacenter IPs, which are Cloudflare-challenged) and commits only when the data
+# changed, which then triggers a normal redeploy.
 
 on:
   schedule:

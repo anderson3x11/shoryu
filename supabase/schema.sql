@@ -1,5 +1,5 @@
 -- Shoryu — Supabase schema reference.
--- Run manually in the Supabase SQL editor (dashboard project: REDACTED).
+-- Run manually in the Supabase SQL editor.
 -- This file documents the DB; it is not applied automatically by the app.
 
 -- ---------------------------------------------------------------------------

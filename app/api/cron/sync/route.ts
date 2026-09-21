@@ -7,7 +7,7 @@ import type { BucklerRankingEntry } from '@/lib/buckler/types'
 
 export const maxDuration = 300
 
-// Single periodic sync (run every 12h by a Coolify Scheduled Task). One pass fetches every
+// Single periodic sync (run every 12h by an external scheduler). One pass fetches every
 // aggregate the site needs — master ranking, pro banners, usage rate — and stores them in
 // Supabase. The /pros, /ranking and /stats pages then read the DB and never touch Buckler.
 // All Buckler calls go through the pacing queue in lib/buckler/client.ts.

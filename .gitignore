@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -40,14 +41,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# personal .md
-chara_tech.md
-CHARACTERS.md
-ROADMAP.md
-CLAUDE.md
-
-# claude code
-.claude/
-
-# db
-supabase/
