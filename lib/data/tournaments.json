@@ -18,6 +18,16 @@
     "year": 2026,
     "tournaments": [
       {
+        "name": "Street Fighter League Pro-Americas 2026",
+        "url": "https://liquipedia.net/fighters/Street_Fighter_League/Americas/2026",
+        "iconUrl": "/liquipedia/bbd34a0d523920d7.png",
+        "date": "Oct 23 - Nov 8, 2026",
+        "prizePool": null,
+        "location": "United States",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
         "name": "Street Fighter League Pro-EMEAA 2026",
         "url": "https://liquipedia.net/fighters/Street_Fighter_League/EMEAA/2026",
         "iconUrl": "/liquipedia/79fbaedba96a13d4.png",
@@ -33,7 +43,7 @@
         "iconUrl": "/liquipedia/ad5a156ff01d1fc0.png",
         "date": "Oct 9 - 11, 2026",
         "prizePool": null,
-        "location": "France",
+        "location": "Nice",
         "winner": null,
         "runnerUp": null
       },
