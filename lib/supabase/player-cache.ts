@@ -22,9 +22,13 @@ async function readCached(playerId: number): Promise<CachedProfile | null> {
 }
 
 async function writeCached(playerId: number, profile: BucklerProfilePage) {
+  // Buckler ships its UI translation strings inside the profile payload (~8% of every stored blob,
+  // ~18 KB each) and nothing here reads them. Drop them before storing.
+  const slim: Record<string, unknown> = { ...profile }
+  delete slim.__namespaces
   await supabase
     .from('player_profiles')
-    .upsert({ player_id: playerId, profile, fetched_at: new Date().toISOString() }, { onConflict: 'player_id' })
+    .upsert({ player_id: playerId, profile: slim, fetched_at: new Date().toISOString() }, { onConflict: 'player_id' })
 }
 
 // DB-cached wrapper around getPlayerProfileResult. Returns the stored profile when it is fresh
