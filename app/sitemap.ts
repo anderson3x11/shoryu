@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { CHARACTERS } from '@/lib/constants/characters'
+import { LOCALES, localeHref } from '@/lib/i18n/locales'
 
 const BASE = 'https://shoryu.site'
 
@@ -27,5 +28,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Individual /player/ pages are intentionally omitted: robots.txt disallows /player/ (so
   // crawlers don't trigger Buckler profile fetches), so sitemapping them would be contradictory.
-  return [...staticPages, ...characterPages]
+  // Each page exists in every locale: English unprefixed, the others under /ja and /pt-br.
+  return [...staticPages, ...characterPages].flatMap((entry) =>
+    LOCALES.map((locale) => ({
+      ...entry,
+      url: `${BASE}${localeHref(locale, entry.url.slice(BASE.length) || '/')}`,
+    })),
+  )
 }

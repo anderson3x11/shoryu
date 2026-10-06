@@ -1,12 +1,14 @@
 import { ExternalLink } from 'lucide-react'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
 import { getTournaments } from '@/lib/liquipedia'
 import type { Player, Tournament, TournamentYear } from '@/lib/liquipedia'
 
 export const revalidate = 86400
 
-export const metadata = {
-  title: 'Tournaments',
-  description: 'Street Fighter 6 Tier 1 tournament results, prize pools, and top players.',
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  return { ...getDict(isLocale(locale) ? locale : DEFAULT_LOCALE).meta.tournaments }
 }
 
 // Snapshot images are local (/liquipedia/...); live-fetched data still carries

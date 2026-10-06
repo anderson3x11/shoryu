@@ -1,8 +1,13 @@
 import Image from 'next/image'
 import { SearchBar } from '@/components/search-bar'
 import { CharacterGrid } from '@/components/character-grid'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
 
-export default async function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: raw } = await params
+  const locale = isLocale(raw) ? raw : DEFAULT_LOCALE
+  const t = getDict(locale).home
   return (
     <div className="flex flex-col flex-1 space-y-12">
       <section className="flex flex-1 flex-col items-center justify-center space-y-6">
@@ -11,14 +16,14 @@ export default async function HomePage() {
             <h1 className="font-display text-5xl sm:text-7xl tracking-widest leading-none text-zinc-100">Shoryu</h1>
             <Image src="/logo.png" alt="Shoryu" width={80} height={80} className="object-contain" />
           </div>
-          <p className="text-zinc-300 mt-3 text-sm tracking-wide">Street Fighter 6 stats, player profiles, and rankings</p>
+          <p className="text-zinc-300 mt-3 text-sm tracking-wide">{t.tagline}</p>
         </div>
         <SearchBar />
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Characters</h2>
-        <CharacterGrid />
+        <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">{t.characters}</h2>
+        <CharacterGrid locale={locale} />
       </section>
     </div>
   )

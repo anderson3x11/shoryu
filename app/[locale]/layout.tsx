@@ -97,7 +97,7 @@ export default async function RootLayout({
         <main className="flex-1 w-full max-w-[90rem] mx-auto px-6 py-8 flex flex-col">
           {children}
         </main>
-        <SiteFooter />
+        <SiteFooter locale={locale} />
         </LocaleProvider>
         {UMAMI_URL && UMAMI_ID && (
           <Script src={UMAMI_URL} data-website-id={UMAMI_ID} strategy="afterInteractive" />

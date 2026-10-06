@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
 import Image from 'next/image'
 import { getProPlayer, type ProPlayer } from '@/lib/data/pro-players'
 import { getProSnapshot } from '@/lib/supabase/snapshots'
@@ -9,9 +11,9 @@ import type { BucklerFighterBanner } from '@/lib/buckler'
 
 export const revalidate = 300
 
-export const metadata = {
-  title: 'Pro Players & Creators',
-  description: 'Top Street Fighter 6 pro players and content creators with their Buckler profiles.',
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  return { ...getDict(isLocale(locale) ? locale : DEFAULT_LOCALE).meta.pros }
 }
 
 function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighterBanner | null }) {

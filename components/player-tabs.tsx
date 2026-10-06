@@ -3,6 +3,7 @@
 import { useState, useEffect, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/i18n/context'
 import type { LpCharacter, MatchupRow, SessionData, CurrentByChar, RivalsData } from '@/lib/supabase/ranked-stats'
 
 // Code-split the tab panels: their JS (incl. recharts) loads only when a tab is first opened,
@@ -25,11 +26,11 @@ interface RankedStats {
   rivals: RivalsData
 }
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'history',  label: 'Recent Battles' },
-  { id: 'stats',    label: 'Stats' },
-  { id: 'rivals',   label: 'Rivals' },
+const TABS: { id: Tab; labelKey: 'overview' | 'history' | 'statsTab' | 'rivals' }[] = [
+  { id: 'overview', labelKey: 'overview' },
+  { id: 'history',  labelKey: 'history' },
+  { id: 'stats',    labelKey: 'statsTab' },
+  { id: 'rivals',   labelKey: 'rivals' },
 ]
 
 interface PlayerTabsProps {
@@ -43,6 +44,7 @@ interface PlayerTabsProps {
 export function PlayerTabs({ playerId, shortId, header, overview, action }: PlayerTabsProps) {
   const [tab, setTab] = useState<Tab>('overview')
   // Tabs mount on first activation and stay mounted afterward, so switching back doesn't refetch.
+  const dict = useT()
   const [activated, setActivated] = useState<Set<Tab>>(() => new Set<Tab>(['overview']))
   const [stats, setStats] = useState<RankedStats | null>(null)   // null = not loaded yet
   const [statsError, setStatsError] = useState(false)
@@ -85,7 +87,7 @@ export function PlayerTabs({ playerId, shortId, header, overview, action }: Play
                     : 'text-zinc-300 hover:text-zinc-200',
                 )}
               >
-                {t.label}
+                {dict.player[t.labelKey]}
               </button>
             ))}
           </div>
