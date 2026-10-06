@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
 import { getDict } from '@/lib/i18n/dict'
 import { StreedleGame } from './game'

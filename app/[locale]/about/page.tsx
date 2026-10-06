@@ -1,97 +1,56 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
+import { DEFAULT_LOCALE, isLocale, localeHref } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
 
-export const metadata: Metadata = {
-  title: 'About - Shoryu',
-  description: 'About Shoryu, a Street Fighter 6 stats site.',
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  return { ...getDict(isLocale(locale) ? locale : DEFAULT_LOCALE).meta.about }
 }
 
-export default function AboutPage() {
+export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: raw } = await params
+  const locale = isLocale(raw) ? raw : DEFAULT_LOCALE
+  const t = getDict(locale).about
+  const href = (path: string) => localeHref(locale, path)
+
+  const sections = [t.lookup, t.profile, t.ranking, t.characters, t.streetdle, t.tournaments]
+
   return (
     <div className="max-w-2xl mx-auto py-8 space-y-12">
 
       <div>
         <div className="flex items-center gap-3 mb-3">
           <span className="block w-2 h-11 sm:h-14 -skew-x-12 bg-amber-400 shrink-0" />
-          <h1 className="font-bebas text-5xl sm:text-7xl">About Shoryu</h1>
+          <h1 className="font-bebas text-5xl sm:text-7xl">{t.title}</h1>
         </div>
-        <p className="text-zinc-300 leading-relaxed">
-          Shoryu is a fan-made stats site for Street Fighter 6. It tracks player rankings,
-          match history, character data, and tournament results. The kind of site I wished
-          existed when I started playing.
-        </p>
+        <p className="text-zinc-300 leading-relaxed">{t.intro}</p>
       </div>
 
       <div className="space-y-8">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-400">How to use Shoryu</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-400">{t.howToUse}</h2>
 
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-zinc-200">Looking up a player</h3>
-          <p className="text-sm text-zinc-300 leading-relaxed">
-            Use the search bar at the top to find any player by their CFN name (their in-game username).
-            Results will show their main character, rank, and region. Click on a player to open their full profile.
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-zinc-200">Player profile</h3>
-          <p className="text-sm text-zinc-300 leading-relaxed">
-            The profile page is split into several sections. At the top you'll find the player's rank
-            and main character. Below that, their stats per character and match counts across all game modes.
-            The match history shows their recent games with the result, opponent, and LP/MR gained or lost.
-            The matchup chart shows their win rate against each character they've faced.
-            Finally, the LP/MR history chart lets you track their progression over time.
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-zinc-200">Master Ranking</h3>
-          <p className="text-sm text-zinc-300 leading-relaxed">
-            The Ranking page shows the global Master Rating leaderboard, featuring the top players in the world
-            ranked by MR (Master Rating), the point system used at the highest level of ranked play.
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-zinc-200">Character pages</h3>
-          <p className="text-sm text-zinc-300 leading-relaxed">
-            Each character has a dedicated page with links to external resources: frame data, combo guides,
-            tech videos organized by category, and pro players known for that character. Useful whether
-            you're picking up a new character or looking to level up your main.
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-zinc-200">Streetdle</h3>
-          <p className="text-sm text-zinc-300 leading-relaxed">
-            A daily guessing game. Each day a Street Fighter character is chosen at random from a pool of
-            72 characters spanning the entire series. Type a name, submit your guess, and use the colored
-            clues to narrow it down. A new character is picked every day at midnight.
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-zinc-200">Tournaments</h3>
-          <p className="text-sm text-zinc-300 leading-relaxed">
-            The Tournaments page lists Tier 1 SF6 tournaments with results, prize pools, and the players
-            who placed. Data comes from Liquipedia and updates automatically.
-          </p>
-        </div>
+        {sections.map((s) => (
+          <div key={s.h} className="space-y-2">
+            <h3 className="text-sm font-semibold text-zinc-200">{s.h}</h3>
+            <p className="text-sm text-zinc-300 leading-relaxed">{s.p}</p>
+          </div>
+        ))}
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-400">Questions?</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-400">{t.questions}</h2>
         <p className="text-zinc-300 leading-relaxed">
-          The{' '}
-          <Link href="/faq" className="text-zinc-200 hover:text-white underline underline-offset-2">Q&amp;A</Link>{' '}
-          covers where the data comes from, how often it updates, why some stats only cover the current
-          phase, and what MR and LP mean.
+          {t.qaBefore}
+          <Link href={href('/faq')} className="text-zinc-200 hover:text-white underline underline-offset-2">
+            {getDict(locale).footer.qa}
+          </Link>
+          {t.qaAfter}
         </p>
       </div>
 
       <div className="pt-4 border-t border-zinc-800 flex items-center justify-between">
-        <Link href="/" className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors">
-          ← Back to Shoryu
+        <Link href={href('/')} className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors">
+          ← {t.back}
         </Link>
         <div className="flex items-center gap-4">
           <a
@@ -100,9 +59,9 @@ export default function AboutPage() {
             rel="noopener noreferrer"
             className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
           >
-            Source code on GitHub →
+            {t.source} →
           </a>
-          <p className="text-sm text-zinc-500">Made with love by anderson.</p>
+          <p className="text-sm text-zinc-500">{t.madeBy}</p>
         </div>
       </div>
 
