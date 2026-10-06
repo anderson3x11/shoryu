@@ -3,6 +3,16 @@
     "year": 2027,
     "tournaments": [
       {
+        "name": "Capcom Cup 13",
+        "url": "https://liquipedia.net/fighters/Capcom_Cup/13",
+        "iconUrl": "/liquipedia/ea4957d0be7b260b.png",
+        "date": "Mar 10 - 14, 2027",
+        "prizePool": null,
+        "location": "Tokyo",
+        "winner": null,
+        "runnerUp": null
+      },
+      {
         "name": "Street Fighter League Pro-JP 2026",
         "url": "https://liquipedia.net/fighters/Street_Fighter_League/Japan/2026",
         "iconUrl": "/liquipedia/03b2ab2fb23cd422.png",
@@ -42,7 +52,7 @@
         "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2026/France/SF6",
         "iconUrl": "/liquipedia/ad5a156ff01d1fc0.png",
         "date": "Oct 9 - 11, 2026",
-        "prizePool": null,
+        "prizePool": "$56,230.95",
         "location": "Nice",
         "winner": null,
         "runnerUp": null
