@@ -1,16 +1,23 @@
 import { revalidatePath } from 'next/cache'
 import { getCachedPlayerProfile, getProfileFetchedAt } from '@/lib/supabase/player-cache'
 import { syncAndGetRankedBattles } from '@/lib/supabase/battles'
+import { isShortId } from '@/lib/buckler'
+import { rateLimit } from '@/lib/rate-limit'
 
 // Manual "Refresh" for a player profile: forces one Buckler fetch (bypassing the 12h cache)
 // and updates the stored copy. Rate-limited to once per 5 min per player to stop the button
 // from being used to hammer Buckler.
 const MIN_INTERVAL_MS = 5 * 60 * 1000
 
-export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  // The 5 min throttle below is per player, so on its own it doesn't stop one client from
+  // refreshing a different player every time. The per-client limit covers that.
+  const limited = rateLimit(req)
+  if (limited) return limited
+
   const { id } = await params
+  if (!isShortId(id)) return Response.json({ error: 'bad id' }, { status: 400 })
   const numId = Number(id)
-  if (!Number.isFinite(numId)) return Response.json({ error: 'bad id' }, { status: 400 })
 
   const fetchedAt = await getProfileFetchedAt(numId)
   if (fetchedAt && Date.now() - fetchedAt < MIN_INTERVAL_MS) {

@@ -1,5 +1,6 @@
 import { unstable_cache } from 'next/cache'
-import { getPlayActWinRates, getPlayActMatchupMatrix, type PlayActModeId } from '@/lib/buckler'
+import { getPlayActWinRates, getPlayActMatchupMatrix, isShortId, type PlayActModeId } from '@/lib/buckler'
+import { rateLimit } from '@/lib/rate-limit'
 import { getCachedPlayerProfile } from '@/lib/supabase/player-cache'
 import { matchupRowsFromMatrix } from '@/lib/supabase/ranked-stats'
 
@@ -38,11 +39,14 @@ const cachedMatchupRows = unstable_cache(
 const CACHE_HEADERS = { 'Cache-Control': 's-maxage=43200, stale-while-revalidate=86400' }
 
 export async function GET(req: Request) {
+  const limited = rateLimit(req)
+  if (limited) return limited
+
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
   const mode = Number(searchParams.get('mode')) as PlayActModeId
   const kind = searchParams.get('kind')
-  if (!id || !MODE_IDS.includes(mode) || (kind !== 'chars' && kind !== 'matrix')) {
+  if (!id || !isShortId(id) || !MODE_IDS.includes(mode) || (kind !== 'chars' && kind !== 'matrix')) {
     return Response.json({ error: 'id, mode (1-5) and kind (chars|matrix) required' }, { status: 400 })
   }
 

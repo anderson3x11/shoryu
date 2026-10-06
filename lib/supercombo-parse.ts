@@ -187,7 +187,9 @@ function escapeHtml(s: string): string {
  * Wiki text is escaped before any tag is emitted, so the result is safe to inject.
  */
 export function rich(src: string): string {
-  let s = src
+  // Strip the sentinels from the input first: a wiki edit containing them could otherwise open a
+  // fake tag whose "class" is raw, unescaped wiki text.
+  let s = src.replace(/[\x01-\x03]/g, '')
   s = s.replace(/<!--[\s\S]*?-->/g, '')
   // Keep the inner text of colored spans; their meaning is re-derived at render time.
   s = s.replace(/<span[^>]*>/gi, '').replace(/<\/span>/gi, '')

@@ -1,5 +1,6 @@
-import { getBattleLog } from '@/lib/buckler'
+import { getBattleLog, isShortId } from '@/lib/buckler'
 import type { BucklerBattle } from '@/lib/buckler'
+import { rateLimit } from '@/lib/rate-limit'
 
 type BucklerMode = 'rank' | 'casual' | 'hub' | 'custom' | 'extreme'
 const ALL_MODES: BucklerMode[] = ['rank', 'casual', 'hub', 'custom']
@@ -95,13 +96,25 @@ async function collectAll(
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
+  const limited = rateLimit(req)
+  if (limited) return limited
+
   const id = searchParams.get('id')
   const mode = searchParams.get('mode') ?? 'all'
   const page = Number(searchParams.get('page') ?? '1')
   const char = searchParams.get('char')
   const sid = Number(searchParams.get('sid') ?? '0')
 
-  if (!id) return Response.json({ error: 'id required' }, { status: 400 })
+  // id and mode end up in a Buckler URL path, so both are allowlisted. The `as BucklerMode` casts
+  // below only satisfy TypeScript; this is the runtime check. Buckler serves at most
+  // MAX_BUCKLER_PAGES pages per mode, so a larger page only burns queue time.
+  if (!id || !isShortId(id)) return Response.json({ error: 'valid id required' }, { status: 400 })
+  if (mode !== 'all' && !ALL_MODES.includes(mode as BucklerMode)) {
+    return Response.json({ error: 'invalid mode' }, { status: 400 })
+  }
+  if (!Number.isInteger(page) || page < 1 || page > MAX_BUCKLER_PAGES) {
+    return Response.json({ error: 'invalid page' }, { status: 400 })
+  }
 
   // Character filter: walk Buckler pages and accumulate matches with that character until we have
   // enough to fill the requested page (plus one extra to detect whether a next page exists), or

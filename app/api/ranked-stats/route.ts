@@ -1,3 +1,5 @@
+import { isShortId } from '@/lib/buckler'
+import { rateLimit } from '@/lib/rate-limit'
 import { syncAndGetRankedBattles } from '@/lib/supabase/battles'
 import { getCachedPlayerProfile } from '@/lib/supabase/player-cache'
 import { buildLpCharacters, buildMatchupRows, buildRivals, buildSession, matchupRowsFromMatrix, type CurrentByChar } from '@/lib/supabase/ranked-stats'
@@ -6,9 +8,12 @@ import { buildLpCharacters, buildMatchupRows, buildRivals, buildSession, matchup
 // profile's History and Stats tabs share this one call instead of hitting /api/lp-history (3x)
 // + /api/matchups + /api/session (which walked up to 15 Buckler pages).
 export async function GET(req: Request) {
+  const limited = rateLimit(req)
+  if (limited) return limited
+
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
-  if (!id) return Response.json({ error: 'id required' }, { status: 400 })
+  if (!id || !isShortId(id)) return Response.json({ error: 'valid id required' }, { status: 400 })
 
   // The profile (matchup matrix + current LP/MR per char) is served from the 12h DB cache, so a
   // revisit within the TTL returns the stored snapshot with no Buckler request. The page rendered

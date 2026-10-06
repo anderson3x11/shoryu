@@ -22,15 +22,22 @@ const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (
 const MIN_GAP_MS = 500
 const JITTER_MS = 600
 const REQUEST_TIMEOUT_MS = 20000
+// At ~1 request/s, 40 waiting tasks is already a ~45s wait for whoever is at the back. Past
+// that, fail fast (every caller treats a paced() rejection as "source unavailable") instead of
+// letting a flood of requests pile up without bound and stall the site for every visitor.
+const MAX_PENDING = 40
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
 let requestQueue: Promise<unknown> = Promise.resolve()
 let lastStartedAt = 0
+let pending = 0
 
 // The task gets an AbortSignal: on timeout the underlying fetch is actually cancelled, so the
 // queue never moves on while a dead request is still in flight (which would put two requests on
 // the wire at once, the very thing the serial queue exists to prevent).
 function paced<T>(task: (signal: AbortSignal) => Promise<T>): Promise<T> {
+  if (pending >= MAX_PENDING) return Promise.reject(new Error('buckler queue full'))
+  pending++
   const run = requestQueue.then(async () => {
     const wait = lastStartedAt + MIN_GAP_MS + Math.random() * JITTER_MS - Date.now()
     if (wait > 0) await sleep(wait)
@@ -44,6 +51,7 @@ function paced<T>(task: (signal: AbortSignal) => Promise<T>): Promise<T> {
       throw e
     } finally {
       clearTimeout(timer)
+      pending--
     }
   })
   requestQueue = run.catch(() => {})
@@ -218,7 +226,15 @@ export async function searchPlayers(
   }
 }
 
+// Short IDs are purely numeric. Checked before an ID is ever put in a URL path: a value like
+// "../../x" (or "..%2F", which searchParams decodes) would otherwise be normalized by fetch into
+// an arbitrary Buckler path, requested with our session cookie.
+export function isShortId(shortId: string | number): boolean {
+  return /^\d{1,12}$/.test(String(shortId))
+}
+
 export async function getPlayerProfile(shortId: string | number): Promise<BucklerProfilePage | null> {
+  if (!isShortId(shortId)) return null
   return fetchPageData<BucklerProfilePage>(`profile/${shortId}`, 600)
 }
 
@@ -230,6 +246,7 @@ export type PlayerProfileResult =
 // Like getPlayerProfile but tells "Buckler/our session is down" apart from "no such player",
 // so the page can render a retry-later fallback instead of a 404 when the cookie dies.
 export async function getPlayerProfileResult(shortId: string | number): Promise<PlayerProfileResult> {
+  if (!isShortId(shortId)) return { status: 'notfound' }
   try {
     const profile = await fetchPageDataOrThrow<BucklerProfilePage>(`profile/${shortId}`, 600)
     if (!profile?.fighter_banner_info) return { status: 'notfound' }
@@ -405,6 +422,7 @@ export async function getBattleLog(
   page = 1,
   mode: 'rank' | 'casual' | 'hub' | 'custom' | 'extreme' = 'rank'
 ): Promise<BucklerBattleLogPage | null> {
+  if (!isShortId(shortId)) return null
   return fetchPageData<BucklerBattleLogPage>(
     `profile/${shortId}/battlelog/${mode}?page=${page}`,
     300

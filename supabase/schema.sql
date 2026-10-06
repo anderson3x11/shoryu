@@ -98,3 +98,17 @@ drop table if exists player_peak;
 -- Snapshot retention: the *_snapshot tables gain one row per 12h cron run but the pages read only
 -- the newest, so /api/cron/sync now calls pruneSnapshots() to keep just the latest 3 rows each
 -- (see lib/supabase/snapshots.ts). One-time backfill of the historical bloat was done via the API.
+
+-- ---------------------------------------------------------------------------
+-- Row Level Security (2026-09, security review). The app only talks to the DB with the
+-- service role key, server-side, which bypasses RLS. Enabling RLS with no policies means the
+-- anon/authenticated roles (the public anon key) can read and write nothing, so the tables stay
+-- closed even if that key is ever exposed.
+-- ---------------------------------------------------------------------------
+alter table players          enable row level security;
+alter table battles          enable row level security;
+alter table legend_snapshot  enable row level security;
+alter table pro_snapshot     enable row level security;
+alter table ranking_snapshot enable row level security;
+alter table usage_snapshot   enable row level security;
+alter table player_profiles  enable row level security;

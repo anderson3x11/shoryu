@@ -12,12 +12,11 @@ export const maxDuration = 300
 // Supabase. The /pros, /ranking and /stats pages then read the DB and never touch Buckler.
 // All Buckler calls go through the pacing queue in lib/buckler/client.ts.
 export async function GET(request: Request) {
+  // Fail closed: if CRON_SECRET is missing from the environment, refuse instead of letting anyone
+  // trigger a full sync (25+ Buckler requests on our session).
   const cronSecret = process.env.CRON_SECRET
-  if (cronSecret) {
-    const auth = request.headers.get('authorization')
-    if (auth !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+  if (!cronSecret || request.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const result: Record<string, unknown> = {}

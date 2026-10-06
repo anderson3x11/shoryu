@@ -24,16 +24,24 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # Actions are pinned to a commit SHA, not a tag: this job can push to main (which deploys),
+      # and a tag can be moved to point at different code.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
+          cache: npm
+
+      # tsx comes from the lockfile (npm ci), not `npx -y`, which would run whatever version
+      # is latest on npm at that moment with write access to the repo.
+      - name: Install dependencies
+        run: npm ci
 
       # The script exits non-zero (without writing) if the fetch/parse fails, so
       # a bad run never commits an empty snapshot.
       - name: Regenerate snapshot
-        run: npx -y tsx scripts/refresh-tournaments.ts
+        run: npx tsx scripts/refresh-tournaments.ts
 
       - name: Commit if changed
         run: |
