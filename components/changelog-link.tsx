@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useHref } from '@/lib/i18n/context'
 import { useEffect, useState } from 'react'
 import { CHANGELOG } from '@/lib/data/changelog'
 
@@ -8,6 +9,7 @@ const STORAGE_KEY = 'changelog_seen'
 const LATEST = CHANGELOG[0]?.date ?? ''
 
 export function ChangelogLink() {
+  const href = useHref()
   const [dot, setDot] = useState(false)
 
   useEffect(() => {
@@ -16,7 +18,7 @@ export function ChangelogLink() {
   }, [])
 
   return (
-    <Link href="/changelog" prefetch={false} className="relative text-xs text-zinc-400 hover:text-zinc-300 transition-colors">
+    <Link href={href('/changelog')} prefetch={false} className="relative text-xs text-zinc-400 hover:text-zinc-300 transition-colors">
       Changelog
       {dot && (
         <span className="absolute -top-0.5 -right-2 w-1.5 h-1.5 rounded-full bg-red-500" />

@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { CHARACTERS, getCharacterImageUrl } from '@/lib/constants/characters'
+import { DEFAULT_LOCALE, localeHref, type Locale } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
 
 const CLIP = 'polygon(0% 0%, 84% 0%, 100% 16%, 100% 100%, 16% 100%, 0% 84%)'
 
@@ -26,13 +28,14 @@ function Tile({ href, src, alt, color, contain }: { href: string; src: string; a
   )
 }
 
-export function CharacterGrid() {
+export function CharacterGrid({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const href = (path: string) => localeHref(locale, path)
   return (
     <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-13 gap-2">
       {CHARACTERS.filter((c) => !c.comingSoon && !c.hidden).map((char) => (
-        <Tile key={char.id} href={`/character/${char.id}`} src={getCharacterImageUrl(char.slug)} alt={char.name} color={char.color} />
+        <Tile key={char.id} href={href(`/character/${char.id}`)} src={getCharacterImageUrl(char.slug)} alt={char.name} color={char.color} />
       ))}
-      <Tile href="/guides" src={getCharacterImageUrl('guides')} alt="Guides" color="#fbbf24" contain />
+      <Tile href={href('/guides')} src={getCharacterImageUrl('guides')} alt={getDict(locale).meta.guides.title} color="#fbbf24" contain />
     </div>
   )
 }

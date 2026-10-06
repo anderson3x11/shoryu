@@ -1,12 +1,14 @@
 import Link from 'next/link'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
 import { BookOpen, Swords, Info, Dumbbell, Users, ArrowRight } from 'lucide-react'
 import { LinkCard } from '@/components/link-card'
 import { SectionHeader } from '@/components/section-header'
 import { VideoCard } from '@/components/video-card'
 
-export const metadata = {
-  title: 'Guides - Shoryu',
-  description: 'Street Fighter 6 guides, frame data, mechanics, and learning resources.',
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  return { ...getDict(isLocale(locale) ? locale : DEFAULT_LOCALE).meta.guides }
 }
 
 const START_HERE = [

@@ -1,13 +1,15 @@
 import { getUsageSnapshot } from '@/lib/supabase/snapshots'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
 import { getLatestLegendSnapshot } from '@/lib/supabase/legend'
 import { StatsClient } from './stats-client'
 import { LegendSnapshotChart } from '@/components/legend-snapshot-chart'
 
 export const revalidate = 3600
 
-export const metadata = {
-  title: 'Stats',
-  description: 'Street Fighter 6 character usage rates across all rank tiers.',
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  return { ...getDict(isLocale(locale) ? locale : DEFAULT_LOCALE).meta.stats }
 }
 
 export default async function StatsPage() {

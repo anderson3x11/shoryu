@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
 import Image from 'next/image'
 import { unstable_cache } from 'next/cache'
 import { getRankingSnapshot } from '@/lib/supabase/snapshots'
@@ -18,9 +20,9 @@ const cachedRanking = unstable_cache(getRankingSnapshot, ['ranking-snapshot'], {
   revalidate: 300,
 })
 
-export const metadata = {
-  title: 'Master Ranking',
-  description: 'Top Street Fighter 6 players ranked by Master Rating. Live global leaderboard.',
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  return { ...getDict(isLocale(locale) ? locale : DEFAULT_LOCALE).meta.ranking }
 }
 
 function RankingCard({ entry }: { entry: BucklerRankingEntry }) {

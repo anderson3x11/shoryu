@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useMemo, useEffect } from 'react'
 import { Play } from 'lucide-react'
+import { useT } from '@/lib/i18n/context'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -33,6 +34,7 @@ const MODES: { id: Mode; label: string }[] = [
 ]
 
 function ReplayIdCopy({ replayId }: { replayId: string }) {
+  const t = useT()
   const [copied, setCopied] = useState(false)
   return (
     <div className="flex items-center gap-1.5 mt-0.5">
@@ -46,21 +48,21 @@ function ReplayIdCopy({ replayId }: { replayId: string }) {
             setTimeout(() => setCopied(false), 1200)
           } catch {}
         }}
-        title={copied ? 'Copied!' : 'Click to copy'}
+        title={copied ? t.player.copied : t.player.copyId}
         className={cn(
           'text-[10px] sm:text-xs font-mono tabular-nums tracking-wider cursor-pointer transition-colors',
           copied ? 'text-emerald-400' : 'text-zinc-300 hover:text-zinc-300',
         )}
       >
-        {copied ? 'COPIED' : replayId}
+        {copied ? t.player.copied : replayId}
       </button>
       {/* SF6 Stats hosts the replay viewer, keyed by the same Buckler replay id. */}
       <a
         href={`https://sfstats.app/replays/${replayId}`}
         target="_blank"
         rel="noopener noreferrer"
-        title="Watch replay on SF6 Stats"
-        aria-label={`Watch replay ${replayId} on SF6 Stats`}
+        title={t.player.watchReplay}
+        aria-label={`${t.player.watchReplay} (${replayId})`}
         className="text-zinc-500 hover:text-amber-400 transition-colors"
       >
         <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
