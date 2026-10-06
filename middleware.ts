@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
 
 export function middleware(request: NextRequest) {
   // Canonicalize www.shoryu.site -> shoryu.site (Google was indexing both as duplicates)
@@ -14,8 +15,31 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 308)
   }
 
-  if (!request.nextUrl.pathname.startsWith('/player/')) {
-    return NextResponse.next()
+  const { pathname } = request.nextUrl
+  const first = pathname.split('/')[1] ?? ''
+
+  // Routes live under app/[locale]. English is unprefixed in the URL, so /ranking is rewritten to
+  // the internal /en/ranking — a rewrite, not a redirect, which keeps one cache entry per locale
+  // path. /en/... is a duplicate of the bare path, so it redirects to it.
+  if (first === DEFAULT_LOCALE) {
+    const url = request.nextUrl.clone()
+    url.pathname = pathname.slice(DEFAULT_LOCALE.length + 1) || '/'
+    return NextResponse.redirect(url, 308)
+  }
+  const locale = isLocale(first) ? first : DEFAULT_LOCALE
+  // The path as the app sees it, locale segment removed, for the checks below.
+  const bare = isLocale(first) ? pathname.slice(first.length + 1) || '/' : pathname
+  const rewrite = () => {
+    if (locale !== DEFAULT_LOCALE) return NextResponse.next()
+    const url = request.nextUrl.clone()
+    url.pathname = `/${DEFAULT_LOCALE}${pathname === '/' ? '' : pathname}`
+    return NextResponse.rewrite(url)
+  }
+
+  if (pathname.startsWith('/api/')) return NextResponse.next()
+
+  if (!bare.startsWith('/player/')) {
+    return rewrite()
   }
 
   // Next.js internal requests (RSC navigation, prefetch)
@@ -23,7 +47,7 @@ export function middleware(request: NextRequest) {
     request.headers.get('rsc') === '1' ||
     request.headers.get('next-router-prefetch') === '1'
   ) {
-    return NextResponse.next()
+    return rewrite()
   }
 
   // Block bot that passes player ID as nxtPid query param
@@ -47,7 +71,7 @@ export function middleware(request: NextRequest) {
     return new NextResponse(null, { status: 403 })
   }
 
-  return NextResponse.next()
+  return rewrite()
 }
 
 // Broad enough to catch every page for the www redirect, but skips anything with a file
