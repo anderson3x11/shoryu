@@ -67,3 +67,43 @@ export async function getProfileFetchedAt(playerId: number): Promise<number | nu
   const cached = await readCached(playerId)
   return cached?.fetchedAt ?? null
 }
+
+// Retention for the profile cache. A stored copy older than TTL_MS is refetched on the next visit
+// anyway, so past that point it only serves as the fallback for when Buckler is unreachable,
+// and that is not worth keeping for players nobody has looked at in a month. Returns how many rows went.
+const RETENTION_DAYS = 30
+
+// Deleted in batches: one DELETE over every expired row runs past the database's statement
+// timeout once a backlog has built up, and the whole prune then fails instead of making progress.
+const PRUNE_BATCH = 200
+const PRUNE_MAX_BATCHES = 50
+
+export async function prunePlayerProfiles(days = RETENTION_DAYS): Promise<number> {
+  const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
+  let removed = 0
+
+  for (let batch = 0; batch < PRUNE_MAX_BATCHES; batch++) {
+    const { data: stale, error: readErr } = await supabase
+      .from('player_profiles')
+      .select('player_id')
+      .lt('fetched_at', cutoff)
+      .limit(PRUNE_BATCH)
+    if (readErr) {
+      console.error('[sync] prune player_profiles read error:', readErr)
+      break
+    }
+    if (!stale?.length) break
+
+    const { error: delErr } = await supabase
+      .from('player_profiles')
+      .delete()
+      .in('player_id', stale.map((r) => r.player_id))
+    if (delErr) {
+      console.error('[sync] prune player_profiles delete error:', delErr)
+      break
+    }
+    removed += stale.length
+  }
+
+  return removed
+}
