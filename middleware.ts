@@ -19,8 +19,8 @@ export function middleware(request: NextRequest) {
   const first = pathname.split('/')[1] ?? ''
 
   // Routes live under app/[locale]. English is unprefixed in the URL, so /ranking is rewritten to
-  // the internal /en/ranking — a rewrite, not a redirect, which keeps one cache entry per locale
-  // path. /en/... is a duplicate of the bare path, so it redirects to it.
+  // the internal /en/ranking (a rewrite, not a redirect, which keeps one cache entry per locale
+  // path). /en/... is a duplicate of the bare path, so it redirects to it.
   if (first === DEFAULT_LOCALE) {
     const url = request.nextUrl.clone()
     url.pathname = pathname.slice(DEFAULT_LOCALE.length + 1) || '/'

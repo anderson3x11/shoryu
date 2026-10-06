@@ -1,6 +1,6 @@
 import type { Locale } from './locales'
 
-// UI strings only. Character reference data (wiki prose, combos, patch notes) stays English —
+// UI strings only. Character reference data (wiki prose, combos, patch notes) stays English:
 // it is a scraped snapshot, regenerated after every balance patch.
 // Keep the shape flat-ish and the keys grouped by where they appear.
 export const DICT = {
