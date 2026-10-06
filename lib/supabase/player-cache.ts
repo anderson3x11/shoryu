@@ -49,7 +49,9 @@ export async function getCachedPlayerProfile(
   }
   // Buckler unreachable (e.g. dead cookie) but we have a stored copy → serve it stale rather
   // than an error screen. A positive "notfound" still falls through unchanged.
-  if (live.status === 'unavailable' && cached) {
+  // Not on `force`: a manual refresh that silently returned the same stored copy looked like a
+  // successful refresh that changed nothing, so the caller needs the failure.
+  if (live.status === 'unavailable' && cached && !force) {
     return { status: 'ok', profile: cached.profile }
   }
   return live
