@@ -52,10 +52,24 @@
         "url": "https://liquipedia.net/fighters/Evolution_Championship_Series/2026/France/SF6",
         "iconUrl": "/liquipedia/ad5a156ff01d1fc0.png",
         "date": "Oct 9 - 11, 2026",
-        "prizePool": "$56,230.95",
+        "prizePool": "$56,022.16",
         "location": "Nice",
-        "winner": null,
-        "runnerUp": null
+        "winner": {
+          "name": "Dual Kevin",
+          "url": "https://liquipedia.net/fighters/Dual_Kevin",
+          "flagUrl": "/liquipedia/4c74097c6a1a38bc.png",
+          "flagAlt": "United States",
+          "charUrl": "/liquipedia/b0b1247e61b9b7e2.png",
+          "charAlt": "Rashid"
+        },
+        "runnerUp": {
+          "name": "Tachikawa",
+          "url": "https://liquipedia.net/fighters/Tachikawa",
+          "flagUrl": "/liquipedia/c7ac4dbc00afbbc6.png",
+          "flagAlt": "Japan",
+          "charUrl": "/liquipedia/53656ebe9259a5cb.png",
+          "charAlt": "C. Viper"
+        }
       },
       {
         "name": "Ultimate Fighting Arena 2026",
