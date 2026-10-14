@@ -5,6 +5,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-10-14",
+    items: [
+      "Arjun is in: he shows up on the character grid, in stats and matchups, and has his own page",
+      "Arjun added to Streetdle's roster",
+    ],
+  },
+  {
     date: "2026-08-05",
     items: [
       "Yasmine is in: she shows up on the character grid, in stats and matchups, and has her own page",

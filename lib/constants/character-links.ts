@@ -1983,5 +1983,27 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
     ufd: UFD + "yasmine",
     playlist: YT + "PLecRLEq2-W_s",
     discords: ["https://discord.gg/99HNYysXvY"],
+    techs: {
+      guides: [
+        { title: "Character Guide", url: "https://www.youtube.com/watch?v=M7NfqAcU7KI" },
+        { title: "5 Things You Must Know", url: "https://www.youtube.com/watch?v=86bgUK15N_A" },
+      ],
+      combos: [
+        { title: "Basic Combos", url: "https://www.youtube.com/watch?v=FAtWrTLC-Vg" },
+        { title: "Combo Guide", url: "https://www.youtube.com/watch?v=bEdrtNphESc" },
+        { title: "Combos", url: "https://www.youtube.com/watch?v=w_7mBxUrdOc" },
+        { title: "Corner-to-Corner in 2 Combos", url: "https://www.youtube.com/watch?v=awm6XDrlpt8" },
+        { title: "5 Frisbees in 1 Combo", url: "https://www.youtube.com/watch?v=CSaDhLuSGXo" },
+      ],
+      oki: [
+        { title: "Meaties, Safe Jumps and Resets", url: "https://www.youtube.com/watch?v=yhcYsDlxqHg" },
+        { title: "Beginner Knockdowns and Oki", url: "https://www.youtube.com/watch?v=hXUC9MVbCWI" },
+      ],
+    },
+  },
+
+  arjun: {
+    supercombo: SC + "Arjun",
+    playlist: YT + "PLC0cDmvvtay4",
   },
 };
