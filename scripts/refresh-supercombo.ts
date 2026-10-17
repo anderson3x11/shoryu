@@ -143,6 +143,8 @@ async function scrapeCharacter(
   const moves = rows
     .map((row) => parseMove(row, (f) => images.get(f)))
     .filter((m): m is Move => m !== null)
+    // The wiki occasionally stores the same row twice (Arjun's 2HK at release); ids must be unique.
+    .filter((m, i, all) => all.findIndex((o) => o.id === m.id) === i)
 
   return {
     chara,
