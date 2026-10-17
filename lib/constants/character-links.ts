@@ -53,12 +53,14 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Burnout Pressure",
           url: "https://www.youtube.com/watch?v=MULDXBqT9Bw",
         },
+        { title: "Neutral", url: "https://www.youtube.com/watch?v=FpsASI8w5EA&t=121s" },
       ],
       matchup: [
         {
           title: "Anti Ryu",
           url: "https://www.youtube.com/watch?v=aPVrSlCro80",
         },
+        { title: "Matchups", url: "https://www.youtube.com/watch?v=FpsASI8w5EA&t=2973s" },
       ],
       combos: [
         { title: "Combos", url: "https://www.youtube.com/watch?v=XT3XXT5KBMA" },
@@ -74,6 +76,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Stun Combos",
           url: "https://www.youtube.com/watch?v=AJ7Q528_ksE",
         },
+        { title: "Ryu Beginner Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=fytVhC0VD9A" },
       ],
       pressure: [
         {
@@ -157,6 +160,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Stun Combo",
           url: "https://www.youtube.com/watch?v=3lS3IVSMrlg",
         },
+        { title: "LUKE Beginner Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=U-8O4Cg0Qcs" },
+        { title: "Combos", url: "https://www.youtube.com/watch?v=twvm0JDMVOM&t=273s" },
       ],
       pressure: [
         {
@@ -177,9 +182,13 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Oki & Meaty",
           url: "https://www.youtube.com/watch?v=j-CnkfsCq4I",
         },
+        { title: "Safe Jumps", url: "https://www.youtube.com/watch?v=J91nVq0bdkM&t=165s" },
+        { title: "Side Switch", url: "https://www.youtube.com/watch?v=J91nVq0bdkM&t=198s" },
       ],
       techs: [
         { title: "Techs", url: "https://www.youtube.com/watch?v=J91nVq0bdkM" },
+        { title: "Current Patch Luke: Essential Changes & Routes", url: "https://www.youtube.com/watch?v=d3gRKwlCe3s" },
+        { title: "Spacing Traps", url: "https://www.youtube.com/watch?v=kjaHOSlos1s&t=1141s" },
       ],
     },
     players: [
@@ -371,6 +380,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Command Grab Oki",
           url: "https://www.youtube.com/watch?v=jdZi6c5fAtg",
         },
+        { title: "Sideswitch", url: "https://www.youtube.com/watch?v=QbjjX3FoXcI&t=426s" },
+        { title: "Safe Jumps", url: "https://www.youtube.com/watch?v=QbjjX3FoXcI&t=392s" },
       ],
       techs: [
         { title: "Techs", url: "https://www.youtube.com/watch?v=QbjjX3FoXcI" },
@@ -402,6 +413,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Stun Combos",
           url: "https://www.youtube.com/watch?v=w4fnC-87EvU",
         },
+        { title: "Drive Impact Combos", url: "https://www.youtube.com/watch?v=zROn7wmg984&t=85s" },
       ],
       pressure: [
         {
@@ -484,6 +496,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Stun Combos",
           url: "https://www.youtube.com/watch?v=hJQ2Im1F0aM",
         },
+        { title: "Combos", url: "https://www.youtube.com/watch?v=0mfvoTEXHxI&t=117s" },
       ],
       oki: [
         {
@@ -517,6 +530,9 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Amnesia Followups",
           url: "https://www.youtube.com/watch?v=x5FrEpiVY2c&t=554s",
         },
+      ],
+      pressure: [
+        { title: "Pressure & Setups", url: "https://www.youtube.com/watch?v=0mfvoTEXHxI&t=502s" },
       ],
     },
     players: [
@@ -565,6 +581,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Trade Combos",
           url: "https://www.youtube.com/watch?v=DwUmW16Tk34",
         },
+        { title: "Classic DHALSIM Combos & Setup Guide the March Update", url: "https://www.youtube.com/watch?v=_daztuhiZiA" },
       ],
       pressure: [
         {
@@ -617,6 +634,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Drive Impact Combos",
           url: "https://www.youtube.com/watch?v=7gMjNlWK6xw",
         },
+        { title: "CAMMY Beginner Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=B6ceWgQ2t3Q" },
+        { title: "Classic CAMMY Combos & Setup Guide IN-DEPTH", url: "https://www.youtube.com/watch?v=XIZbb7en5RQ" },
       ],
       pressure: [
         {
@@ -670,6 +689,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Trade Combos",
           url: "https://www.youtube.com/watch?v=3Ijtwzy0n_4",
         },
+        { title: "KEN Beginner Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=nHdQV0i1OrY" },
+        { title: "Classic KEN Combos & Setup Guide the March Update", url: "https://www.youtube.com/watch?v=As_1k7XKPhc" },
       ],
       pressure: [
         {
@@ -714,6 +735,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Drive Impact Reset",
           url: "https://www.youtube.com/watch?v=WXOUN0osZ3c&t=137s",
         },
+        { title: "Dee Jay Fundamentals Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=9A4QXgyMY68" },
       ],
       pressure: [
         {
@@ -766,6 +788,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Stun Combo",
           url: "https://www.youtube.com/watch?v=KBgAm72tHsY",
         },
+        { title: "Classic Lily Combos & Setup Guide the March Update", url: "https://www.youtube.com/watch?v=vkfzS1OOP4w" },
       ],
       pressure: [
         {
@@ -828,6 +851,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Stun Combos",
           url: "https://www.youtube.com/watch?v=2kBkizvG7eM&t=5251s",
         },
+        { title: "Classic A.K.I. Combos & Setup Guide the March Update", url: "https://www.youtube.com/watch?v=L0CwNWqhc8o" },
+        { title: "Combos", url: "https://www.youtube.com/watch?v=2kBkizvG7eM&t=2398s" },
       ],
       pressure: [
         {
@@ -859,6 +884,9 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Poison",
           url: "https://www.youtube.com/watch?v=2kBkizvG7eM&t=497s",
         },
+      ],
+      matchup: [
+        { title: "Matchups", url: "https://www.youtube.com/watch?v=2kBkizvG7eM&t=6820s" },
       ],
     },
     players: [
@@ -1282,6 +1310,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Shin Dream Combo",
           url: "https://www.youtube.com/watch?v=7kvVB-L4yO4",
         },
+        { title: "ED Beginner Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=NoH1BViQnRU" },
       ],
       pressure: [
         {
@@ -1328,6 +1357,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
       ],
       combos: [
         { title: "Combos", url: "https://www.youtube.com/watch?v=-lRaQevWaaw" },
+        { title: "Classic HONDA Combos & Setup Guide POST-PATCH", url: "https://www.youtube.com/watch?v=-fyURA3Ha94" },
       ],
       pressure: [
         {
@@ -1350,6 +1380,9 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           url: "https://www.youtube.com/watch?v=ndlUNJj6gMI&t=66s",
         },
       ],
+      techs: [
+        { title: "Frametraps", url: "https://www.youtube.com/watch?v=ZI5sAd5RyOw&t=965s" },
+      ],
     },
   },
 
@@ -1371,6 +1404,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Level 3 Combos",
           url: "https://www.youtube.com/watch?v=fNwyfVvwpzg",
         },
+        { title: "Jamie Beginner Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=Kq_YvCiCgWM" },
       ],
       pressure: [
         {
@@ -1439,6 +1473,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Anti Air Combos",
           url: "https://www.youtube.com/watch?v=s_y0rXm0Jg0",
         },
+        { title: "AKUMA Beginner Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=YxtKvL-r9-4" },
       ],
       pressure: [
         {
@@ -1501,6 +1536,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Drive Impact Combos",
           url: "https://www.youtube.com/watch?v=zNoEkB5Ql9I&t=647s",
         },
+        { title: "M. Bison Fundamentals Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=6QZiyemClRE" },
       ],
       pressure: [
         {
@@ -1564,6 +1600,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "All-In Combo",
           url: "https://www.youtube.com/watch?v=IKOHchEIYJ4",
         },
+        { title: "TERRY Fundamentals Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=740x8d6Lpew" },
       ],
       pressure: [
         {
@@ -1635,6 +1672,8 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Stun Combos (With Stocks)",
           url: "https://www.youtube.com/watch?v=SVP-nHrKix4",
         },
+        { title: "MAI Beginner Guide: The ONLY Combos & Setups You Need", url: "https://www.youtube.com/watch?v=-P3Io7JQT7M" },
+        { title: "Classic MAI Combos & Setup Guide IN-DEPTH", url: "https://www.youtube.com/watch?v=d6A3gZaLKm8" },
       ],
       pressure: [
         {
@@ -1779,6 +1818,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Corner-to-Corner Combo",
           url: "https://www.youtube.com/watch?v=Rs4S3OLp1gQ&t=286s",
         },
+        { title: "Classic SAGAT Combos & Setup Guide the March Update", url: "https://www.youtube.com/watch?v=KCw6T5PlLCE" },
       ],
       pressure: [
         {
@@ -1890,6 +1930,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Drive Impact Setups",
           url: "https://www.youtube.com/watch?v=3IChPAE-emM",
         },
+        { title: "Safe Jumps 2", url: "https://www.youtube.com/watch?v=Rz1jz8jmLWM&t=199s" },
       ],
     },
     players: [
@@ -1907,6 +1948,14 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
     techs: {
       guides: [
         { title: "Guide", url: "https://www.youtube.com/watch?v=L4OjcgYa7-o" },
+        { title: "5 Things You MUST KNOW About ALEX", url: "https://www.youtube.com/watch?v=TFRb43znmQ0" },
+        { title: "Alex Character Guide", url: "https://www.youtube.com/watch?v=e-xXJ-uzIHI" },
+        { title: "So You Want to Learn Alex... | Road to Master", url: "https://www.youtube.com/watch?v=DKSSlT136cg" },
+        { title: "Modern Alex Character Guide!", url: "https://www.youtube.com/watch?v=9f3oMPBgj9Q" },
+        { title: "How To Play Modern Alex!", url: "https://www.youtube.com/watch?v=avfZ1dmvvtA" },
+        { title: "Modern Alex Move List", url: "https://www.youtube.com/watch?v=R8ecfhqpvBg" },
+        { title: "Specials", url: "https://www.youtube.com/watch?v=R8ecfhqpvBg&t=21s" },
+        { title: "Special Moves", url: "https://www.youtube.com/watch?v=MRHG-bBmKrk&t=56s" },
       ],
       combos: [
         { title: "Combos", url: "https://www.youtube.com/watch?v=KOBn4nUUVKU" },
@@ -1914,6 +1963,17 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Combos & Oki",
           url: "https://www.youtube.com/watch?v=GEWPCeTQQ-A",
         },
+        { title: "Alex Combos Guide", url: "https://www.youtube.com/watch?v=od0MTsrnIpc" },
+        { title: "Alex Combos and Conversions", url: "https://www.youtube.com/watch?v=jlVtI3ybXSY" },
+        { title: "Classic Alex Day 1 Guide: Essential Combos & Setups", url: "https://www.youtube.com/watch?v=E9wpJlohku8" },
+        { title: "Classic Alex Complete Guide: Updated Combos & Setups", url: "https://www.youtube.com/watch?v=8p5NCSvXjbM" },
+        { title: "Combo Trial Beginner", url: "https://www.youtube.com/watch?v=MRHG-bBmKrk" },
+        { title: "Drive Rush Combos", url: "https://www.youtube.com/watch?v=od0MTsrnIpc&t=128s" },
+        { title: "Punish combos and big combos", url: "https://www.youtube.com/watch?v=od0MTsrnIpc&t=211s" },
+        { title: "Punish Counter", url: "https://www.youtube.com/watch?v=jlVtI3ybXSY&t=190s" },
+        { title: "Drive Impact Conversions", url: "https://www.youtube.com/watch?v=jlVtI3ybXSY&t=142s" },
+        { title: "Auto Combos", url: "https://www.youtube.com/watch?v=R8ecfhqpvBg&t=401s" },
+        { title: "Assisted Combos", url: "https://www.youtube.com/watch?v=MRHG-bBmKrk&t=162s" },
       ],
       oki: [
         { title: "Setups", url: "https://www.youtube.com/watch?v=lVKZEkZTgXc" },
@@ -1933,6 +1993,15 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
           title: "Resets",
           url: "https://www.youtube.com/watch?v=Nrp5SLzTKAw&t=488s",
         },
+        { title: "Knockdowns and Oki", url: "https://www.youtube.com/watch?v=qT2mhqxQjyc" },
+        { title: "Alex NEW safe jump setup bait reversal", url: "https://www.youtube.com/watch?v=JvJJCH1PRxY" },
+        { title: "Alex day1 safe jump setup", url: "https://www.youtube.com/watch?v=mXduz9G1cok" },
+      ],
+      techs: [
+        { title: "Counter Hit Confirms", url: "https://www.youtube.com/watch?v=od0MTsrnIpc&t=96s" },
+        { title: "Prowler Stance", url: "https://www.youtube.com/watch?v=R8ecfhqpvBg&t=156s" },
+        { title: "Super Arts", url: "https://www.youtube.com/watch?v=MRHG-bBmKrk&t=83s" },
+        { title: "Unique Attacks", url: "https://www.youtube.com/watch?v=MRHG-bBmKrk&t=105s" },
       ],
     },
     players: [
@@ -1955,6 +2024,15 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
         { title: "Ingrid Guide", url: "https://www.youtube.com/watch?v=CemqJ5giO88" },
         { title: "So you wanna learn Ingrid", url: "https://www.youtube.com/watch?v=mUzxSpeXXZY" },
         { title: "BrianF mastering Ingrid", url: "https://www.youtube.com/watch?v=k4Inl5ZTlIQ"},
+        { title: "Ingrid Strategy Guide", url: "https://www.youtube.com/watch?v=n4rawE-AhvU" },
+        { title: "Ingrid Win Rate Guide", url: "https://www.youtube.com/watch?v=QgLt2YbXq-4" },
+        { title: "Ingrid 20 Minute Course", url: "https://www.youtube.com/watch?v=tsSoOs43Ygk" },
+        { title: "Ingrid Move Breakdown", url: "https://www.youtube.com/watch?v=ZyzkGKWl460" },
+        { title: "Ingrid In-Depth Guide", url: "https://www.youtube.com/watch?v=GVLz07PL0tM" },
+        { title: "How To Play Modern Ingrid", url: "https://www.youtube.com/watch?v=rufuVsbQyco" },
+        { title: "Modern Ingrid Beginner Guide", url: "https://www.youtube.com/watch?v=-Zn8M2iwsQc" },
+        { title: "Modern Ingrid Simple Guide", url: "https://www.youtube.com/watch?v=G_MsSVV0slE" },
+        { title: "Modern Ingrid Strengths", url: "https://www.youtube.com/watch?v=jgZotjS-RV0" },
       ],
       matchup: [
         { title: "Anti Ingrid Guide", url: "https://www.youtube.com/watch?v=6kOWXT6fol0" },
@@ -1964,14 +2042,27 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
         { title: "Combos", url: "https://www.youtube.com/watch?v=nQ6tcRElnfA" },
         { title: "Combos and setups", url: "https://www.youtube.com/watch?v=QmUwizYjJNc" },
         { title: "Combos and conversions", url: "https://www.youtube.com/watch?v=oracUZ7upAE" },
+        { title: "Ingrid Basic Combos", url: "https://www.youtube.com/watch?v=Fb566Gy3YcU" },
+        { title: "Ingrid Combos Guide", url: "https://www.youtube.com/watch?v=1kFHnxOx36A" },
+        { title: "Ingrid 18 Best Combos and Set Plays", url: "https://www.youtube.com/watch?v=9OFgdvcPH3Q" },
+        { title: "Ingrid Practical Combo Routes", url: "https://www.youtube.com/watch?v=Q_S3VdqXTLE" },
+        { title: "Ingrid Neutral and Essential Combos", url: "https://www.youtube.com/watch?v=lJKr8s3TII0" },
+        { title: "Ingrid Basic Combo Guide", url: "https://www.youtube.com/watch?v=77lhfsINM58" },
+        { title: "Ingrid High-Damage Combos and Setplay", url: "https://www.youtube.com/watch?v=iLaCyU3y2UE" },
+        { title: "Ingrid Master Rank Combo Guide", url: "https://www.youtube.com/watch?v=5Iz4wCiCpPM" },
+        { title: "Classic INGRID Combos & Setup Guide DAY1", url: "https://www.youtube.com/watch?v=-4PaFZp7KI4" },
+        { title: "Modern Ingrid Combos", url: "https://www.youtube.com/watch?v=sldwHIb9DYo" },
       ],
       oki: [
         { title: "Safejump Shimmy setup", url: "https://www.youtube.com/watch?v=zx9p4cTrKh8" },
         { title: "Knockdown and Oki", url: "https://www.youtube.com/watch?v=Wey8M4nfeI4" },
+        { title: "Ingrid SA2 Setplay Guide", url: "https://www.youtube.com/watch?v=oXaCC6Pj3ZE" },
+        { title: "Ingrid Torikore Guide", url: "https://www.youtube.com/watch?v=dzV986Pekx0" },
       ],
       techs: [
         { title: "Ingrid tech", url: "https://www.youtube.com/watch?v=n3SRVhCrvno" },
         { title: "Ingrid SA 2 tech", url: "https://www.youtube.com/watch?v=t_6usBZZM9A"},
+        { title: "How To Teleport With Modern Ingrid", url: "https://www.youtube.com/watch?v=m599u1MqhEg" },
       ]
     },
     players: [
@@ -1987,6 +2078,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
       guides: [
         { title: "Character Guide", url: "https://www.youtube.com/watch?v=M7NfqAcU7KI" },
         { title: "5 Things You Must Know", url: "https://www.youtube.com/watch?v=86bgUK15N_A" },
+        { title: "Modern Yasmine Beginner Guide", url: "https://www.youtube.com/watch?v=Jv0JtzaukAU" },
       ],
       combos: [
         { title: "Basic Combos", url: "https://www.youtube.com/watch?v=FAtWrTLC-Vg" },
@@ -1994,6 +2086,7 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
         { title: "Combos", url: "https://www.youtube.com/watch?v=w_7mBxUrdOc" },
         { title: "Corner-to-Corner in 2 Combos", url: "https://www.youtube.com/watch?v=awm6XDrlpt8" },
         { title: "5 Frisbees in 1 Combo", url: "https://www.youtube.com/watch?v=CSaDhLuSGXo" },
+        { title: "Joe Ebios - Classic Yasmine Day-One Combos and Setups", url: "https://www.youtube.com/watch?v=2oprUYMR4Rk" },
       ],
       oki: [
         { title: "Meaties, Safe Jumps and Resets", url: "https://www.youtube.com/watch?v=yhcYsDlxqHg" },
@@ -2005,5 +2098,10 @@ export const CHARACTER_LINKS: Record<string, CharacterLinks> = {
   arjun: {
     supercombo: SC + "Arjun",
     playlist: YT + "PLC0cDmvvtay4",
+    techs: {
+      guides: [
+        { title: "Street Fighter - Character Guide: Arjun", url: "https://www.youtube.com/watch?v=6l9RFvk3fec" },
+      ],
+    },
   },
 };
