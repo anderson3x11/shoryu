@@ -165,7 +165,7 @@ async function fetchData<T>(
         'Accept-Language': 'en-US,en;q=0.9',
         Cookie: cookie,
       },
-      next: { revalidate },
+      next: { revalidate, tags: playerTags(path) },
       signal,
     }))
   } catch (e) {
@@ -199,6 +199,15 @@ async function fetchData<T>(
     throw new BucklerUnavailableError('No pageProps (session likely expired)')
   }
   return (json as { pageProps: T }).pageProps
+}
+
+// Every profile/ID and profile/ID/battlelog/... fetch carries the player's tag, so the manual
+// refresh can drop them from Next's data cache. Without it a "forced" refresh was served the
+// cached Buckler response (up to 10 min old) and stored that as fresh.
+export const playerTag = (shortId: string | number) => `buckler-player-${shortId}`
+function playerTags(path: string): string[] | undefined {
+  const id = path.match(/^profile\/(\d+)/)?.[1]
+  return id ? [playerTag(id)] : undefined
 }
 
 // Best-effort variant: collapses source-unavailable into null. Used by list/aggregate

@@ -1,7 +1,7 @@
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { getCachedPlayerProfile, getProfileFetchedAt } from '@/lib/supabase/player-cache'
 import { syncAndGetRankedBattles } from '@/lib/supabase/battles'
-import { isShortId } from '@/lib/buckler'
+import { isShortId, playerTag } from '@/lib/buckler'
 import { rateLimit } from '@/lib/rate-limit'
 
 // Manual "Refresh" for a player profile: forces one Buckler fetch (bypassing the 12h cache)
@@ -24,6 +24,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     return Response.json({ error: 'Too soon' }, { status: 429 })
   }
 
+  // Drop this player's Buckler responses from Next's data cache first, so the fetches below and
+  // the Recent Battles reload hit Buckler instead of a response up to 10 min old.
+  revalidateTag(playerTag(id), { expire: 0 })
   const result = await getCachedPlayerProfile(id, true)
   if (result.status === 'unavailable') return Response.json({ error: 'unavailable' }, { status: 503 })
   if (result.status === 'notfound') return Response.json({ error: 'notfound' }, { status: 404 })
@@ -32,6 +35,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   await syncAndGetRankedBattles(id, numId, true)
   // The profile page is ISR (revalidate = 600) and its cache key ignores the query string, so
   // without this purge the reload would keep serving the pre-refresh render for up to 10 minutes.
-  revalidatePath(`/player/${id}`)
+  // revalidatePath needs the rewrite destination (/en/player/ID, /ja/player/ID...), not the
+  // browser URL, so the route pattern covers every locale.
+  revalidatePath('/[locale]/player/[id]', 'page')
   return Response.json({ ok: true })
 }
