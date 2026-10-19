@@ -26,6 +26,17 @@ async function writeCached(playerId: number, profile: BucklerProfilePage) {
   // ~18 KB each) and nothing here reads them. Drop them before storing.
   const slim: Record<string, unknown> = { ...profile }
   delete slim.__namespaces
+  // The matchup matrix lists every character pair, played or not (~210 KB of a ~236 KB profile).
+  // matchupRowsFromMatrix skips 0-game entries anyway, so only the played ones are stored.
+  const play = profile.play
+  if (play?.character_win_rates_by_rival_character) {
+    slim.play = {
+      ...play,
+      character_win_rates_by_rival_character: play.character_win_rates_by_rival_character
+        .map((row) => ({ ...row, rival_character_win_rates: row.rival_character_win_rates.filter((rv) => rv.battle_count > 0) }))
+        .filter((row) => row.rival_character_win_rates.length > 0),
+    }
+  }
   await supabase
     .from('player_profiles')
     .upsert({ player_id: playerId, profile: slim, fetched_at: new Date().toISOString() }, { onConflict: 'player_id' })
