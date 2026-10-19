@@ -145,7 +145,26 @@ async function fetchPageDataOrThrow<T = unknown>(path: string, revalidate = 60):
     console.warn('[buckler] No session cookie — set BUCKLER_COOKIE in .env.local')
     throw new BucklerUnavailableError('No session cookie')
   }
-  return fetchData<T>(path, cookie, revalidate, true)
+  if (!isPlayerPath(path)) return fetchData<T>(path, cookie, revalidate, true)
+  const hit = playerCache.get(path)
+  if (hit && Date.now() - hit.at < revalidate * 1000) return hit.data as T
+  const data = await fetchData<T>(path, cookie, 0, true)
+  if (playerCache.size > 2000) playerCache.clear()
+  playerCache.set(path, { at: Date.now(), data })
+  return data
+}
+
+// Per-player responses (profile/ID, profile/ID/battlelog/...) bypass Next's data cache: it is
+// stale-while-revalidate, so the first view after a quiet spell got a days-old battle log (and
+// a refresh got the old profile, stored as fresh). This cache expires hard instead.
+// ponytail: in-process, like the pacing queue, so only valid on a single instance.
+const playerCache = new Map<string, { at: number; data: unknown }>()
+const isPlayerPath = (path: string) => /^profile\/\d+/.test(path)
+
+// Used by the manual refresh so its fetches, and the Recent Battles reload after it, hit Buckler.
+export function clearPlayerCache(shortId: string | number) {
+  const re = new RegExp(`^profile/${shortId}(?!\\d)`)
+  for (const key of playerCache.keys()) if (re.test(key)) playerCache.delete(key)
 }
 
 async function fetchData<T>(
@@ -165,7 +184,9 @@ async function fetchData<T>(
         'Accept-Language': 'en-US,en;q=0.9',
         Cookie: cookie,
       },
-      next: { revalidate, tags: playerTags(path) },
+      // No option at all (not 'no-store', which would flip the ISR player page to dynamic):
+      // Next then skips its data cache, like it does for the Supabase client.
+      ...(revalidate ? { next: { revalidate } } : {}),
       signal,
     }))
   } catch (e) {
@@ -199,15 +220,6 @@ async function fetchData<T>(
     throw new BucklerUnavailableError('No pageProps (session likely expired)')
   }
   return (json as { pageProps: T }).pageProps
-}
-
-// Every profile/ID and profile/ID/battlelog/... fetch carries the player's tag, so the manual
-// refresh can drop them from Next's data cache. Without it a "forced" refresh was served the
-// cached Buckler response (up to 10 min old) and stored that as fresh.
-export const playerTag = (shortId: string | number) => `buckler-player-${shortId}`
-function playerTags(path: string): string[] | undefined {
-  const id = path.match(/^profile\/(\d+)/)?.[1]
-  return id ? [playerTag(id)] : undefined
 }
 
 // Best-effort variant: collapses source-unavailable into null. Used by list/aggregate
