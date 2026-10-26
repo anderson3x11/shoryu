@@ -7,7 +7,7 @@
         "url": "https://liquipedia.net/fighters/Capcom_Cup/13",
         "iconUrl": "/liquipedia/ea4957d0be7b260b.png",
         "date": "Mar 10 - 14, 2027",
-        "prizePool": null,
+        "prizePool": "$1,297,000",
         "location": "Tokyo",
         "winner": null,
         "runnerUp": null
@@ -33,7 +33,7 @@
         "iconUrl": "/liquipedia/bbd34a0d523920d7.png",
         "date": "Oct 23 - Nov 8, 2026",
         "prizePool": null,
-        "location": "United States",
+        "location": "Los Angeles, CA",
         "winner": null,
         "runnerUp": null
       },
@@ -374,7 +374,7 @@
         "url": "https://liquipedia.net/fighters/Capcom_Cup/12",
         "iconUrl": "/liquipedia/a65188803a789e68.png",
         "date": "Mar 11 - 14, 2026",
-        "prizePool": "$1,282,000",
+        "prizePool": "$1,297,000",
         "location": "Tokyo",
         "winner": {
           "name": "Sahara",
