@@ -19,8 +19,11 @@ const LEAGUES = [
   { label: 'Master',   rankId: 36   },
 ]
 
-// Text only: the Buckler control-type icons these used to show now answer 403 to hotlinks.
-const CONTROLS = ['Total', 'Classic', 'Modern']
+const CONTROLS = [
+  { label: 'Total',   icon: null },
+  { label: 'Classic', icon: 'https://www.streetfighter.com/6/buckler/assets/images/stats/icon_controltype0.png' },
+  { label: 'Modern',  icon: 'https://www.streetfighter.com/6/buckler/assets/images/stats/icon_controltype1.png' },
+]
 
 function formatMonth(yyyymm: string): string {
   const year = parseInt(yyyymm.slice(0, 4))
@@ -53,7 +56,7 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
 
       <div className="space-y-3">
         <div className="flex gap-2">
-          {CONTROLS.map((label, i) => (
+          {CONTROLS.map(({ label, icon }, i) => (
             <button
               key={i}
               onClick={() => setControl(i)}
@@ -63,6 +66,10 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
                   : 'bg-zinc-800 text-zinc-300 hover:text-zinc-200'
               }`}
             >
+              {icon && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={icon} alt={label} className="h-5 w-auto" />
+              )}
               {label}
             </button>
           ))}
