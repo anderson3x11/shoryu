@@ -35,10 +35,13 @@ function addToRecent(item: RecentSearch) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify([item, ...existing].slice(0, MAX_RECENT)))
 }
 
-export function SearchBar() {
+// `onPick` turns the bar into a player picker (compare page): choosing a player hands its id
+// back instead of opening the profile, and a text search only shows the dropdown.
+export function SearchBar({ onPick, placeholder }: { onPick?: (shortId: number) => void; placeholder?: string } = {}) {
   const t = useT()
   const href = useHref()
   const router = useRouter()
+  const openPlayer = (id: number | string) => (onPick ? onPick(Number(id)) : router.push(href(`/player/${id}`)))
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<BucklerFighterBanner[]>([])
   const [loading, setLoading] = useState(false)
@@ -101,7 +104,7 @@ export function SearchBar() {
       char_name: result.favorite_character_name,
     })
     setRecent(loadRecent())
-    router.push(href(`/player/${result.personal_info.short_id}`))
+    openPlayer(result.personal_info.short_id)
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -109,8 +112,8 @@ export function SearchBar() {
     const trimmed = query.trim()
     if (!trimmed) return
     if (/^\d+$/.test(trimmed)) {
-      router.push(href(`/player/${trimmed}`))
-    } else {
+      openPlayer(trimmed)
+    } else if (!onPick) {
       router.push(href(`/search?q=${encodeURIComponent(trimmed)}`))
     }
     setQuery('')
@@ -149,7 +152,7 @@ export function SearchBar() {
           <input
             value={query}
             onChange={handleQueryChange}
-            placeholder={t.search.placeholder}
+            placeholder={placeholder ?? t.search.placeholder}
             autoComplete="off"
             className="relative z-10 w-full h-full bg-transparent pl-12 pr-12 text-base text-zinc-100 placeholder:text-zinc-400 focus:outline-none"
           />
@@ -162,7 +165,7 @@ export function SearchBar() {
       {open && isNumericQuery && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-none shadow-2xl z-50 overflow-hidden">
           <button
-            onClick={() => { router.push(href(`/player/${query}`)); setQuery(''); setOpen(false) }}
+            onClick={() => { openPlayer(query); setQuery(''); setOpen(false) }}
             className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-zinc-800 transition-colors text-left cursor-pointer"
           >
             <ArrowRight className="w-4 h-4 text-zinc-300 flex-shrink-0" />
@@ -251,7 +254,7 @@ export function SearchBar() {
                 className="flex items-center bg-zinc-800/60 hover:bg-zinc-800 border border-zinc-700/50 rounded-none transition-colors"
               >
                 <button
-                  onClick={() => router.push(href(`/player/${r.short_id}`))}
+                  onClick={() => openPlayer(r.short_id)}
                   className="flex items-center gap-2 pl-3 pr-2 py-1.5 cursor-pointer"
                 >
                   <div className="relative w-5 h-5 rounded overflow-hidden bg-zinc-700 flex-shrink-0">

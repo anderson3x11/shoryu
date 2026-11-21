@@ -149,3 +149,24 @@ export async function syncAndGetRankedBattles(playerId: string, sid: number, for
 
   return getRankedBattlesFromDB(numId)
 }
+
+// Ranked games between two players already in the DB (synced from either side, deduped by
+// replay), from a's point of view. No Buckler call: only what earlier visits stored.
+export async function getHeadToHead(a: number, b: number): Promise<{ wins: number; losses: number; draws: number }> {
+  const { data } = await supabase
+    .from('battles')
+    .select('replay_id, player_id, result')
+    .or(`and(player_id.eq.${a},opp_player_id.eq.${b}),and(player_id.eq.${b},opp_player_id.eq.${a})`)
+  const seen = new Set<string>()
+  const record = { wins: 0, losses: 0, draws: 0 }
+  for (const r of data ?? []) {
+    if (seen.has(r.replay_id)) continue
+    seen.add(r.replay_id)
+    // A row stored from b's side has the result flipped for a.
+    const res = r.player_id === a ? r.result : r.result === 2 ? 2 : 1 - r.result
+    if (res === 1) record.wins++
+    else if (res === 0) record.losses++
+    else record.draws++
+  }
+  return record
+}

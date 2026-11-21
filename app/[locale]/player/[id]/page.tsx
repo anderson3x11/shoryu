@@ -1,4 +1,7 @@
 import { cache } from 'react'
+import Link from 'next/link'
+import { DEFAULT_LOCALE, isLocale, localeHref } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
 import { notFound } from 'next/navigation'
 import { getCachedPlayerProfile } from '@/lib/supabase/player-cache'
 import { ServiceUnavailable } from '@/components/service-unavailable'
@@ -16,7 +19,7 @@ export const revalidate = 600
 const getProfile = cache((id: string) => getCachedPlayerProfile(id))
 
 interface PlayerPageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string; locale: string }>
 }
 
 export async function generateMetadata({ params }: PlayerPageProps) {
@@ -29,7 +32,8 @@ export async function generateMetadata({ params }: PlayerPageProps) {
 }
 
 export default async function PlayerPage({ params }: PlayerPageProps) {
-  const { id } = await params
+  const { id, locale: rawLocale } = await params
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE
 
   // Overview only needs the profile. Battle logs / LP-MR history / matchups are fetched
   // client-side, lazily, when the Recent Battles or Stats tab is first opened.
@@ -60,7 +64,18 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
         playerId={String(shortId)}
         shortId={shortId}
         header={<PlayerHeader banner={banner} />}
-        action={<RefreshProfileButton playerId={String(shortId)} fetchedAt={fetchedAt} />}
+        action={
+          <div className="flex items-center gap-2">
+            <Link
+              href={localeHref(locale, `/compare?a=${shortId}`)}
+              prefetch={false}
+              className="rounded-none border border-zinc-700 px-2 sm:px-2.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-300 hover:border-amber-400 hover:text-amber-400 transition-colors"
+            >
+              {getDict(locale).compare.button}
+            </Link>
+            <RefreshProfileButton playerId={String(shortId)} fetchedAt={fetchedAt} />
+          </div>
+        }
         seasonBar={profile.play?.current_season_id != null && (
           <SeasonBar
             playerId={String(shortId)}
