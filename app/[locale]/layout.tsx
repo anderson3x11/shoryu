@@ -76,19 +76,19 @@ export default async function RootLayout({
       <body className="antialiased min-h-screen flex flex-col bg-zinc-950 text-zinc-100" suppressHydrationWarning>
         <LocaleProvider locale={locale}>
         <nav className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
-          <div className="max-w-[90rem] mx-auto px-3 sm:px-6 h-14 flex items-center gap-2 sm:gap-8">
+          <div className="max-w-[90rem] mx-auto px-3 sm:px-6 h-14 flex items-center gap-2 lg:gap-4 xl:gap-8">
             <Link href={href('/')} className="flex items-center gap-2 flex-shrink-0">
               <span className="font-display text-2xl tracking-wider leading-none text-zinc-100">Shoryu</span>
               <Image src="/logo.png" alt="Shoryu" width={36} height={36} className="object-contain" />
             </Link>
-            <div className="h-5 w-px bg-zinc-700 shrink-0 hidden sm:block" />
+            <div className="h-5 w-px bg-zinc-700 shrink-0 hidden lg:block" />
             <NavSearch />
-            <div className="h-5 w-px bg-zinc-700 shrink-0 hidden sm:block" />
-            <Link href={href('/pros')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">{t.nav.pros}</Link>
-            <Link href={href('/tournaments')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">{t.nav.tournaments}</Link>
-            <Link href={href('/ranking')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">{t.nav.ranking}</Link>
-            <Link href={href('/streetdle')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">{t.nav.streetdle}</Link>
-            <Link href={href('/stats')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden sm:block">{t.nav.stats}</Link>
+            <div className="h-5 w-px bg-zinc-700 shrink-0 hidden lg:block" />
+            <Link href={href('/pros')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden lg:block">{t.nav.pros}</Link>
+            <Link href={href('/tournaments')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden lg:block">{t.nav.tournaments}</Link>
+            <Link href={href('/ranking')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden lg:block">{t.nav.ranking}</Link>
+            <Link href={href('/streetdle')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden lg:block">{t.nav.streetdle}</Link>
+            <Link href={href('/stats')} className="text-base text-zinc-300 hover:text-zinc-100 transition-colors shrink-0 hidden lg:block">{t.nav.stats}</Link>
             <NavMenu />
             <LanguageSwitcher />
           </div>

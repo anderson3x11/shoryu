@@ -22,7 +22,7 @@ export function NavMenu() {
   }, [])
 
   return (
-    <div ref={ref} className="relative sm:hidden flex-shrink-0">
+    <div ref={ref} className="relative lg:hidden flex-shrink-0">
       <button
         onClick={() => setOpen(o => !o)}
         aria-label={t.nav.openMenu}

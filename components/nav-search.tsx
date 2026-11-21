@@ -82,7 +82,7 @@ export function NavSearch() {
   const isNumericQuery = /^\d+$/.test(query) && query.length >= 2
 
   return (
-    <div ref={containerRef} className="relative flex-1 sm:flex-none sm:w-72">
+    <div ref={containerRef} className="relative flex-1 min-w-0 lg:max-w-72">
       <form onSubmit={handleSubmit}>
         <div className="group relative h-8">
           <div
