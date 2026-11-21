@@ -52,35 +52,29 @@ export const TONE_CLASS: Record<Tone, string> = {
 // Vitals
 // ---------------------------------------------------------------------------
 
+// Labels and hints live in the dictionary (character.vital / character.vitalHint), by key.
+export type VitalKey = Exclude<keyof Vitals, 'jumpSpd' | 'hp'>
+
 export interface VitalRow {
-  key: string
-  label: string
+  key: VitalKey
   value: string
-  hint: string
 }
 
-type VitalKey = keyof Omit<Vitals, 'jumpSpd'>
-
-const VITAL_SPECS: { key: VitalKey; label: string; digits: number; hint: string }[] = [
-  { key: 'fwdWalkSpd', label: 'Fwd Walk', digits: 3, hint: 'Distance covered per frame walking forward' },
-  { key: 'bwdWalkSpd', label: 'Back Walk', digits: 3, hint: 'Distance covered per frame walking back' },
-  { key: 'fwdDashDist', label: 'Fwd Dash', digits: 2, hint: 'Distance covered by a forward dash' },
-  { key: 'bwdDashDist', label: 'Back Dash', digits: 2, hint: 'Distance covered by a back dash' },
-  { key: 'fwdJumpDist', label: 'Fwd Jump', digits: 2, hint: 'Distance covered by a forward jump' },
-  { key: 'bwdJumpDist', label: 'Back Jump', digits: 2, hint: 'Distance covered by a back jump' },
-  { key: 'jumpApex', label: 'Jump Height', digits: 2, hint: 'Peak height of a neutral jump' },
-  { key: 'throwRange', label: 'Throw Range', digits: 2, hint: 'Reach of a normal throw' },
-  { key: 'dRushBlock', label: 'Drive Rush', digits: 2, hint: 'Distance a Drive Rush covers before it is blocked' },
+const VITAL_SPECS: { key: VitalKey; digits: number }[] = [
+  { key: 'fwdWalkSpd', digits: 3 },
+  { key: 'bwdWalkSpd', digits: 3 },
+  { key: 'fwdDashDist', digits: 2 },
+  { key: 'bwdDashDist', digits: 2 },
+  { key: 'fwdJumpDist', digits: 2 },
+  { key: 'bwdJumpDist', digits: 2 },
+  { key: 'jumpApex', digits: 2 },
+  { key: 'throwRange', digits: 2 },
+  { key: 'dRushBlock', digits: 2 },
 ]
 
 /** Movement vitals, formatted for display. HP is shown separately. */
 export function vitalRows(vitals: Vitals): VitalRow[] {
-  return VITAL_SPECS.map(({ key, label, digits, hint }) => ({
-    key,
-    label,
-    value: vitals[key].toFixed(digits),
-    hint,
-  }))
+  return VITAL_SPECS.map(({ key, digits }) => ({ key, value: vitals[key].toFixed(digits) }))
 }
 
 // ---------------------------------------------------------------------------

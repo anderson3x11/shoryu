@@ -11,43 +11,27 @@ import {
 import type { FatExtra } from '@/lib/fat'
 import { FilterChips } from '@/components/filter-chips'
 import { Picker } from '@/components/picker'
+import { useT } from '@/lib/i18n/context'
+import { fill } from '@/lib/i18n/format'
 
 const WIKI = 'https://wiki.supercombo.gg'
 
-const GROUP_LABELS: Record<MoveGroup, string> = {
-  normal: 'Normals',
-  air: 'Air',
-  throw: 'Throws',
-  special: 'Specials',
-  super: 'Supers',
-  drive: 'Drive',
-  taunt: 'Taunts',
-}
-
 const GROUP_ORDER: MoveGroup[] = ['normal', 'air', 'throw', 'special', 'super', 'drive', 'taunt']
 
-// The in-game frame meter colors: green startup, red active, blue recovery.
-const FRAME_KINDS: { kind: FrameKind; label: string; className: string }[] = [
-  { kind: 'startup', label: 'Startup', className: 'bg-emerald-500' },
-  { kind: 'active', label: 'Active', className: 'bg-rose-500' },
-  { kind: 'gap', label: 'Gap', className: 'bg-zinc-700' },
-  { kind: 'recovery', label: 'Recovery', className: 'bg-blue-600' },
-  { kind: 'landing', label: 'Landing', className: 'bg-blue-300' },
+// The in-game frame meter colors: green startup, red active, blue recovery. Labels and every
+// other string here live in the dictionary (character.*), keyed by these ids.
+const FRAME_KINDS: { kind: FrameKind; className: string }[] = [
+  { kind: 'startup', className: 'bg-emerald-500' },
+  { kind: 'active', className: 'bg-rose-500' },
+  { kind: 'gap', className: 'bg-zinc-700' },
+  { kind: 'recovery', className: 'bg-blue-600' },
+  { kind: 'landing', className: 'bg-blue-300' },
 ]
 const FRAME_KIND = Object.fromEntries(FRAME_KINDS.map((k) => [k.kind, k])) as Record<FrameKind, (typeof FRAME_KINDS)[number]>
 
-// FAT fields, in reading order. Pairs read "on hit / on block".
-const FAT_FACTS: [keyof FatExtra, string, string?][] = [
-  ['hitstun', 'Hitstun'],
-  ['blockstun', 'Blockstun'],
-  ['hitstop', 'Hitstop'],
-  ['hitConfirm', 'Hit confirm', 'Frames to confirm into a special or super'],
-  ['afterDriveRush', 'After drive rush', 'Advantage on hit / on block after a drive rush'],
-  ['perfectParry', 'On perfect parry'],
-  ['juggle', 'Juggle', 'Juggle start / increase / limit'],
-  ['scaling', 'Scaling'],
-  ['range', 'Range'],
-  ['superGain', 'Super gain', 'Super meter gained on hit / on block'],
+// FAT fields, in reading order. Pairs read "on hit / on block" (explained in character.fatHint).
+const FAT_FACTS: (keyof FatExtra)[] = [
+  'hitstun', 'blockstun', 'hitstop', 'hitConfirm', 'afterDriveRush', 'perfectParry', 'juggle', 'scaling', 'range', 'superGain',
 ]
 
 // First number of a frame value ("-13(-28)" -> -13, "KD +29" -> 29); null when there is none.
@@ -57,19 +41,19 @@ function frameNumber(v: string): number | null {
 }
 
 // Quick filters, combinable. "Safe" is -3 or better on block, the usual unpunishable threshold.
-const QUICK_FILTERS: { id: string; label: string; test: (m: Move) => boolean }[] = [
-  { id: 'plus', label: 'Plus on block', test: (m) => (frameNumber(m.blockAdv) ?? -99) >= 1 },
-  { id: 'safe', label: 'Safe on block', test: (m) => (frameNumber(m.blockAdv) ?? -99) >= -3 },
-  { id: 'invuln', label: 'Invincible', test: (m) => Boolean(m.invuln) },
-  { id: 'armor', label: 'Armor', test: (m) => Boolean(m.armor) },
+const QUICK_FILTERS: { id: 'plus' | 'safe' | 'invuln' | 'armor'; test: (m: Move) => boolean }[] = [
+  { id: 'plus', test: (m) => (frameNumber(m.blockAdv) ?? -99) >= 1 },
+  { id: 'safe', test: (m) => (frameNumber(m.blockAdv) ?? -99) >= -3 },
+  { id: 'invuln', test: (m) => Boolean(m.invuln) },
+  { id: 'armor', test: (m) => Boolean(m.armor) },
 ]
 
 // Sorting stays within each move group; ties keep the reading order.
-const SORTS: { id: string; label: string; key?: (m: Move) => number }[] = [
-  { id: 'default', label: 'Move order' },
-  { id: 'startup', label: 'Fastest startup', key: (m) => frameNumber(m.startup) ?? 999 },
-  { id: 'block', label: 'Best on block', key: (m) => -(frameNumber(m.blockAdv) ?? -999) },
-  { id: 'hit', label: 'Best on hit', key: (m) => -(frameNumber(m.hitAdv) ?? -999) },
+const SORTS: { id: 'default' | 'startup' | 'block' | 'hit'; key?: (m: Move) => number }[] = [
+  { id: 'default' },
+  { id: 'startup', key: (m) => frameNumber(m.startup) ?? 999 },
+  { id: 'block', key: (m) => -(frameNumber(m.blockAdv) ?? -999) },
+  { id: 'hit', key: (m) => -(frameNumber(m.hitAdv) ?? -999) },
 ]
 
 /** Notes longer than this start clamped, with a toggle to read the rest. */
@@ -80,20 +64,21 @@ export function CharacterFrameData({ moves, extras, accent }: {
   extras: Record<string, FatExtra>
   accent: string
 }) {
+  const t = useT().character
   const [group, setGroup] = useState<string>('all')
   const [query, setQuery] = useState('')
   const [quick, setQuick] = useState<string[]>([])
-  const [sort, setSort] = useState('default')
+  const [sort, setSort] = useState<(typeof SORTS)[number]['id']>('default')
 
   const chips = useMemo(() => {
     const counts = new Map<MoveGroup, number>()
     for (const m of moves) counts.set(m.group, (counts.get(m.group) ?? 0) + 1)
     return [
-      { id: 'all', label: 'All', count: moves.length },
+      { id: 'all', label: t.all, count: moves.length },
       ...GROUP_ORDER.filter((g) => counts.has(g))
-        .map((g) => ({ id: g, label: GROUP_LABELS[g], count: counts.get(g)! })),
+        .map((g) => ({ id: g, label: t.group[g], count: counts.get(g)! })),
     ]
-  }, [moves])
+  }, [moves, t])
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -123,12 +108,12 @@ export function CharacterFrameData({ moves, extras, accent }: {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Find a move: 2MK, Shoryuken, projectile..."
+            placeholder={t.searchPlaceholder}
             className="w-full rounded-none border border-zinc-800 bg-zinc-900 pl-9 pr-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[color:var(--accent)] focus:outline-none"
           />
         </label>
         <span className="text-xs text-zinc-400 shrink-0">
-          {visible.length} of {moves.length} moves · tap an image for full size
+          {fill(t.status, { n: visible.length, total: moves.length })}
         </span>
       </div>
 
@@ -150,26 +135,26 @@ export function CharacterFrameData({ moves, extras, accent }: {
                     : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-100',
                 )}
               >
-                {f.label}
+                {t.quick[f.id]}
               </button>
             )
           })}
         </div>
         <Picker
           className="sm:w-48"
-          label="Sort moves"
+          label={t.sortLabel}
           value={sort}
-          onChange={setSort}
-          options={SORTS.map((x) => ({ value: x.id, label: x.label }))}
+          onChange={(v) => setSort(v as typeof sort)}
+          options={SORTS.map((x) => ({ value: x.id, label: t.sort[x.id] }))}
         />
       </div>
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-zinc-400">
-        <span className="uppercase tracking-wider text-zinc-500">Frame meter</span>
+        <span className="uppercase tracking-wider text-zinc-500">{t.frameMeter}</span>
         {FRAME_KINDS.map((k) => (
           <span key={k.kind} className="flex items-center gap-1">
             <span className={cn('h-3 w-2', k.className)} />
-            {k.label}
+            {t.frameKind[k.kind]}
           </span>
         ))}
       </div>
@@ -179,7 +164,7 @@ export function CharacterFrameData({ moves, extras, accent }: {
           <div className="flex items-center gap-2">
             <span className="block w-1.5 h-5 -skew-x-12 shrink-0" style={{ background: 'var(--accent, #fbbf24)' }} />
             <h3 className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">
-              {GROUP_LABELS[s.group]}
+              {t.group[s.group]}
             </h3>
             <span className="text-xs text-zinc-500">{s.moves.length}</span>
           </div>
@@ -190,44 +175,51 @@ export function CharacterFrameData({ moves, extras, accent }: {
       ))}
 
       {visible.length === 0 && (
-        <p className="text-sm text-zinc-400 py-6 text-center">No move matches that search.</p>
+        <p className="text-sm text-zinc-400 py-6 text-center">{t.noMove}</p>
       )}
     </div>
   )
 }
 
 /** One move, laid out like a frame data card: hitbox image first, the core numbers big, the rest below. */
+// hitboxShots labels come out in English ("Full hitbox", "Hitbox 2", "Preview 2"); swap the words.
+function hitboxLabel(label: string, t: ReturnType<typeof useT>['character']): string {
+  if (label === 'Full hitbox') return t.fullHitbox
+  return label.replace(/^Hitbox/, t.hitbox).replace(/^Preview/, t.preview)
+}
+
 function MoveCard({ move, extra }: { move: Move; extra?: FatExtra }) {
+  const t = useT().character
   // Hitbox first: seeing where the move hits is the point of the image.
   const shots = [
-    ...hitboxShots(move.hitboxes),
-    ...(move.img ? [{ path: move.img, label: 'Hide hitbox' }] : []),
+    ...hitboxShots(move.hitboxes).map((h) => ({ ...h, label: hitboxLabel(h.label, t) })),
+    ...(move.img ? [{ path: move.img, label: t.hideHitbox }] : []),
   ]
   const [shot, setShot] = useState(0)
   const [showNotes, setShowNotes] = useState(false)
   const current = shots[shot]
 
   const stats: { label: string; value: string; adv?: boolean }[] = [
-    { label: 'Startup', value: move.startup },
-    { label: 'Active', value: move.active },
-    { label: 'Recovery', value: move.recovery },
-    { label: 'On hit', value: move.hitAdv, adv: true },
-    { label: 'On block', value: move.blockAdv, adv: true },
-    { label: 'Damage', value: move.damage },
+    { label: t.stat.startup, value: move.startup },
+    { label: t.stat.active, value: move.active },
+    { label: t.stat.recovery, value: move.recovery },
+    { label: t.stat.onHit, value: move.hitAdv, adv: true },
+    { label: t.stat.onBlock, value: move.blockAdv, adv: true },
+    { label: t.stat.damage, value: move.damage },
   ]
 
   const facts = [
-    ['Guard', move.guard],
-    ['Cancel', move.cancel],
-    ['Total', move.total],
-    ['Punish counter', move.punishAdv],
-    ['Invuln', move.invuln],
-    ['Armor', move.armor],
-    ['Drive dmg (block)', move.driveBlk],
-    ['Drive gain', move.driveGain],
+    [t.fact.guard, move.guard],
+    [t.fact.cancel, move.cancel],
+    [t.fact.total, move.total],
+    [t.fact.punish, move.punishAdv],
+    [t.fact.invuln, move.invuln],
+    [t.fact.armor, move.armor],
+    [t.fact.driveBlock, move.driveBlk],
+    [t.fact.driveGain, move.driveGain],
   ].filter(([, v]) => v) as [string, string][]
   const fatFacts = FAT_FACTS
-    .map(([key, label, hint]) => ({ label, hint, value: extra?.[key] }))
+    .map((key) => ({ label: t.fat[key], hint: key in t.fatHint ? t.fatHint[key as keyof typeof t.fatHint] : undefined, value: extra?.[key] }))
     .filter((f) => f.value)
   const meter = frameMeter(move)
 
@@ -241,7 +233,7 @@ function MoveCard({ move, extra }: { move: Move; extra?: FatExtra }) {
             href={`${WIKI}${current.path}`}
             target="_blank"
             rel="noopener noreferrer"
-            title="Open full size on the SuperCombo wiki"
+            title={t.openWiki}
             className="absolute inset-0"
           >
             <Image
@@ -330,7 +322,7 @@ function MoveCard({ move, extra }: { move: Move; extra?: FatExtra }) {
                 onClick={() => setShowNotes(!showNotes)}
                 className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-400 hover:text-zinc-100 cursor-pointer"
               >
-                {showNotes ? 'Less' : 'More'}
+                {showNotes ? t.less : t.more}
               </button>
             )}
           </div>
@@ -347,9 +339,10 @@ function MoveCard({ move, extra }: { move: Move; extra?: FatExtra }) {
  * blocks in 2px black borders (outlines overlapping in the 2px gaps, so a wrapped row keeps them).
  */
 function FrameMeter({ segments }: { segments: FrameSegment[] }) {
-  const summary = segments.map((s) => `${FRAME_KIND[s.kind].label} ${s.frames}`).join(', ')
+  const t = useT().character
+  const summary = segments.map((s) => `${t.frameKind[s.kind]} ${s.frames}`).join(', ')
   return (
-    <div role="img" aria-label={`Frame meter: ${summary}`} title={summary} className="flex flex-wrap gap-0.5 p-0.5">
+    <div role="img" aria-label={`${t.frameMeter}: ${summary}`} title={summary} className="flex flex-wrap gap-0.5 p-0.5">
       {segments.flatMap((s, i) => {
         const digits = String(s.frames)
         const block = (key: string, digit?: string) => (

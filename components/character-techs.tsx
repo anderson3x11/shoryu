@@ -1,5 +1,6 @@
 'use client'
 
+import { useT } from '@/lib/i18n/context'
 import { useState } from 'react'
 import { VideoCard } from '@/components/video-card'
 import { FilterChips } from '@/components/filter-chips'
@@ -8,11 +9,12 @@ export type TechVideo = { title: string; url: string; thumbnail: string | null }
 export type TechCategory = { id: string; label: string; videos: TechVideo[] }
 
 export function CharacterTechs({ categories, accent = '#fbbf24' }: { categories: TechCategory[]; accent?: string }) {
+  const t = useT()
   const [active, setActive] = useState('all')
 
   const total = categories.reduce((n, c) => n + c.videos.length, 0)
   const chips = [
-    { id: 'all', label: 'All', count: total },
+    { id: 'all', label: t.character.all, count: total },
     ...categories.map((c) => ({ id: c.id, label: c.label, count: c.videos.length })),
   ]
 

@@ -13,12 +13,14 @@ import { getCharacterWiki, type Reason } from '@/lib/supercombo'
 import { FAT_URL, getFatExtras } from '@/lib/fat'
 
 const TECH_ORDER = ['guides', 'combos', 'pressure', 'oki', 'matchup', 'techs'] as const
-const TECH_LABELS: Record<string, string> = { guides: 'Guides', combos: 'Combos', pressure: 'Pressure', oki: 'Okizeme', matchup: 'Matchups', techs: 'Tech' }
 import { CHARACTERS, getCharacterFullImageUrl, getCharacterHeaderY } from '@/lib/constants/characters'
 import { CHARACTER_LINKS } from '@/lib/constants/character-links'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
+import { fill } from '@/lib/i18n/format'
 
 interface CharacterPageProps {
-  params: Promise<{ name: string }>
+  params: Promise<{ name: string; locale: string }>
 }
 
 export async function generateMetadata({ params }: CharacterPageProps) {
@@ -58,7 +60,8 @@ async function getYoutubeThumbnail(url: string): Promise<string | null> {
 }
 
 export default async function CharacterPage({ params }: CharacterPageProps) {
-  const { name } = await params
+  const { name, locale: rawLocale } = await params
+  const t = getDict(isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE).character
   const char = CHARACTERS.find((c) => c.id === name)
   if (!char) notFound()
 
@@ -67,11 +70,11 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
   // Collect all YouTube URLs and fetch thumbnails in parallel
   const watchItems = [
-    links.playlist && { title: 'SF6 High Level Replays', url: links.playlist },
+    links.playlist && { title: t.highLevelReplays, url: links.playlist },
   ].filter(Boolean) as { title: string; url: string }[]
 
   const allTechs: TechSection = { ...links.techs }
-  if (links.misterCrimson) allTechs.matchup = [...(allTechs.matchup ?? []), { title: 'Matchup Guide by Mister Crimson', url: links.misterCrimson }]
+  if (links.misterCrimson) allTechs.matchup = [...(allTechs.matchup ?? []), { title: t.crimsonGuide, url: links.misterCrimson }]
   if (links.videoGuides?.length) allTechs.guides = [...(allTechs.guides ?? []), ...links.videoGuides]
   if (links.techVideos?.length) allTechs.guides = [...(allTechs.guides ?? []), ...links.techVideos]
 
@@ -85,7 +88,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   const techCategories = TECH_ORDER
     .map((cat) => ({
       id: cat,
-      label: TECH_LABELS[cat],
+      label: t.tech[cat as keyof typeof t.tech] ?? cat,
       videos: (allTechs[cat] ?? []).map((v) => ({ title: v.title, url: v.url, thumbnail: thumbMap[v.url] ?? null })),
     }))
     .filter((c) => c.videos.length > 0)
@@ -102,16 +105,16 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
     <>
       {wiki?.vitals && (
         <section className="space-y-3">
-          <SectionHeader>Vitals</SectionHeader>
+          <SectionHeader>{t.vitals}</SectionHeader>
           <div className="border border-zinc-800 bg-zinc-900/40 px-4 py-3">
-            <CharacterVitals vitals={wiki.vitals} />
+            <CharacterVitals vitals={wiki.vitals} t={t} />
           </div>
         </section>
       )}
 
       {hasGuides && (
         <section className="space-y-3">
-          <SectionHeader>Guides &amp; Data</SectionHeader>
+          <SectionHeader>{t.guidesData}</SectionHeader>
           <div className="grid grid-cols-1 gap-2">
             {links.supercombo && (
               <LinkCard href={links.supercombo} icon={<BookOpen size={16} />} title="Supercombo Wiki" domain="wiki.supercombo.gg" color="#60a5fa" />
@@ -128,7 +131,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
       {players.length > 0 && (
         <section className="space-y-3">
-          <SectionHeader>Players to Watch</SectionHeader>
+          <SectionHeader>{t.playersToWatch}</SectionHeader>
           {links.playersNote && <p className="text-sm italic leading-relaxed text-zinc-300">{links.playersNote}</p>}
           <div className="grid grid-cols-1 gap-2">
             {players.map((player) => {
@@ -156,7 +159,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
       {hasCommunity && (
         <section className="space-y-3">
-          <SectionHeader>Community</SectionHeader>
+          <SectionHeader>{t.community}</SectionHeader>
           <div className="grid grid-cols-1 gap-2">
             {links.discords!.map((url, i) => (
               <LinkCard
@@ -180,7 +183,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
         <div className="lg:col-span-2 space-y-8">
           {wiki && wiki.overview.length > 0 && (
             <section className="space-y-3">
-              <SectionHeader>Who is {char.name}?</SectionHeader>
+              <SectionHeader>{fill(t.whoIs, { name: char.name })}</SectionHeader>
               <div className="space-y-3">
                 {wiki.overview.map((p, i) => (
                   <p
@@ -195,10 +198,10 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
           {wiki && (wiki.pick.length > 0 || wiki.avoid.length > 0) && (
             <section className="space-y-3">
-              <SectionHeader>Pick / Avoid</SectionHeader>
+              <SectionHeader>{t.pickAvoid}</SectionHeader>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <ReasonList title={`Play ${char.name} if…`} reasons={wiki.pick} positive />
-                <ReasonList title="Think twice if…" reasons={wiki.avoid} positive={false} />
+                <ReasonList title={fill(t.playIf, { name: char.name })} reasons={wiki.pick} positive />
+                <ReasonList title={t.thinkTwice} reasons={wiki.avoid} positive={false} />
               </div>
             </section>
           )}
@@ -209,7 +212,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
       {wiki && wiki.patches.length > 0 && (
         <section className="space-y-3">
-          <SectionHeader>Patch History</SectionHeader>
+          <SectionHeader>{t.patchHistory}</SectionHeader>
           <CharacterPatches patches={wiki.patches} accent={accent} />
         </section>
       )}
@@ -220,7 +223,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
     <div className="space-y-8">
       {watchItems.length > 0 && (
         <section className="space-y-3">
-          <SectionHeader>Replays</SectionHeader>
+          <SectionHeader>{t.replays}</SectionHeader>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {watchItems.map((item) => (
               <VideoCard key={item.url} href={item.url} title={item.title} thumbnail={thumbMap[item.url]} />
@@ -231,22 +234,22 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
       {hasTechs && (
         <section className="space-y-3">
-          <SectionHeader>Techs</SectionHeader>
+          <SectionHeader>{t.techs}</SectionHeader>
           <CharacterTechs categories={techCategories} accent={accent} />
         </section>
       )}
     </div>
   )
 
-  const tabs: CharacterTab[] = [{ id: 'overview', label: 'Overview', content: overviewTab }]
+  const tabs: CharacterTab[] = [{ id: 'overview', label: t.overview, content: overviewTab }]
   if (wiki?.moves.length) {
     tabs.push({
-      id: 'frames', label: 'Frame Data', count: wiki.moves.length,
+      id: 'frames', label: t.frameData, count: wiki.moves.length,
       content: <CharacterFrameData moves={wiki.moves} extras={fat} accent={accent} />,
     })
   }
   if (watchItems.length || hasTechs) {
-    tabs.push({ id: 'videos', label: 'Videos', count: allTechVideos.length, content: videoTab })
+    tabs.push({ id: 'videos', label: t.videos, count: allTechVideos.length, content: videoTab })
   }
 
   return (
@@ -273,7 +276,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
       {wiki && (
         <p className="text-xs text-zinc-500">
-          Character data, frame data and patch notes are mirrored from the{' '}
+          {t.credit1}{' '}
           <a
             href={links.supercombo ?? 'https://wiki.supercombo.gg/w/Street_Fighter_6'}
             target="_blank"
@@ -282,12 +285,11 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           >
             SuperCombo wiki
           </a>
-          , maintained by the community under CC BY-SA. Hitstun, juggle, hit confirm windows and the
-          other extra frame data come from{' '}
+          {t.credit2}{' '}
           <a href={FAT_URL} target="_blank" rel="noopener noreferrer" className="underline hover:text-zinc-300">
             FAT
           </a>
-          {' '}by D4RKONION and the FAT team, under GPL-3.0.
+          {' '}{t.credit3}
         </p>
       )}
     </div>
