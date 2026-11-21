@@ -1,5 +1,7 @@
 'use client'
 
+import { useT } from '@/lib/i18n/context'
+import { fill } from '@/lib/i18n/format'
 import { useState } from 'react'
 import Image from 'next/image'
 import {
@@ -36,6 +38,7 @@ function CustomTooltip({ active, payload, isMaster }: { active?: boolean; payloa
 }
 
 export function LpHistoryChart({ characters, error = false }: LpHistoryChartProps) {
+  const t = useT().profile
   const [selected, setSelected] = useState<number | null>(null)
   // Default to the most-played character until the user picks one.
   const sel = selected ?? characters?.[0]?.charId ?? null
@@ -68,7 +71,7 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
   return (
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">
       <div className="px-4 pt-4 pb-3 flex items-center justify-between gap-2 flex-wrap">
-        <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">{char?.isMaster ? 'MR' : 'LP'} History</CardTitle>
+        <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">{char?.isMaster ? t.historyMR : t.historyLP}</CardTitle>
         {characters !== null && characters.length > 0 && (
           <div className="flex gap-1.5 flex-wrap">
             {characters.map(c => (
@@ -93,18 +96,18 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
       </div>
 
       {error && (
-        <div className="px-4 pb-4 text-sm text-zinc-300">Failed to load LP history.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-300">{t.historyFailed}</div>
       )}
 
       {!error && characters === null && (
         <div className="px-4 pb-4 flex items-center gap-2 text-sm text-zinc-300">
           <div className="w-3 h-3 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
-          Loading history…
+          {t.historyLoading}
         </div>
       )}
 
       {!error && characters !== null && characters.length === 0 && (
-        <div className="px-4 pb-4 text-sm text-zinc-300">No ranked match data found.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-300">{t.historyEmpty}</div>
       )}
 
       {!error && points.length > 0 && (() => {
@@ -139,7 +142,7 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
               <Tooltip content={<CustomTooltip isMaster={char?.isMaster ?? false} />} />
               {resetMarkers.map(ts => (
                 <ReferenceLine key={ts} x={ts} stroke="#f59e0b" strokeDasharray="4 3" strokeWidth={1.5}
-                  label={{ value: 'Reset', position: 'insideTopRight', fill: '#f59e0b', fontSize: 9 }}
+                  label={{ value: t.reset, position: 'insideTopRight', fill: '#f59e0b', fontSize: 9 }}
                 />
               ))}
               <Line
@@ -152,7 +155,7 @@ export function LpHistoryChart({ characters, error = false }: LpHistoryChartProp
               />
             </LineChart>
           </ResponsiveContainer>
-          <p className="text-[10px] text-zinc-400 text-right mt-1">Showing {points.length} of {metricPoints.length} ranked matches · {char?.isMaster ? 'Master Rating' : 'League Points'}</p>
+          <p className="text-[10px] text-zinc-400 text-right mt-1">{fill(t.showing, { n: points.length, total: metricPoints.length })} · {char?.isMaster ? t.masterRating : t.leaguePoints}</p>
         </div>
         )
       })()}

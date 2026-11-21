@@ -7,6 +7,8 @@ import { getCharacterImageUrl, getCharacterByBucklerId } from '@/lib/constants/c
 import { getWinrateMode, getServerWinrateMode, setWinrateMode, subscribeWinrateMode, type WinrateModeId } from '@/lib/constants/winrate-modes'
 import { WinrateModeButtons } from '@/components/winrate-mode-buttons'
 import { getSeason, subscribeSeason } from '@/lib/constants/season'
+import { modeKey } from '@/lib/constants/winrate-modes'
+import { useT } from '@/lib/i18n/context'
 import type { MatchupRow, MatchupVs } from '@/lib/supabase/ranked-stats'
 
 interface MatchupChartProps {
@@ -17,14 +19,8 @@ interface MatchupChartProps {
   error?: boolean
 }
 
-// Buckler's matrix covers every battle mode, not just ranked — say so instead of lying.
-const MODE_MATCH_LABEL: Record<WinrateModeId, string> = {
-  1: 'matches (all modes)',
-  2: 'ranked matches',
-  3: 'casual matches',
-  4: 'custom room matches',
-  5: 'battle hub matches',
-}
+// Buckler's matrix covers every battle mode, not just ranked, so the count says which mode it is
+// (profile.matchCount) instead of calling everything "ranked".
 
 // Skewed bar matching the Stats-page usage bars
 const BAR_CLIP = 'polygon(3px 0%, 100% 0%, calc(100% - 3px) 100%, 0% 100%)'
@@ -76,6 +72,8 @@ function MatchupBar({ vs }: { vs: MatchupVs }) {
 }
 
 export function MatchupChart({ playerId, rows, totalBattles, seasonId = null, error = false }: MatchupChartProps) {
+  const dict = useT()
+  const t = dict.profile
   // Battle-mode filter and phase (season bar). The current phase in mode 1 ("All") is the rows
   // prop from /api/ranked-stats; anything else is fetched once from /api/winrates and kept per
   // (phase, mode).
@@ -117,12 +115,12 @@ export function MatchupChart({ playerId, rows, totalBattles, seasonId = null, er
       <div className="px-4 pt-4 pb-3 flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-2">
           <span className="block w-1.5 h-5 -skew-x-12 bg-amber-400" />
-          <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">Matchups</CardTitle>
+          <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">{t.matchups}</CardTitle>
         </div>
         <div className="flex items-center gap-2 flex-wrap justify-end">
           {activeRows !== null && (
             <span className="text-xs text-zinc-400">
-              {shownSeason != null ? `Phase ${shownSeason} · ` : ''}{activeTotal} {MODE_MATCH_LABEL[mode]}
+              {shownSeason != null ? `${dict.season.phase} ${shownSeason} · ` : ''}{activeTotal} {t.matchCount[modeKey(mode)]}
             </span>
           )}
           <WinrateModeButtons value={mode} onChange={selectMode} />
@@ -130,18 +128,18 @@ export function MatchupChart({ playerId, rows, totalBattles, seasonId = null, er
       </div>
 
       {showError && (
-        <div className="px-4 pb-4 text-sm text-zinc-300">Failed to load matchup data.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-300">{t.matchupsFailed}</div>
       )}
 
       {!showError && activeRows === null && (
         <div className="px-4 pb-4 flex items-center gap-2 text-sm text-zinc-300">
           <div className="w-3 h-3 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
-          Computing matchups…
+          {t.computing}
         </div>
       )}
 
       {!showError && activeRows !== null && activeRows.length === 0 && (
-        <div className="px-4 pb-4 text-sm text-zinc-300">No match data found for this mode.</div>
+        <div className="px-4 pb-4 text-sm text-zinc-300">{t.noMatchData}</div>
       )}
 
       {!showError && activeRows !== null && activeRows.length > 0 && (
@@ -165,7 +163,7 @@ export function MatchupChart({ playerId, rows, totalBattles, seasonId = null, er
                   </div>
                   <div className="min-w-0">
                     <div className="font-bebas text-2xl tracking-widest text-zinc-100 leading-none">{row.charName}</div>
-                    <div className="text-[11px] text-zinc-400 tabular-nums mt-1.5">{row.totalGames} games</div>
+                    <div className="text-[11px] text-zinc-400 tabular-nums mt-1.5">{row.totalGames} {t.games}</div>
                   </div>
                 </div>
 

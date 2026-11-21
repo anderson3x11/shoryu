@@ -2,13 +2,17 @@
 // IDs match Buckler's play/act targetModeId. Mode 1 is what the profile payload carries; the
 // others are lazy-fetched from /api/winrates. No Extreme battle mode — Buckler doesn't offer it.
 // Same labels and order as the Match History mode tabs.
+// `key` names the label in the dictionary (profile.modes / profile.matchCount).
 export const WINRATE_MODES = [
-  { id: 1, label: 'All' },
-  { id: 2, label: 'Ranked' },
-  { id: 3, label: 'Casual' },
-  { id: 5, label: 'Battle Hub' },
-  { id: 4, label: 'Custom Room' },
+  { id: 1, key: 'all' },
+  { id: 2, key: 'ranked' },
+  { id: 3, key: 'casual' },
+  { id: 5, key: 'hub' },
+  { id: 4, key: 'custom' },
 ] as const
+
+export type ModeKey = (typeof WINRATE_MODES)[number]['key']
+export const modeKey = (id: WinrateModeId): ModeKey => WINRATE_MODES.find((m) => m.id === id)!.key
 
 export type WinrateModeId = (typeof WINRATE_MODES)[number]['id']
 

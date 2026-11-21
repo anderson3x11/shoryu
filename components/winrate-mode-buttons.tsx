@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/i18n/context'
 import { WINRATE_MODES, type WinrateModeId } from '@/lib/constants/winrate-modes'
 
 interface WinrateModeButtonsProps {
@@ -11,6 +12,7 @@ interface WinrateModeButtonsProps {
 // Battle-mode filter shared by the Overview character list and the Stats matchup chart.
 // Same button style as the Match History mode tabs.
 export function WinrateModeButtons({ value, onChange }: WinrateModeButtonsProps) {
+  const t = useT().profile
   return (
     <div className="flex gap-1 flex-wrap justify-end">
       {WINRATE_MODES.map((m) => (
@@ -24,7 +26,7 @@ export function WinrateModeButtons({ value, onChange }: WinrateModeButtonsProps)
               : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-zinc-200'
           )}
         >
-          {m.label}
+          {t.modes[m.key]}
         </button>
       ))}
     </div>

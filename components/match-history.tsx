@@ -3,6 +3,7 @@
 import { useState, useTransition, useMemo, useEffect, useSyncExternalStore } from 'react'
 import { Play } from 'lucide-react'
 import { useT } from '@/lib/i18n/context'
+import type { ModeKey } from '@/lib/constants/winrate-modes'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -25,12 +26,13 @@ interface MatchHistoryProps {
 
 type Mode = 'all' | 'rank' | 'casual' | 'hub' | 'custom'
 
-const MODES: { id: Mode; label: string }[] = [
-  { id: 'all',    label: 'All'        },
-  { id: 'rank',   label: 'Ranked'     },
-  { id: 'casual', label: 'Casual'     },
-  { id: 'hub',    label: 'Battle Hub' },
-  { id: 'custom', label: 'Custom Room'},
+// `key` names the label in the dictionary (profile.modes).
+const MODES: { id: Mode; key: ModeKey }[] = [
+  { id: 'all',    key: 'all'    },
+  { id: 'rank',   key: 'ranked' },
+  { id: 'casual', key: 'casual' },
+  { id: 'hub',    key: 'hub'    },
+  { id: 'custom', key: 'custom' },
 ]
 
 function ReplayIdCopy({ replayId }: { replayId: string }) {
@@ -79,6 +81,7 @@ const MATCH_TYPE_LABELS: Record<string, string> = {
 }
 
 export function MatchHistory({ initialBattles = [], initialTotalPages = 1, currentShortId, playerId, lpCharacters, currentByChar }: MatchHistoryProps) {
+  const t = useT()
   const [mode, setMode]           = useState<Mode>('all')
   const [page, setPage]           = useState(1)
   const [battles, setBattles]     = useState<BucklerBattle[]>(initialBattles)
@@ -217,7 +220,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">
       {/* Header + tabs */}
       <div className="px-4 pt-4 pb-0 flex items-center justify-between gap-4 flex-wrap">
-        <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">Match History</CardTitle>
+        <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">{t.profile.matchHistory}</CardTitle>
         <div className="flex gap-1 flex-wrap justify-end">
           {MODES.map((m) => (
             <button
@@ -230,7 +233,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
                   : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-zinc-300'
               )}
             >
-              {m.label}
+              {t.profile.modes[m.key]}
             </button>
           ))}
         </div>
@@ -248,7 +251,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
                 : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-zinc-300'
             )}
           >
-            All
+            {t.profile.modes.all}
           </button>
           {myChars.map(({ slug, name }) => (
             <button
@@ -271,11 +274,11 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
         {initialLoading ? (
           <div className="px-4 py-10 flex items-center justify-center gap-2 text-sm text-zinc-300">
             <span className="w-4 h-4 rounded-full border-2 border-zinc-600 border-t-amber-400 animate-spin" />
-            Loading matches…
+            {t.profile.loadingMatches}
           </div>
         ) : battles.length === 0 ? (
           <div className="px-4 py-6 text-sm text-zinc-300">
-            {charFilter ? 'No more matches with this character.' : 'No matches found.'}
+            {charFilter ? t.profile.noMoreWithChar : t.profile.noMatches}
           </div>
         ) : battles.map((battle) => {
           const isP1 = battle.player1_info.player.short_id === sid
@@ -359,7 +362,7 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
                     {rounds.lost}
                   </span>
                   {me.round_results.length > 0 && (
-                    <div className="flex items-center gap-1 mt-1" aria-label="Round results">
+                    <div className="flex items-center gap-1 mt-1" aria-label={t.profile.roundResults}>
                       {me.round_results.map((r, i) => (
                         <span
                           key={i}
@@ -422,17 +425,17 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
             disabled={page <= 1 || pending}
             className="text-xs px-3 py-1.5 rounded-none border border-zinc-700 text-zinc-300 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
-            ← Prev
+            ← {t.profile.prev}
           </button>
           <span className="text-xs text-zinc-300">
-            Page {page} / {totalPages}
+            {t.profile.page} {page} / {totalPages}
           </span>
           <button
             onClick={() => goPage(page + 1)}
             disabled={page >= totalPages || pending}
             className="text-xs px-3 py-1.5 rounded-none border border-zinc-700 text-zinc-300 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
-            Next →
+            {t.profile.next} →
           </button>
         </div>
       )}

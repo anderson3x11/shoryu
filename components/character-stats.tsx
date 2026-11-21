@@ -8,6 +8,7 @@ import { getCharacterByBucklerId, getCharacterImageUrl } from '@/lib/constants/c
 import { getWinrateMode, getServerWinrateMode, setWinrateMode, subscribeWinrateMode, type WinrateModeId } from '@/lib/constants/winrate-modes'
 import { WinrateModeButtons } from '@/components/winrate-mode-buttons'
 import { getSeason, subscribeSeason } from '@/lib/constants/season'
+import { useT } from '@/lib/i18n/context'
 import type { BucklerLeagueInfo } from '@/lib/buckler'
 
 export interface PhaseCharInfo {
@@ -91,6 +92,7 @@ function RankBadge({ li }: { li: BucklerLeagueInfo }) {
 }
 
 export function CharacterStats({ playerId, phases, winRates }: CharacterStatsProps) {
+  const t = useT().profile
   const [activePhaseId, setActivePhaseId] = useState(phases[0]?.id ?? '')
 
   // Battle-mode filter and phase (season bar). The current phase in mode 1 ("All") is the
@@ -152,7 +154,7 @@ export function CharacterStats({ playerId, phases, winRates }: CharacterStatsPro
       <div className="flex items-center justify-between px-4 pt-4 pb-3 flex-shrink-0">
         <div className="flex items-center gap-2">
           <span className="block w-1.5 h-5 -skew-x-12 bg-amber-400" />
-          <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">Characters</CardTitle>
+          <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">{t.characters}</CardTitle>
         </div>
 
         <div className="flex items-center gap-1.5 flex-wrap justify-end">
@@ -178,7 +180,7 @@ export function CharacterStats({ playerId, phases, winRates }: CharacterStatsPro
       </div>
 
       {failed && (
-        <p className="px-4 pb-2 text-xs text-zinc-400 flex-shrink-0">Win rates unavailable for this mode.</p>
+        <p className="px-4 pb-2 text-xs text-zinc-400 flex-shrink-0">{t.winRatesUnavailable}</p>
       )}
 
       {/* List — fills remaining card height, scrolls when content exceeds it */}
@@ -187,7 +189,7 @@ export function CharacterStats({ playerId, phases, winRates }: CharacterStatsPro
         {displayed.length === 0 && loading ? null : displayed.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 gap-2 text-zinc-300">
             <span className="text-2xl text-zinc-500">?</span>
-            <p className="text-sm">No ranked games this phase</p>
+            <p className="text-sm">{t.noGamesPhase}</p>
           </div>
         ) : (
           displayed.map((c, i) => {
@@ -225,7 +227,7 @@ export function CharacterStats({ playerId, phases, winRates }: CharacterStatsPro
                     if (!wr || wr.battle_count === 0) {
                       return (
                         <div className="flex items-center justify-center">
-                          <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">No games</p>
+                          <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">{t.noGames}</p>
                         </div>
                       )
                     }
@@ -238,7 +240,7 @@ export function CharacterStats({ playerId, phases, winRates }: CharacterStatsPro
                           <span className="text-zinc-400"> / </span>
                           <span className="text-red-400">{losses}L</span>
                         </p>
-                        <p className="text-[11px] font-semibold tabular-nums uppercase tracking-wide text-zinc-400 leading-tight">{wr.battle_count} games</p>
+                        <p className="text-[11px] font-semibold tabular-nums uppercase tracking-wide text-zinc-400 leading-tight">{wr.battle_count} {t.games}</p>
                         <p className="text-sm font-semibold tabular-nums text-zinc-100">{rate.toFixed(1)}%</p>
                       </div>
                     )

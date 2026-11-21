@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { useLocale, useT } from '@/lib/i18n/context'
+import { formatAge } from '@/lib/i18n/format'
 import Image from 'next/image'
 import { Card, CardTitle } from '@/components/ui/card'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
@@ -13,6 +15,9 @@ interface SessionSummaryProps {
 
 export function SessionSummary({ session }: SessionSummaryProps) {
   const [now] = useState(() => Date.now())
+  const dict = useT()
+  const t = dict.profile
+  const locale = useLocale()
   if (!session || session.total < 2) return null
 
   // Computed client-side from newestAt so a cached response never shows a stale "ended X ago".
@@ -23,21 +28,21 @@ export function SessionSummary({ session }: SessionSummaryProps) {
     <Card className="bg-zinc-900 border-zinc-800">
       <div className="px-4 sm:px-5 py-4 flex flex-col gap-4">
         <div className="flex items-center justify-between gap-3 flex-wrap">
-          <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">Last Session</CardTitle>
+          <CardTitle className="text-sm text-zinc-300 uppercase tracking-wider">{t.lastSession}</CardTitle>
           <span className="text-xs text-zinc-300 tabular-nums">
-            {fmtDuration(session.durationSec)} · ended {fmtAge(ageSec)}
+            {fmtDuration(session.durationSec)} · {t.ended} {formatAge(ageSec, locale, dict.player.justNow)}
           </span>
         </div>
 
         <div className="grid gap-3 sm:gap-6 grid-cols-3">
-          <Stat value={String(session.wins)} label="Wins" color="emerald" />
-          <Stat value={String(session.losses)} label="Losses" color="red" />
-          <Stat value={`${session.winRate}%`} label="Win Rate" />
+          <Stat value={String(session.wins)} label={t.wins} color="emerald" />
+          <Stat value={String(session.losses)} label={t.losses} color="red" />
+          <Stat value={`${session.winRate}%`} label={t.winRate} />
         </div>
 
         {session.chars.length > 0 && (
           <div className="flex items-center gap-x-4 gap-y-2 flex-wrap pt-3 border-t border-zinc-800/60 -mx-1 px-1 mt-1">
-            <span className="text-[10px] text-zinc-300 uppercase tracking-widest">Played</span>
+            <span className="text-[10px] text-zinc-300 uppercase tracking-widest">{t.played}</span>
             {session.chars.map(c => {
               const hasDelta = c.deltaCount > 0
               const approx = hasDelta && c.deltaCount < c.rankedCount
@@ -104,11 +109,3 @@ function fmtDuration(sec: number): string {
   return `${m}m`
 }
 
-function fmtAge(sec: number): string {
-  const m = Math.floor(sec / 60)
-  if (m < 1) return 'just now'
-  if (m < 60) return `${m}m ago`
-  const h = Math.floor(m / 60)
-  if (h < 24) return `${h}h ago`
-  return `${Math.floor(h / 24)}d ago`
-}

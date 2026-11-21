@@ -1,3 +1,6 @@
+'use client'
+
+import { useT } from '@/lib/i18n/context'
 import { Card } from '@/components/ui/card'
 import type { BucklerPlayData } from '@/lib/buckler'
 
@@ -26,6 +29,7 @@ function formatTime(seconds: number): string {
 }
 
 export function PlayCounts({ playData }: PlayCountsProps) {
+  const t = useT().profile
   const stats = playData.battle_stats
   const playtimes = playData.base_info.content_play_time_list
     .filter((pt) => pt.play_time > 0)
@@ -46,7 +50,7 @@ export function PlayCounts({ playData }: PlayCountsProps) {
       <div className="px-4 pt-4 pb-3 border-b border-zinc-800 flex-shrink-0">
         <div className="flex items-center gap-2 mb-1.5">
           <span className="block w-1.5 h-5 -skew-x-12 bg-amber-400" />
-          <p className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">Matches Played</p>
+          <p className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">{t.matchesPlayed}</p>
         </div>
         <p className="text-4xl font-bold text-white tabular-nums">{total.toLocaleString()}</p>
       </div>
@@ -88,7 +92,7 @@ export function PlayCounts({ playData }: PlayCountsProps) {
         <div className="px-4 py-3 flex-shrink-0">
           <div className="flex items-center gap-2 mb-2.5">
             <span className="block w-1.5 h-4 -skew-x-12 bg-amber-400" />
-            <p className="font-bebas text-lg tracking-widest text-zinc-100 leading-none">Time Played</p>
+            <p className="font-bebas text-lg tracking-widest text-zinc-100 leading-none">{t.timePlayed}</p>
           </div>
           <div className="space-y-1.5">
             {playtimes.map((pt) => (

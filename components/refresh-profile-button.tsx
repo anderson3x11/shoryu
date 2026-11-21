@@ -3,7 +3,7 @@
 import { useState, useSyncExternalStore } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { useT, useLocale } from '@/lib/i18n/context'
-import { HTML_LANG } from '@/lib/i18n/locales'
+import { formatAge } from '@/lib/i18n/format'
 import { noSubscribe } from '@/lib/utils'
 
 // Forces a fresh Buckler fetch for this player (bypassing the 12h profile + battle caches), then
@@ -19,7 +19,7 @@ export function RefreshProfileButton({ playerId, fetchedAt }: { playerId: string
   const age = useSyncExternalStore(
     noSubscribe,
     () => fetchedAt
-      ? fmtAge(Math.max(0, Math.floor((Date.now() - fetchedAt) / 1000)), HTML_LANG[locale], t.player.justNow)
+      ? formatAge(Math.max(0, Math.floor((Date.now() - fetchedAt) / 1000)), locale, t.player.justNow)
       : null,
     () => null,
   )
@@ -55,15 +55,4 @@ export function RefreshProfileButton({ playerId, fetchedAt }: { playerId: string
       </button>
     </div>
   )
-}
-
-// Intl handles "5 min ago" in every locale we ship, so there is no wording to translate here.
-function fmtAge(sec: number, lang: string, justNow: string): string {
-  const m = Math.floor(sec / 60)
-  if (m < 1) return justNow
-  const rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto', style: 'short' })
-  if (m < 60) return rtf.format(-m, 'minute')
-  const h = Math.floor(m / 60)
-  if (h < 24) return rtf.format(-h, 'hour')
-  return rtf.format(-Math.floor(h / 24), 'day')
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { useT } from '@/lib/i18n/context'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -15,30 +16,31 @@ interface RivalsProps {
 type Variant = 'played' | 'victim' | 'tormentor'
 
 export function Rivals({ data, error = false }: RivalsProps) {
+  const t = useT()
   const empty = data !== null && data.mostPlayed.length === 0
 
   return (
     <Card className="bg-zinc-900 border-zinc-800 py-0 gap-0">
       <div className="px-4 pt-4 pb-3 flex items-center gap-2">
         <span className="block w-1.5 h-5 -skew-x-12 bg-amber-400" />
-        <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">Rivals</CardTitle>
+        <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">{t.player.rivals}</CardTitle>
       </div>
 
       {data === null && !error && (
-        <div className="px-4 pb-5 text-sm text-zinc-400">Loading…</div>
+        <div className="px-4 pb-5 text-sm text-zinc-400">{t.profile.loading}</div>
       )}
       {error && (
-        <div className="px-4 pb-5 text-sm text-zinc-400">Couldn&apos;t load rivals.</div>
+        <div className="px-4 pb-5 text-sm text-zinc-400">{t.profile.rivalsFailed}</div>
       )}
       {empty && (
-        <div className="px-4 pb-5 text-sm text-zinc-400">No ranked battles synced yet.</div>
+        <div className="px-4 pb-5 text-sm text-zinc-400">{t.profile.rivalsEmpty}</div>
       )}
 
       {data !== null && !empty && (
         <div className="px-4 pb-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <Section title="Most Played" variant="played" rivals={data.mostPlayed} />
-          <Section title="Victims" variant="victim" rivals={data.victims} hint="you beat most" />
-          <Section title="Tormentors" variant="tormentor" rivals={data.tormentors} hint="beat you most" />
+          <Section title={t.profile.mostPlayed} variant="played" rivals={data.mostPlayed} />
+          <Section title={t.profile.victims} variant="victim" rivals={data.victims} hint={t.profile.victimsHint} />
+          <Section title={t.profile.tormentors} variant="tormentor" rivals={data.tormentors} hint={t.profile.tormentorsHint} />
         </div>
       )}
     </Card>
@@ -56,6 +58,7 @@ function Section({
   rivals: Rival[]
   hint?: string
 }) {
+  const t = useT()
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline gap-2 border-b border-zinc-800 pb-1.5">
@@ -63,7 +66,7 @@ function Section({
         {hint && <span className="text-[10px] text-zinc-500 lowercase tracking-wide">{hint}</span>}
       </div>
       {rivals.length === 0 ? (
-        <span className="text-xs text-zinc-500 py-1">Not enough games.</span>
+        <span className="text-xs text-zinc-500 py-1">{t.profile.notEnough}</span>
       ) : (
         <ul className="flex flex-col">
           {rivals.map((r) => (
@@ -76,6 +79,7 @@ function Section({
 }
 
 function RivalRow({ rival, variant }: { rival: Rival; variant: Variant }) {
+  const t = useT()
   const diff = rival.wins - rival.losses
 
   return (
@@ -95,7 +99,7 @@ function RivalRow({ rival, variant }: { rival: Rival; variant: Variant }) {
           />
         </div>
         <span className={cn('flex-1 min-w-0 truncate text-sm text-zinc-200', !rival.name && 'text-zinc-500 italic')}>
-          {rival.name ?? 'Unknown'}
+          {rival.name ?? t.profile.unknown}
         </span>
         <span className="flex items-center gap-2 flex-shrink-0 tabular-nums text-xs">
           {variant === 'played' && (
