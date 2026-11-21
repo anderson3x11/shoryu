@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { useHref } from '@/lib/i18n/context'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
+import { noSubscribe } from '@/lib/utils'
 import { CHANGELOG } from '@/lib/data/changelog'
 
 const STORAGE_KEY = 'changelog_seen'
@@ -10,12 +11,12 @@ const LATEST = CHANGELOG[0]?.date ?? ''
 
 export function ChangelogLink() {
   const href = useHref()
-  const [dot, setDot] = useState(false)
-
-  useEffect(() => {
-    const seen = localStorage.getItem(STORAGE_KEY) ?? ''
-    setDot(LATEST > seen)
-  }, [])
+  // localStorage is read as an external store: no dot on the server, the real value on the client.
+  const dot = useSyncExternalStore(
+    noSubscribe,
+    () => LATEST > (localStorage.getItem(STORAGE_KEY) ?? ''),
+    () => false,
+  )
 
   return (
     <Link href={href('/changelog')} prefetch={false} className="relative text-xs text-zinc-400 hover:text-zinc-300 transition-colors">

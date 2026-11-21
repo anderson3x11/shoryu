@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useMemo, useEffect } from 'react'
+import { useState, useTransition, useMemo, useEffect, useSyncExternalStore } from 'react'
 import { Play } from 'lucide-react'
 import { useT } from '@/lib/i18n/context'
 import Image from 'next/image'
@@ -12,7 +12,7 @@ import type { BucklerBattle } from '@/lib/buckler'
 import { getBattleWinner } from '@/lib/buckler'
 import { valueAfter } from '@/lib/supabase/ranked-stats'
 import type { LpCharacter, CurrentByChar } from '@/lib/supabase/ranked-stats'
-import { cn } from '@/lib/utils'
+import { cn, noSubscribe } from '@/lib/utils'
 
 interface MatchHistoryProps {
   initialBattles?: BucklerBattle[]
@@ -85,8 +85,8 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
   const [totalPages, setTotal]    = useState(initialTotalPages)
   const [charFilter, setCharFilter] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => { setMounted(true) }, [])
+  // False on the server and during hydration, true afterwards, without a mount effect.
+  const mounted = useSyncExternalStore(noSubscribe, () => true, () => false)
 
   // True while the lazy first-page fetch is in flight (no server-provided battles).
   const [initialLoading, setInitialLoading] = useState(initialBattles.length === 0)
@@ -115,7 +115,6 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
     const m = new Map<number, LpSeries>()
     for (const c of lpCharacters ?? []) m.set(c.charId, { isMaster: c.isMaster, points: c.points })
     return m
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lpCharacters])
 
   const sid = Number(currentShortId)
@@ -170,6 +169,8 @@ export function MatchHistory({ initialBattles = [], initialTotalPages = 1, curre
 
   useEffect(() => {
     if (charFilter) return // a filtered page can't reveal new characters — skip
+    // Accumulates across fetched pages (state with memory), so it can't be derived during render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setKnownChars(prev => {
       let added = false
       const next = new Map(prev)

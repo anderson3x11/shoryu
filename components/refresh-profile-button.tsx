@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { useT, useLocale } from '@/lib/i18n/context'
 import { HTML_LANG } from '@/lib/i18n/locales'
+import { noSubscribe } from '@/lib/utils'
 
 // Forces a fresh Buckler fetch for this player (bypassing the 12h profile + battle caches), then
 // reloads the page with a one-shot ?refreshed token so every tab re-pulls the fresh data instead
@@ -13,13 +14,15 @@ export function RefreshProfileButton({ playerId, fetchedAt }: { playerId: string
   const locale = useLocale()
   const [loading, setLoading] = useState(false)
   const [note, setNote] = useState<string | null>(null)
-  // Rendered after mount only: the page is ISR-cached, so an age baked into the HTML would itself
-  // be stale (and would not match what the browser computes, which React flags as a mismatch).
-  const [age, setAge] = useState<string | null>(null)
-  useEffect(() => {
-    if (!fetchedAt) return
-    setAge(fmtAge(Math.max(0, Math.floor((Date.now() - fetchedAt) / 1000)), HTML_LANG[locale], t.player.justNow))
-  }, [fetchedAt, locale, t])
+  // Client only (server snapshot null): an age baked into the HTML would already be stale and
+  // would not match what the browser computes. The minute-level string is stable between reads.
+  const age = useSyncExternalStore(
+    noSubscribe,
+    () => fetchedAt
+      ? fmtAge(Math.max(0, Math.floor((Date.now() - fetchedAt) / 1000)), HTML_LANG[locale], t.player.justNow)
+      : null,
+    () => null,
+  )
 
   async function refresh() {
     setNote(null)

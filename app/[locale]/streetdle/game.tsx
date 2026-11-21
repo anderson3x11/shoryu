@@ -97,7 +97,10 @@ export function StreedleGame() {
   const [won, setWon]           = useState(false)
   const [gaveUp, setGaveUp]     = useState(false)
 
+  // Today's answer and saved guesses depend on the browser's clock and localStorage, so they are
+  // seeded on mount rather than during render, which would not match the server HTML.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTarget(getDailyCharacter())
     try {
       const saved: SavedState = JSON.parse(localStorage.getItem(getDailyKey()) ?? 'null')
@@ -133,7 +136,7 @@ export function StreedleGame() {
       {/* Title */}
       <div className="text-center space-y-2 pt-4">
         <h1 className="font-bebas text-5xl sm:text-8xl tracking-widest text-zinc-100">STREETDLE</h1>
-        <p className="text-zinc-300 text-lg">Guess today's Street Fighter character</p>
+        <p className="text-zinc-300 text-lg">Guess today&apos;s Street Fighter character</p>
       </div>
 
       {/* Legend */}
@@ -251,6 +254,7 @@ export function StreedleGame() {
 function NextPuzzleCountdown() {
   const [left, setLeft] = useState<number | null>(null)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLeft(secondsUntilNextPuzzle())
     const t = setInterval(() => setLeft(secondsUntilNextPuzzle()), 1000)
     return () => clearInterval(t)

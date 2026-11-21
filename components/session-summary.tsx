@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import { Card, CardTitle } from '@/components/ui/card'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
@@ -11,10 +12,12 @@ interface SessionSummaryProps {
 }
 
 export function SessionSummary({ session }: SessionSummaryProps) {
+  const [now] = useState(() => Date.now())
   if (!session || session.total < 2) return null
 
   // Computed client-side from newestAt so a cached response never shows a stale "ended X ago".
-  const ageSec = Math.max(0, Math.floor(Date.now() / 1000) - session.newestAt)
+  // The clock is read once, in a state initializer, not on every render.
+  const ageSec = Math.max(0, Math.floor(now / 1000) - session.newestAt)
 
   return (
     <Card className="bg-zinc-900 border-zinc-800">

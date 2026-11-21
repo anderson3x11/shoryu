@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Canonicalize www.shoryu.site -> shoryu.site (Google was indexing both as duplicates)
   const host = request.headers.get('host') ?? ''
   if (host.startsWith('www.')) {

@@ -48,7 +48,10 @@ export function SearchBar() {
   const abortRef = useRef<AbortController | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Recent searches live in localStorage and the user edits them, so they are local state seeded
+  // once on mount (reading localStorage during render would not match the server HTML).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRecent(loadRecent())
   }, [])
 
