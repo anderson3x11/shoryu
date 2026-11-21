@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import { Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { advTone, TONE_CLASS, type Move, type MoveGroup } from '@/lib/supercombo'
+import { advTone, hitboxShots, orderMoves, TONE_CLASS, type Move, type MoveGroup } from '@/lib/supercombo'
 import { FilterChips } from '@/components/filter-chips'
 
 const WIKI = 'https://wiki.supercombo.gg'
@@ -20,23 +20,6 @@ const GROUP_LABELS: Record<MoveGroup, string> = {
 }
 
 const GROUP_ORDER: MoveGroup[] = ['normal', 'air', 'throw', 'special', 'super', 'drive', 'taunt']
-
-// The data comes sorted by input string (2HK before 5LP). Normals and air moves read better in
-// the usual frame data order: standing, crouching, then command normals, light to heavy.
-const STANCE = ['5', '2', '6', '4', '3', '1', 'j.']
-const BUTTON = ['LP', 'MP', 'HP', 'LK', 'MK', 'HK']
-
-function normalRank(input: string): number {
-  const stance = STANCE.findIndex((s) => input.startsWith(s))
-  const button = BUTTON.findIndex((b) => input.slice(stance < 0 ? 0 : STANCE[stance].length).startsWith(b))
-  return (stance < 0 ? STANCE.length : stance) * 100 + (button < 0 ? BUTTON.length : button) * 10
-    + (input.includes('~') ? 1 : 0)
-}
-
-function sortMoves(group: MoveGroup, moves: Move[]): Move[] {
-  if (group !== 'normal' && group !== 'air') return moves
-  return [...moves].sort((a, b) => normalRank(a.input) - normalRank(b.input))
-}
 
 /** Notes longer than this start clamped, with a toggle to read the rest. */
 const NOTES_CLAMP = 180
@@ -65,7 +48,7 @@ export function CharacterFrameData({ moves, accent }: { moves: Move[]; accent: s
   }, [moves, group, query])
 
   const sections = GROUP_ORDER
-    .map((g) => ({ group: g, moves: sortMoves(g, visible.filter((m) => m.group === g)) }))
+    .map((g) => ({ group: g, moves: orderMoves(g, visible.filter((m) => m.group === g)) }))
     .filter((s) => s.moves.length > 0)
 
   return (
@@ -113,11 +96,8 @@ export function CharacterFrameData({ moves, accent }: { moves: Move[]; accent: s
 function MoveCard({ move }: { move: Move }) {
   // Hitbox first: seeing where the move hits is the point of the image.
   const shots = [
-    ...move.hitboxes.map((path, i) => ({
-      path,
-      label: move.hitboxes.length > 1 ? `Hitbox ${i + 1}` : 'Hitbox',
-    })),
-    ...(move.img ? [{ path: move.img, label: 'Move' }] : []),
+    ...hitboxShots(move.hitboxes),
+    ...(move.img ? [{ path: move.img, label: 'Hide hitbox' }] : []),
   ]
   const [shot, setShot] = useState(0)
   const [showNotes, setShowNotes] = useState(false)
@@ -165,7 +145,7 @@ function MoveCard({ move }: { move: Move }) {
             />
           </a>
           {shots.length > 1 && (
-            <div className="absolute bottom-1.5 left-1.5 flex gap-1">
+            <div className="absolute bottom-1.5 left-1.5 right-1.5 flex flex-wrap gap-1">
               {shots.map((s, i) => (
                 <button
                   key={s.path}
