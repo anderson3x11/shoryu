@@ -1,5 +1,5 @@
 export interface ChangelogEntry {
-  version: string  // "1.15": minor for a feature release, patch for a small one
+  version: string  // "1.2": minor for a big release, patch ("1.2.1") for the ones after it
   title: string    // release name shown next to the version
   date: string     // "YYYY-MM-DD"
   items: string[]
@@ -7,7 +7,7 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: "1.15",
+    version: "1.2",
     title: "Head to Head",
     date: "2026-11-21",
     items: [
@@ -17,10 +17,15 @@ export const CHANGELOG: ChangelogEntry[] = [
       "Frame data: quick filters (plus on block, safe, invincible, armor), sorting, and search in move notes",
       "Arjun's frame data now has hitbox images",
       "The current version is now shown in the footer",
+      "Japanese and Portuguese now cover the whole site: profiles, character pages, frame data, stats, tournaments, guides and Streetdle",
+      "New character, country, phase and sort pickers in the site's style, with character portraits",
+      "The ranking now says it's a snapshot refreshed every 12 hours, and how old it is",
+      "The LP/MR chart only offers the characters played in ranked during the picked phase",
+      "Fixed large ranking positions overlapping the character portraits",
     ],
   },
   {
-    version: "1.14",
+    version: "1.1.16",
     title: "Frame Perfect",
     date: "2026-11-21",
     items: [
@@ -34,7 +39,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.13",
+    version: "1.1.15",
     title: "Hitbox Reveal",
     date: "2026-10-19",
     items: [
@@ -44,7 +49,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.12",
+    version: "1.1.14",
     title: "Here Comes Arjun",
     date: "2026-10-14",
     items: [
@@ -53,7 +58,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.11",
+    version: "1.1.13",
     title: "Here Comes Yasmine",
     date: "2026-08-05",
     items: [
@@ -62,7 +67,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.10",
+    version: "1.1.12",
     title: "Rivals",
     date: "2026-07-06",
     items: [
@@ -71,7 +76,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.9",
+    version: "1.1.11",
     title: "Fresh Costume",
     date: "2026-06-20",
     items: [
@@ -82,7 +87,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.8",
+    version: "1.1.10",
     title: "Memory Card",
     date: "2026-06-16",
     items: [
@@ -92,7 +97,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.7.1",
+    version: "1.1.9",
     title: "New Stage",
     date: "2026-06-13",
     items: [
@@ -100,7 +105,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.7",
+    version: "1.1.8",
     title: "Tier List",
     date: "2026-06-08",
     items: [
@@ -110,7 +115,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.6.2",
+    version: "1.1.7",
     title: "Hotfix",
     date: "2026-06-05",
     items: [
@@ -119,7 +124,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.6.1",
+    version: "1.1.6",
     title: "Patch Notes",
     date: "2026-06-03",
     items: [
@@ -128,7 +133,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.6",
+    version: "1.1.5",
     title: "Session Mode",
     date: "2026-06-02",
     items: [
@@ -139,7 +144,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.5",
+    version: "1.1.4",
     title: "Streetdle",
     date: "2026-06-01",
     items: [
@@ -148,7 +153,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.4",
+    version: "1.1.3",
     title: "Scouting Report",
     date: "2026-05-26",
     items: [
@@ -158,7 +163,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.3",
+    version: "1.1.2",
     title: "Quick Rise",
     date: "2026-05-25",
     items: [
@@ -167,7 +172,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.2",
+    version: "1.1.1",
     title: "Fight!",
     date: "2026-05-22",
     items: [
@@ -178,7 +183,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
-    version: "1.1",
+    version: "1.1.0",
     title: "Matchup Mind",
     date: "2026-05-21",
     items: [
