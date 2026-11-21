@@ -1,5 +1,5 @@
 export interface ChangelogEntry {
-  version: string  // "1.2": minor for a big release, patch ("1.2.1") for the ones after it
+  version: string  // "1.2": minor for a big release, patch ("1.2.1") after it, "1.2.0.1" for a hotfix
   title: string    // release name shown next to the version
   date: string     // "YYYY-MM-DD"
   items: string[]
@@ -7,8 +7,8 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: "1.2.1",
-    title: "Fresh Rivals",
+    version: "1.2.0.1",
+    title: "Hotfix: Fresh Rivals",
     date: "2026-11-21",
     items: [
       "Rivals now look at your ranked games from the last 90 days, so they show who you face now and no more \"Unknown\" opponents",
