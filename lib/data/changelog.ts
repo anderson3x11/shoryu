@@ -5,6 +5,25 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-11-21",
+    items: [
+      "Frame meter on every move: startup, active and recovery frames at a glance, like the in-game meter",
+      "More frame data on each move: hitstun, blockstun, hit confirm window, juggle values, drive rush and perfect parry advantage, thanks to FAT",
+      "Moves are now in a proper order: each special with all its versions together, normals from light to heavy",
+      "Hitbox buttons now say what they show (full hitbox, hit 1, hit 2...), and \"Move\" became \"Hide hitbox\"",
+      "The \"Updated\" time next to Refresh now shows when the profile was really last updated",
+      "Fixed the top menu overflowing on tablets and small laptops",
+    ],
+  },
+  {
+    date: "2026-10-19",
+    items: [
+      "Frame data redesigned as cards, with the hitbox image of every move",
+      "New tech videos and timestamped chapters on character pages",
+      "The Refresh button now really pulls the latest data, and match history updates along with the rest of the profile",
+    ],
+  },
+  {
     date: "2026-10-14",
     items: [
       "Arjun is in: he shows up on the character grid, in stats and matchups, and has his own page",
