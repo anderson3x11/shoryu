@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import { CHARACTERS } from '@/lib/constants/characters'
 import type { LegendSnapshot } from '@/lib/supabase/legend'
+import type { Dict } from '@/lib/i18n/dict'
 
 const CHAR_BY_ID = new Map(CHARACTERS.map(c => [c.bucklerCharId, c]))
 
 const MAX_BAR_HEIGHT = 110
 
-export function LegendSnapshotChart({ snapshot }: { snapshot: LegendSnapshot }) {
+export function LegendSnapshotChart({ snapshot, t }: { snapshot: LegendSnapshot; t: Dict['pages'] }) {
   const { data, snapped_at, player_count } = snapshot
   if (!data.length) return null
 
@@ -21,8 +22,8 @@ export function LegendSnapshotChart({ snapshot }: { snapshot: LegendSnapshot }) 
   return (
     <div className="space-y-4">
       <div className="flex items-baseline justify-between gap-4">
-        <h2 className="font-bebas text-4xl tracking-widest text-zinc-100">Legend Snapshot</h2>
-        <span className="text-xs text-zinc-400 flex-shrink-0">{date} · {player_count} players</span>
+        <h2 className="font-bebas text-4xl tracking-widest text-zinc-100">{t.legendSnapshot}</h2>
+        <span className="text-xs text-zinc-400 flex-shrink-0">{date} · {player_count} {t.players}</span>
       </div>
 
       <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">

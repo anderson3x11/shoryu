@@ -39,7 +39,7 @@ function RankingCard({ entry, locale }: { entry: BucklerRankingEntry; locale: Lo
 
   return (
     <div className="flex items-center gap-3 rounded-none border border-zinc-800 bg-zinc-900 px-4 py-3 hover:border-zinc-600 hover:bg-zinc-800/60 transition-colors">
-      <span className="text-xl text-zinc-300 w-8 text-right flex-shrink-0">
+      <span className="text-xl text-zinc-300 w-12 text-right tabular-nums flex-shrink-0">
         #{entry.master_rating_ranking}
       </span>
       <div className="relative w-12 h-12 rounded-none overflow-hidden bg-zinc-800 flex-shrink-0">

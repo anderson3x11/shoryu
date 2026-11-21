@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef, useSyncExternalStore } from 'react'
 import { Trophy, ExternalLink, X } from 'lucide-react'
+import { useT } from '@/lib/i18n/context'
+import { fill } from '@/lib/i18n/format'
+import type { Dict } from '@/lib/i18n/dict'
 
 // How many weeks ahead the banner appears.
 // 0 = only during the tournament's own week (Monday onward) — production behavior.
@@ -43,17 +46,18 @@ function pick(candidates: BannerCandidate[], today: Date): BannerCandidate | nul
   )
 }
 
-function relativeLabel(start: number, end: number, today: number): string {
-  if (start <= today && today <= end) return 'Happening now'
+function relativeLabel(start: number, end: number, today: number, t: Dict['pages']): string {
+  if (start <= today && today <= end) return t.happeningNow
   const days = Math.round((start - today) / DAY_MS)
-  if (days <= 0) return 'Starts today'
-  if (days === 1) return 'Starts tomorrow'
-  return `Starts in ${days} days`
+  if (days <= 0) return t.startsToday
+  if (days === 1) return t.startsTomorrow
+  return fill(t.startsIn, { n: days })
 }
 
 const subscribe = () => () => {}
 
 export function TournamentBannerClient({ candidates }: { candidates: BannerCandidate[] }) {
+  const t = useT().pages
   const [hidden, setHidden] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -67,7 +71,7 @@ export function TournamentBannerClient({ candidates }: { candidates: BannerCandi
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     selected = pick(candidates, today)
-    if (selected) label = relativeLabel(selected.start, selected.end, today.getTime())
+    if (selected) label = relativeLabel(selected.start, selected.end, today.getTime(), t)
   }
 
   // Expose the banner height so sticky chrome below the navbar (e.g. the profile
@@ -107,7 +111,7 @@ export function TournamentBannerClient({ candidates }: { candidates: BannerCandi
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-amber-400/80 hover:text-amber-400 transition-colors"
           >
-            Details
+            {t.details}
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
           <button

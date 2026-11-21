@@ -12,7 +12,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { ...getDict(isLocale(locale) ? locale : DEFAULT_LOCALE).meta.stats }
 }
 
-export default async function StatsPage() {
+export default async function StatsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE
+  const t = getDict(locale).pages
   const [result, snapshot] = await Promise.all([
     getUsageSnapshot(),
     getLatestLegendSnapshot(),
@@ -26,15 +29,15 @@ export default async function StatsPage() {
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-            <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Stats</h1>
+            <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">{t.stats}</h1>
           </div>
-          <p className="text-zinc-300">Stats data unavailable. Check back later.</p>
+          <p className="text-zinc-300">{t.statsUnavailable}</p>
         </div>
       )}
 
       {snapshot && (
         <div className="border-t border-zinc-800 pt-10">
-          <LegendSnapshotChart snapshot={snapshot} />
+          <LegendSnapshotChart snapshot={snapshot} t={t} />
         </div>
       )}
     </div>

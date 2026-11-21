@@ -1,5 +1,6 @@
 'use client'
 
+import { useT } from '@/lib/i18n/context'
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import { CHARACTERS } from '@/lib/constants/characters'
@@ -20,9 +21,9 @@ const LEAGUES = [
 ]
 
 const CONTROLS = [
-  { label: 'Total',   icon: null },
-  { label: 'Classic', icon: 'https://www.streetfighter.com/6/buckler/assets/images/stats/icon_controltype0.png' },
-  { label: 'Modern',  icon: 'https://www.streetfighter.com/6/buckler/assets/images/stats/icon_controltype1.png' },
+  { label: 'total' as const,   icon: null },
+  { label: 'classic' as const, icon: 'https://www.streetfighter.com/6/buckler/assets/images/stats/icon_controltype0.png' },
+  { label: 'modern' as const,  icon: 'https://www.streetfighter.com/6/buckler/assets/images/stats/icon_controltype1.png' },
 ]
 
 function formatMonth(yyyymm: string): string {
@@ -32,6 +33,7 @@ function formatMonth(yyyymm: string): string {
 }
 
 export function StatsClient({ data, month }: { data: BucklerUsageRateData; month: string }) {
+  const t = useT().pages
   const [league, setLeague] = useState(0)
   const [control, setControl] = useState(0)
 
@@ -49,9 +51,9 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
       <div>
         <div className="flex items-center gap-3">
           <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-          <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Stats</h1>
+          <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">{t.stats}</h1>
         </div>
-        <p className="text-zinc-300 text-sm mt-1">Character Usage - {formatMonth(month)}</p>
+        <p className="text-zinc-300 text-sm mt-1">{t.characterUsage} - {formatMonth(month)}</p>
       </div>
 
       <div className="space-y-3">
@@ -68,9 +70,9 @@ export function StatsClient({ data, month }: { data: BucklerUsageRateData; month
             >
               {icon && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={icon} alt={label} className="h-5 w-auto" />
+                <img src={icon} alt={t[label]} className="h-5 w-auto" />
               )}
-              {label}
+              {t[label]}
             </button>
           ))}
         </div>

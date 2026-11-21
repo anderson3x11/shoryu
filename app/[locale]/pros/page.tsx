@@ -83,7 +83,10 @@ function ProCard({ player, banner }: { player: ProPlayer; banner: BucklerFighter
   )
 }
 
-export default async function ProsPage() {
+export default async function ProsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE
+  const t = getDict(locale).pages
   // Banners come from the twice-daily sync snapshot in Supabase, not a live Buckler fetch —
   // this page used to fire one request per pro on every render. If the snapshot is missing
   // (sync never ran), show the retry-later fallback. Order follows PRO_PLAYERS.
@@ -104,11 +107,11 @@ export default async function ProsPage() {
     <div className="space-y-8">
       <div className="flex items-center gap-3">
         <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-        <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Pro Players & Creators</h1>
+        <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">{t.pros}</h1>
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Pro Players</h2>
+        <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">{t.proPlayers}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {pros.map(({ player, banner }) => (
             <ProCard key={player.short_id} player={player} banner={banner} />
@@ -117,7 +120,7 @@ export default async function ProsPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">Content Creators</h2>
+        <h2 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest">{t.creators}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {creators.map(({ player, banner }) => (
             <ProCard key={player.short_id} player={player} banner={banner} />

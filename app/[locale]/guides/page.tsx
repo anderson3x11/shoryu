@@ -30,10 +30,10 @@ const TECH = [
 ]
 
 const RESOURCES = [
-  { title: 'Supercombo Wiki',        desc: 'Community wiki with character pages, combos, and matchups.', domain: 'wiki.supercombo.gg',    url: 'https://wiki.supercombo.gg/w/Street_Fighter_6', icon: <BookOpen size={16} />, color: '#60a5fa' },
-  { title: 'Ultimate Frame Data',    desc: 'Frame data for every move of every character.',             domain: 'ultimateframedata.com', url: 'https://ultimateframedata.com/sf6',             icon: <Swords size={16} />,   color: '#f97316' },
-  { title: 'Fighting Game Glossary', desc: 'Plain-english definitions for FGC terms and mechanics.',    domain: 'glossary.infil.net',    url: 'https://glossary.infil.net/',                   icon: <Info size={16} />,     color: '#a78bfa' },
-  { title: "Gief's Gym",             desc: 'Structured training drills to build your fundamentals.',     domain: 'reddit.com',            url: 'https://www.reddit.com/r/StreetFighter/wiki/v/giefsgym/', icon: <Dumbbell size={16} />, color: '#ff4500' },
+  { title: 'Supercombo Wiki',        desc: 'wikiDesc', domain: 'wiki.supercombo.gg',    url: 'https://wiki.supercombo.gg/w/Street_Fighter_6', icon: <BookOpen size={16} />, color: '#60a5fa' },
+  { title: 'Ultimate Frame Data',    desc: 'ufdDesc', domain: 'ultimateframedata.com', url: 'https://ultimateframedata.com/sf6',             icon: <Swords size={16} />,   color: '#f97316' },
+  { title: 'Fighting Game Glossary', desc: 'glossaryDesc', domain: 'glossary.infil.net',    url: 'https://glossary.infil.net/',                   icon: <Info size={16} />,     color: '#a78bfa' },
+  { title: "Gief's Gym",             desc: 'giefDesc', domain: 'reddit.com',            url: 'https://www.reddit.com/r/StreetFighter/wiki/v/giefsgym/', icon: <Dumbbell size={16} />, color: '#ff4500' },
 ]
 
 function getVideoId(url: string): string | null {
@@ -70,12 +70,15 @@ function VideoGrid({ videos }: { videos: { title: string; url: string }[] }) {
   )
 }
 
-export default async function GuidesPage() {
+export default async function GuidesPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE
+  const t = getDict(locale).pages
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-3">
         <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-        <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Guides</h1>
+        <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">{t.guides}</h1>
       </div>
 
       <p className="text-sm text-zinc-300 max-w-2xl leading-relaxed">
@@ -85,21 +88,21 @@ export default async function GuidesPage() {
 
       <div className="space-y-10">
         <section className="space-y-4">
-          <StepHeader n={1} title="Start Here" hint="Brand new to the game? Watch these first." />
+          <StepHeader n={1} title={t.startHere} hint={t.startHereHint} />
           <VideoGrid videos={START_HERE} />
         </section>
 
         <section className="space-y-4">
-          <StepHeader n={2} title="Choose Your Character" hint="Find a main that clicks with you, then dig into their guides." />
+          <StepHeader n={2} title={t.chooseCharacter} hint={t.chooseCharacterHint} />
           <Link
             href="/"
             className="group flex items-center gap-4 rounded-none border border-amber-400/40 bg-amber-400/5 px-5 py-4 hover:border-amber-400 hover:bg-amber-400/10 transition-colors"
           >
             <Users size={22} className="shrink-0 text-amber-400" />
             <div className="min-w-0 flex-1">
-              <div className="font-bebas text-xl tracking-wide text-zinc-100 leading-none">Browse the roster</div>
+              <div className="font-bebas text-xl tracking-wide text-zinc-100 leading-none">{t.browseRoster}</div>
               <div className="text-xs text-zinc-300 mt-1.5 leading-snug">
-                Open any character for guides, combos, okizeme, matchups and players to watch.
+                {t.browseRosterText}
               </div>
             </div>
             <ArrowRight size={18} className="shrink-0 text-amber-400 transition-transform group-hover:translate-x-0.5" />
@@ -107,20 +110,20 @@ export default async function GuidesPage() {
         </section>
 
         <section className="space-y-4">
-          <StepHeader n={3} title="Learn the Fundamentals" hint="The habits that carry every character and every matchup." />
+          <StepHeader n={3} title={t.fundamentals} hint={t.fundamentalsHint} />
           <VideoGrid videos={FUNDAMENTALS} />
         </section>
 
         <section className="space-y-4">
-          <StepHeader n={4} title="Explore the Tech" hint="Comfortable with the basics? Level up with these concepts." />
+          <StepHeader n={4} title={t.exploreTech} hint={t.exploreTechHint} />
           <VideoGrid videos={TECH} />
         </section>
 
         <section className="space-y-3 pt-2">
-          <SectionHeader>Reference &amp; Tools</SectionHeader>
+          <SectionHeader>{t.reference}</SectionHeader>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {RESOURCES.map((r) => (
-              <LinkCard key={r.url} href={r.url} icon={r.icon} title={r.title} desc={r.desc} domain={r.domain} color={r.color} />
+              <LinkCard key={r.url} href={r.url} icon={r.icon} title={r.title} desc={t[r.desc as keyof typeof t]} domain={r.domain} color={r.color} />
             ))}
           </div>
         </section>

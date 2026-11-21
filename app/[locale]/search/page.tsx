@@ -4,6 +4,9 @@ import { searchPlayers } from '@/lib/buckler'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId, TIER_COLORS } from '@/lib/constants/ranks'
 import type { BucklerFighterBanner } from '@/lib/buckler'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { getDict } from '@/lib/i18n/dict'
+import { fill } from '@/lib/i18n/format'
 
 interface SearchPageProps {
   searchParams: Promise<{ q?: string; page?: string }>
@@ -67,7 +70,10 @@ function PlayerCard({ banner }: { banner: BucklerFighterBanner }) {
   )
 }
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
+export default async function SearchPage({ params, searchParams }: SearchPageProps & { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE
+  const t = getDict(locale).pages
   const { q, page: pageParam } = await searchParams
   const query = q?.trim() ?? ''
   const parsedPage = Number(pageParam ?? 1)
@@ -82,19 +88,19 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-          <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Search</h1>
+          <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">{t.search}</h1>
         </div>
         {query && (
           <p className="text-sm text-zinc-300">
             {results.length > 0
-              ? `Results for "${query}"${totalPages > 1 ? ` (page ${page} of ${totalPages})` : ''}`
-              : `No results for "${query}"`}
+              ? fill(t.resultsFor, { q: query }) + (totalPages > 1 ? fill(t.pageOf, { page, total: totalPages }) : '')
+              : fill(t.noResults, { q: query })}
           </p>
         )}
       </div>
 
       {!query && (
-        <p className="text-zinc-300 text-sm">Enter a player name in the search bar above.</p>
+        <p className="text-zinc-300 text-sm">{t.enterName}</p>
       )}
 
       {results.length > 0 && (
@@ -112,16 +118,16 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               href={`/search?q=${encodeURIComponent(query)}&page=${page - 1}`}
               className="text-xs px-3 py-1.5 rounded-none border border-zinc-700 text-zinc-300 hover:text-zinc-200 transition-colors"
             >
-              ← Prev
+              ← {t.prev}
             </Link>
           ) : <span />}
-          <span className="text-xs text-zinc-300">Page {page} / {totalPages}</span>
+          <span className="text-xs text-zinc-300">{t.page} {page} / {totalPages}</span>
           {page < totalPages ? (
             <Link
               href={`/search?q=${encodeURIComponent(query)}&page=${page + 1}`}
               className="text-xs px-3 py-1.5 rounded-none border border-zinc-700 text-zinc-300 hover:text-zinc-200 transition-colors"
             >
-              Next →
+              {t.next} →
             </Link>
           ) : <span />}
         </div>

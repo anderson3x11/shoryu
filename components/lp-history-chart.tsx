@@ -2,7 +2,8 @@
 
 import { useT } from '@/lib/i18n/context'
 import { fill } from '@/lib/i18n/format'
-import { useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
+import { getSeason, subscribeSeason } from '@/lib/constants/season'
 import Image from 'next/image'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -13,6 +14,7 @@ import { getCharacterImageUrl } from '@/lib/constants/characters'
 import type { LpCharacter } from '@/lib/supabase/ranked-stats'
 
 interface LpHistoryChartProps {
+  playerId: string
   characters: LpCharacter[] | null   // null = still loading
   error?: boolean
 }
@@ -37,11 +39,33 @@ function CustomTooltip({ active, payload, isMaster }: { active?: boolean; payloa
   )
 }
 
-export function LpHistoryChart({ characters, error = false }: LpHistoryChartProps) {
+export function LpHistoryChart({ playerId, characters: allCharacters, error = false }: LpHistoryChartProps) {
   const t = useT().profile
   const [selected, setSelected] = useState<number | null>(null)
-  // Default to the most-played character until the user picks one.
-  const sel = selected ?? characters?.[0]?.charId ?? null
+
+  // Only offer the characters played in ranked during the phase picked in the season bar (the
+  // battle history itself spans every phase stored). Their ids come from the phase's ranked win
+  // rates, cached server-side; until they arrive, every stored character is offered.
+  const season = useSyncExternalStore(subscribeSeason, () => getSeason(playerId), () => null)
+  const phaseKey = String(season ?? 'current')
+  const [playedByPhase, setPlayedByPhase] = useState<Record<string, number[]>>({})
+  useEffect(() => {
+    if (playedByPhase[phaseKey]) return
+    const ctrl = new AbortController()
+    const seasonQs = season === null ? '' : `&season=${season}`
+    fetch(`/api/winrates?id=${playerId}&mode=2&kind=chars${seasonQs}`, { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((d: { winRates: { character_id: number; battle_count: number }[] }) =>
+        setPlayedByPhase((p) => ({ ...p, [phaseKey]: d.winRates.filter((w) => w.battle_count > 0).map((w) => w.character_id) })))
+      .catch(() => {})
+    return () => ctrl.abort()
+  }, [phaseKey, season, playedByPhase, playerId])
+  const played = playedByPhase[phaseKey]
+  const characters = allCharacters && played ? allCharacters.filter((c) => played.includes(c.charId)) : allCharacters
+
+  // Default to the most-played character until the user picks one (or when the pick isn't
+  // offered in this phase).
+  const sel = characters?.some((c) => c.charId === selected) ? selected : characters?.[0]?.charId ?? null
 
   const char = characters?.find(c => c.charId === sel)
 

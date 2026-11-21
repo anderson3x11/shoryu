@@ -111,7 +111,7 @@ export function PlayerTabs({ playerId, shortId, header, overview, action, season
 
       {activated.has('stats') && (
         <div className={cn('space-y-4', tab !== 'stats' && 'hidden')}>
-          <LpHistoryChart characters={stats?.characters ?? null} error={statsError} />
+          <LpHistoryChart playerId={playerId} characters={stats?.characters ?? null} error={statsError} />
           <MatchupChart playerId={playerId} rows={stats?.rows ?? null} totalBattles={stats?.totalBattles ?? 0} seasonId={stats?.seasonId ?? null} error={statsError} />
         </div>
       )}

@@ -1,6 +1,6 @@
 import { ExternalLink } from 'lucide-react'
 import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
-import { getDict } from '@/lib/i18n/dict'
+import { getDict, type Dict } from '@/lib/i18n/dict'
 import { getTournaments } from '@/lib/liquipedia'
 import type { Player, Tournament, TournamentYear } from '@/lib/liquipedia'
 
@@ -75,7 +75,7 @@ function TournamentRow({ t }: { t: Tournament }) {
   )
 }
 
-function YearSection({ year, tournaments }: TournamentYear) {
+function YearSection({ year, tournaments, t }: TournamentYear & { t: Dict['pages'] }) {
   return (
     <section className="space-y-2">
       <h2 className="font-bebas text-4xl tracking-widest text-zinc-100">{year}</h2>
@@ -83,17 +83,17 @@ function YearSection({ year, tournaments }: TournamentYear) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-zinc-800 bg-zinc-900">
-              <th className="pl-4 pr-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider">Tournament</th>
-              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider whitespace-nowrap">Date</th>
-              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider">Prize</th>
-              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider">Location</th>
-              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider">Winner</th>
-              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider whitespace-nowrap">Runner-up</th>
+              <th className="pl-4 pr-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider">{t.colTournament}</th>
+              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider whitespace-nowrap">{t.colDate}</th>
+              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider">{t.colPrize}</th>
+              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider">{t.colLocation}</th>
+              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider">{t.colWinner}</th>
+              <th className="px-4 py-2.5 text-left text-xs font-semibold text-zinc-300 uppercase tracking-wider whitespace-nowrap">{t.colRunnerUp}</th>
             </tr>
           </thead>
           <tbody className="bg-zinc-900/50">
-            {tournaments.map(t => (
-              <TournamentRow key={t.url} t={t} />
+            {tournaments.map(row => (
+              <TournamentRow key={row.url} t={row} />
             ))}
           </tbody>
         </table>
@@ -102,22 +102,25 @@ function YearSection({ year, tournaments }: TournamentYear) {
   )
 }
 
-export default async function TournamentsPage() {
+export default async function TournamentsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE
+  const t = getDict(locale).pages
   const data = await getTournaments()
 
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-3">
         <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-        <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Tournaments</h1>
+        <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">{t.tournaments}</h1>
       </div>
 
       {data.length === 0 && (
-        <p className="text-zinc-300">Tournament data temporarily unavailable.</p>
+        <p className="text-zinc-300">{t.tournamentsUnavailable}</p>
       )}
 
       {data.map(section => (
-        <YearSection key={section.year} {...section} />
+        <YearSection key={section.year} {...section} t={t} />
       ))}
     </div>
   )
