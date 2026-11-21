@@ -11,7 +11,7 @@ interface SearchPageProps {
 
 export async function generateMetadata({ searchParams }: SearchPageProps) {
   const { q } = await searchParams
-  return { title: q ? `"${q}" on Shoryu` : 'Search - Shoryu' }
+  return { title: q ? `"${q}"` : 'Search' }
 }
 
 function PlayerCard({ banner }: { banner: BucklerFighterBanner }) {

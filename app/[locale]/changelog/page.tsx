@@ -4,7 +4,7 @@ import { CHANGELOG } from '@/lib/data/changelog'
 import { ChangelogSeen } from '@/components/changelog-seen'
 
 export const metadata: Metadata = {
-  title: 'Changelog - Shoryu',
+  title: 'Changelog',
 }
 
 export default function ChangelogPage() {

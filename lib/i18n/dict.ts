@@ -25,6 +25,11 @@ export const DICT = {
       tagline: 'Street Fighter 6 stats, player profiles, and rankings',
       characters: 'Characters',
     },
+    notFound: {
+      title: 'K.O.',
+      text: 'This page does not exist, or it moved. Try searching for a player instead.',
+      home: 'Back to home',
+    },
     search: {
       placeholder: 'Search by CFN name or ID',
       goToPlayer: 'Go to player',
@@ -121,6 +126,11 @@ export const DICT = {
       tagline: 'ストリートファイター6の戦績・プレイヤー情報・ランキング',
       characters: 'キャラクター',
     },
+    notFound: {
+      title: 'K.O.',
+      text: 'このページは存在しないか、移動しました。プレイヤーを検索してみてください。',
+      home: 'ホームに戻る',
+    },
     search: {
       placeholder: 'CFN名またはIDで検索',
       goToPlayer: 'プレイヤーページへ',
@@ -216,6 +226,11 @@ export const DICT = {
     home: {
       tagline: 'Estatísticas, perfis de jogadores e rankings de Street Fighter 6',
       characters: 'Personagens',
+    },
+    notFound: {
+      title: 'K.O.',
+      text: 'Esta página não existe ou foi movida. Tente pesquisar um jogador.',
+      home: 'Voltar ao início',
     },
     search: {
       placeholder: 'Buscar por nome CFN ou ID',
