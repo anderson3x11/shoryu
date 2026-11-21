@@ -20,7 +20,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       "Japanese and Portuguese now cover the whole site: profiles, character pages, frame data, stats, tournaments, guides and Streetdle",
       "New character, country, phase and sort pickers in the site's style, with character portraits",
       "The ranking now says it's a snapshot refreshed every 12 hours, and how old it is",
-      "The LP/MR chart only offers the characters played in ranked during the picked phase",
+      "The LP/MR chart only offers the characters played in ranked this phase, and says so when a past phase has no history to show",
       "Fixed large ranking positions overlapping the character portraits",
     ],
   },

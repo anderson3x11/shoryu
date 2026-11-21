@@ -43,25 +43,28 @@ export function LpHistoryChart({ playerId, characters: allCharacters, error = fa
   const t = useT().profile
   const [selected, setSelected] = useState<number | null>(null)
 
-  // Only offer the characters played in ranked during the phase picked in the season bar (the
-  // battle history itself spans every phase stored). Their ids come from the phase's ranked win
-  // rates, cached server-side; until they arrive, every stored character is offered.
+  // The history is built from the ranked games Shoryu has stored, which only go back to the
+  // player's first visit and carry no phase. So a past phase gets an explanation rather than a
+  // chart (its characters' points would come from other phases), and the current phase only
+  // offers the characters played in ranked in it (ids from its ranked win rates, cached
+  // server-side). Until those ids arrive the chart shows its loading state, not stale buttons.
   const season = useSyncExternalStore(subscribeSeason, () => getSeason(playerId), () => null)
-  const phaseKey = String(season ?? 'current')
-  const [playedByPhase, setPlayedByPhase] = useState<Record<string, number[]>>({})
+  const past = season !== null
+  const [played, setPlayed] = useState<number[] | 'all' | null>(null)
   useEffect(() => {
-    if (playedByPhase[phaseKey]) return
+    if (past || played !== null) return
     const ctrl = new AbortController()
-    const seasonQs = season === null ? '' : `&season=${season}`
-    fetch(`/api/winrates?id=${playerId}&mode=2&kind=chars${seasonQs}`, { signal: ctrl.signal })
+    fetch(`/api/winrates?id=${playerId}&mode=2&kind=chars`, { signal: ctrl.signal })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
       .then((d: { winRates: { character_id: number; battle_count: number }[] }) =>
-        setPlayedByPhase((p) => ({ ...p, [phaseKey]: d.winRates.filter((w) => w.battle_count > 0).map((w) => w.character_id) })))
-      .catch(() => {})
+        setPlayed(d.winRates.filter((w) => w.battle_count > 0).map((w) => w.character_id)))
+      // No filter rather than no chart when the win rates can't be fetched.
+      .catch(() => { if (!ctrl.signal.aborted) setPlayed('all') })
     return () => ctrl.abort()
-  }, [phaseKey, season, playedByPhase, playerId])
-  const played = playedByPhase[phaseKey]
-  const characters = allCharacters && played ? allCharacters.filter((c) => played.includes(c.charId)) : allCharacters
+  }, [past, played, playerId])
+  const characters = past || allCharacters === null || played === null
+    ? null
+    : played === 'all' ? allCharacters : allCharacters.filter((c) => played.includes(c.charId))
 
   // Default to the most-played character until the user picks one (or when the pick isn't
   // offered in this phase).
@@ -123,7 +126,11 @@ export function LpHistoryChart({ playerId, characters: allCharacters, error = fa
         <div className="px-4 pb-4 text-sm text-zinc-300">{t.historyFailed}</div>
       )}
 
-      {!error && characters === null && (
+      {!error && past && (
+        <div className="px-4 pb-4 text-sm text-zinc-300">{t.historyPastPhase}</div>
+      )}
+
+      {!error && !past && characters === null && (
         <div className="px-4 pb-4 flex items-center gap-2 text-sm text-zinc-300">
           <div className="w-3 h-3 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
           {t.historyLoading}
