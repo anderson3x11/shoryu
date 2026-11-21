@@ -39,9 +39,10 @@ interface PlayerTabsProps {
   header: ReactNode
   overview: ReactNode
   action?: ReactNode
+  seasonBar?: ReactNode   // phase picker, shown on the tabs whose data it drives (Overview, Stats)
 }
 
-export function PlayerTabs({ playerId, shortId, header, overview, action }: PlayerTabsProps) {
+export function PlayerTabs({ playerId, shortId, header, overview, action, seasonBar }: PlayerTabsProps) {
   const [tab, setTab] = useState<Tab>('overview')
   // Tabs mount on first activation and stay mounted afterward, so switching back doesn't refetch.
   const dict = useT()
@@ -96,6 +97,8 @@ export function PlayerTabs({ playerId, shortId, header, overview, action }: Play
       </div>
 
       {header}
+
+      {seasonBar && (tab === 'overview' || tab === 'stats') && seasonBar}
 
       <div className={cn(tab !== 'overview' && 'hidden')}>{overview}</div>
 

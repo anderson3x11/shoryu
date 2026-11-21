@@ -30,6 +30,14 @@ export const DICT = {
       text: 'This page does not exist, or it moved. Try searching for a player instead.',
       home: 'Back to home',
     },
+    season: {
+      phase: 'Phase',
+      current: 'current',
+      peak: 'Peak MR this phase',
+      noPeak: 'No Master rank this phase',
+      loading: 'Loading phase...',
+      unavailable: 'This phase is unavailable right now.',
+    },
     rankingPage: {
       title: 'Master Ranking',
       page: 'Page',
@@ -142,6 +150,14 @@ export const DICT = {
       text: 'このページは存在しないか、移動しました。プレイヤーを検索してみてください。',
       home: 'ホームに戻る',
     },
+    season: {
+      phase: 'フェーズ',
+      current: '現在',
+      peak: 'このフェーズの最高MR',
+      noPeak: 'このフェーズはマスター未到達',
+      loading: '読み込み中...',
+      unavailable: 'このフェーズは現在表示できません。',
+    },
     rankingPage: {
       title: 'マスターランキング',
       page: 'ページ',
@@ -253,6 +269,14 @@ export const DICT = {
       title: 'K.O.',
       text: 'Esta página não existe ou foi movida. Tente pesquisar um jogador.',
       home: 'Voltar ao início',
+    },
+    season: {
+      phase: 'Fase',
+      current: 'atual',
+      peak: 'MR máximo nesta fase',
+      noPeak: 'Sem rank Master nesta fase',
+      loading: 'Carregando fase...',
+      unavailable: 'Esta fase não está disponível agora.',
     },
     rankingPage: {
       title: 'Ranking Master',

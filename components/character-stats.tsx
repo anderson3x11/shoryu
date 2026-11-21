@@ -7,6 +7,7 @@ import { getRankImageUrl, getRank, TIER_COLORS, showsMasterRating, getEffectiveR
 import { getCharacterByBucklerId, getCharacterImageUrl } from '@/lib/constants/characters'
 import { getWinrateMode, getServerWinrateMode, setWinrateMode, subscribeWinrateMode, type WinrateModeId } from '@/lib/constants/winrate-modes'
 import { WinrateModeButtons } from '@/components/winrate-mode-buttons'
+import { getSeason, subscribeSeason } from '@/lib/constants/season'
 import type { BucklerLeagueInfo } from '@/lib/buckler'
 
 export interface PhaseCharInfo {
@@ -92,36 +93,58 @@ function RankBadge({ li }: { li: BucklerLeagueInfo }) {
 export function CharacterStats({ playerId, phases, winRates }: CharacterStatsProps) {
   const [activePhaseId, setActivePhaseId] = useState(phases[0]?.id ?? '')
 
-  // Battle-mode filter. Mode 1 ("All") is the winRates prop; other modes are fetched once and
-  // kept per mode, so toggling back and forth costs a single request each.
+  // Battle-mode filter and phase (season bar). The current phase in mode 1 ("All") is the
+  // winRates prop; anything else is fetched once and kept per (phase, mode), so toggling back and
+  // forth costs a single request each. A past phase also loads where each character ended it.
   const mode = useSyncExternalStore(subscribeWinrateMode, getWinrateMode, getServerWinrateMode)
-  const [byMode, setByMode] = useState<Partial<Record<WinrateModeId, WinRateEntry[]>>>({})
-  const [failed, setFailed] = useState(false)
+  const season = useSyncExternalStore(subscribeSeason, () => getSeason(playerId), () => null)
+  const key = `${season ?? 'current'}:${mode}`
+  const [byKey, setByKey] = useState<Record<string, WinRateEntry[]>>({})
+  const [leagues, setLeagues] = useState<Record<number, PhaseCharInfo[]>>({})
+  const [failedKey, setFailedKey] = useState<string | null>(null)
+  const failed = failedKey === key
+  const own = season === null && mode === 1
 
   useEffect(() => {
-    if (mode === 1 || byMode[mode] || failed) return
+    if (own || byKey[key] || failed) return
     const ctrl = new AbortController()
-    fetch(`/api/winrates?id=${playerId}&mode=${mode}&kind=chars`, { signal: ctrl.signal })
+    const seasonQs = season === null ? '' : `&season=${season}`
+    fetch(`/api/winrates?id=${playerId}&mode=${mode}&kind=chars${seasonQs}`, { signal: ctrl.signal })
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
       })
-      .then((d: { winRates: WinRateEntry[] }) => setByMode((prev) => ({ ...prev, [mode]: d.winRates })))
-      .catch(() => { if (!ctrl.signal.aborted) setFailed(true) })
+      .then((d: { winRates: WinRateEntry[] }) => setByKey((prev) => ({ ...prev, [key]: d.winRates })))
+      .catch(() => { if (!ctrl.signal.aborted) setFailedKey(key) })
     return () => ctrl.abort()
-  }, [mode, byMode, failed, playerId])
+  }, [own, key, byKey, failed, mode, season, playerId])
+
+  useEffect(() => {
+    if (season === null || leagues[season]) return
+    const ctrl = new AbortController()
+    fetch(`/api/winrates?id=${playerId}&kind=league&season=${season}`, { signal: ctrl.signal })
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
+      .then((d: { league: PhaseCharInfo[] }) => setLeagues((prev) => ({ ...prev, [season]: d.league })))
+      .catch(() => { if (!ctrl.signal.aborted) setFailedKey(key) })
+    return () => ctrl.abort()
+  }, [season, leagues, key, playerId])
 
   function selectMode(m: WinrateModeId) {
-    setFailed(false)
+    setFailedKey(null)
     setWinrateMode(m)
   }
 
-  const activeWinRates = mode === 1 ? winRates : byMode[mode]
-  const loading = mode !== 1 && !byMode[mode] && !failed
+  const activeWinRates = own ? winRates : byKey[key]
+  const seasonChars = season === null ? null : leagues[season]
+  const loading = !failed && (!activeWinRates || (season !== null && !seasonChars))
   const winRateMap = new Map(activeWinRates?.map(w => [w.character_id, w]) ?? [])
 
   const activePhase = phases.find((p) => p.id === activePhaseId) ?? phases[0]
-  const displayed = activePhase ? sortByBest(activePhase.chars, winRateMap) : []
+  const chars = season === null ? activePhase?.chars : seasonChars
+  const displayed = chars ? sortByBest(chars, winRateMap) : []
 
   return (
     <Card className="absolute inset-0 bg-zinc-900 border-zinc-800 flex flex-col py-0 gap-0">
@@ -161,7 +184,7 @@ export function CharacterStats({ playerId, phases, winRates }: CharacterStatsPro
       {/* List — fills remaining card height, scrolls when content exceeds it */}
       <div className="relative flex-1 min-h-0">
       <div className="overflow-y-auto h-full">
-        {displayed.length === 0 ? (
+        {displayed.length === 0 && loading ? null : displayed.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 gap-2 text-zinc-300">
             <span className="text-2xl text-zinc-500">?</span>
             <p className="text-sm">No ranked games this phase</p>

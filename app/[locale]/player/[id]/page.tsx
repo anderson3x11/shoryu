@@ -7,6 +7,7 @@ import { RefreshProfileButton } from '@/components/refresh-profile-button'
 import { CharacterStats, type PhaseData } from '@/components/character-stats'
 import { PlayCounts } from '@/components/play-counts'
 import { PlayerTabs } from '@/components/player-tabs'
+import { SeasonBar } from '@/components/season-bar'
 
 export const revalidate = 600
 
@@ -60,6 +61,13 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
         shortId={shortId}
         header={<PlayerHeader banner={banner} />}
         action={<RefreshProfileButton playerId={String(shortId)} fetchedAt={fetchedAt} />}
+        seasonBar={profile.play?.current_season_id != null && (
+          <SeasonBar
+            playerId={String(shortId)}
+            seasonIds={profile.play.season_ids ?? [profile.play.current_season_id]}
+            current={profile.play.current_season_id}
+          />
+        )}
         overview={
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Relative wrapper: min-height on mobile (absolute child has no intrinsic height), desktop row height = PlayCounts height */}

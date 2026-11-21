@@ -421,6 +421,20 @@ export async function getPlayActWinRates(
   return data.character_win_rates ?? []
 }
 
+// Per-character league info for one season. `peak: false` is where each character ended the
+// season (rank, LP, MR); the highest/master_rating_info action is each character's best MR in it.
+export async function getPlayActLeagueInfo(
+  shortId: string | number,
+  seasonId: number,
+  peak: boolean,
+): Promise<BucklerPlayData['character_league_infos']> {
+  const data = await fetchPlayAct<Pick<BucklerPlayData, 'character_league_infos'>>(
+    peak ? 'highest/master_rating_info' : 'leagueinfo',
+    { targetShortId: Number(shortId), targetSeasonId: seasonId, locale: 'en', peak },
+  )
+  return data.character_league_infos ?? []
+}
+
 export async function getPlayActMatchupMatrix(
   shortId: string | number,
   seasonId: number,

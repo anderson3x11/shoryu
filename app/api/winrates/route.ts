@@ -1,14 +1,20 @@
 import { unstable_cache } from 'next/cache'
-import { getPlayActWinRates, getPlayActMatchupMatrix, isShortId, type PlayActModeId } from '@/lib/buckler'
+import {
+  getPlayActLeagueInfo, getPlayActWinRates, getPlayActMatchupMatrix, isShortId, type PlayActModeId,
+} from '@/lib/buckler'
 import { rateLimit } from '@/lib/rate-limit'
 import { getCachedPlayerProfile } from '@/lib/supabase/player-cache'
 import { matchupRowsFromMatrix } from '@/lib/supabase/ranked-stats'
+import type { BucklerLeagueInfo } from '@/lib/buckler'
 
 // Mode-filtered win rates for the Overview character list (kind=chars) and the Stats matchup
-// chart (kind=matrix). Mode 1 ("All") is exactly what the cached profile already carries, so it
-// answers from the 12h DB cache with no Buckler request; modes 2-5 hit the play/act API through
-// the paced queue, cached 12h per (player, season, mode) so repeat toggles cost nothing.
+// chart (kind=matrix), for the current phase or a past one (?season=). Current phase, mode 1
+// ("All") is exactly what the cached profile already carries, so it answers from the 12h DB cache
+// with no Buckler request; everything else hits the play/act API through the paced queue.
+// kind=league is where each character ended a past phase, kind=peak each character's best MR.
+// A past phase never changes again, so its answers are cached for good; the current one for 12h.
 const MODE_IDS: PlayActModeId[] = [1, 2, 3, 4, 5]
+const KINDS = ['chars', 'matrix', 'league', 'peak']
 
 interface SlimWinRate {
   character_id: number
@@ -22,18 +28,29 @@ function slim(winRates: SlimWinRate[]): SlimWinRate[] {
     .map(({ character_id, battle_count, win_count }) => ({ character_id, battle_count, win_count }))
 }
 
-const cachedWinRates = unstable_cache(
-  async (id: string, seasonId: number, mode: PlayActModeId) =>
-    slim(await getPlayActWinRates(id, seasonId, mode)),
-  ['play-act-winrates'],
-  { revalidate: 43200 }
-)
+type LeagueRow = { character_id: number; is_played: boolean; league_info: BucklerLeagueInfo }
+const slimLeague = (rows: LeagueRow[]): LeagueRow[] =>
+  rows.map(({ character_id, is_played, league_info }) => ({ character_id, is_played, league_info }))
 
-const cachedMatchupRows = unstable_cache(
+// One cache per lifetime: 12h for the live phase, forever (revalidate: false) for past phases.
+function cached<A extends unknown[], R>(fn: (...a: A) => Promise<R>, key: string) {
+  const live = unstable_cache(fn, [key], { revalidate: 43200 })
+  const frozen = unstable_cache(fn, [`${key}-past`], { revalidate: false })
+  return (past: boolean, ...a: A) => (past ? frozen : live)(...a)
+}
+
+const cachedWinRates = cached(
+  async (id: string, seasonId: number, mode: PlayActModeId) => slim(await getPlayActWinRates(id, seasonId, mode)),
+  'play-act-winrates',
+)
+const cachedMatchupRows = cached(
   async (id: string, seasonId: number, mode: PlayActModeId) =>
     matchupRowsFromMatrix(await getPlayActMatchupMatrix(id, seasonId, mode)),
-  ['play-act-matchups'],
-  { revalidate: 43200 }
+  'play-act-matchups',
+)
+const cachedLeague = cached(
+  async (id: string, seasonId: number, peak: boolean) => slimLeague(await getPlayActLeagueInfo(id, seasonId, peak)),
+  'play-act-league',
 )
 
 const CACHE_HEADERS = { 'Cache-Control': 's-maxage=43200, stale-while-revalidate=86400' }
@@ -46,8 +63,10 @@ export async function GET(req: Request) {
   const id = searchParams.get('id')
   const mode = Number(searchParams.get('mode')) as PlayActModeId
   const kind = searchParams.get('kind')
-  if (!id || !isShortId(id) || !MODE_IDS.includes(mode) || (kind !== 'chars' && kind !== 'matrix')) {
-    return Response.json({ error: 'id, mode (1-5) and kind (chars|matrix) required' }, { status: 400 })
+  const seasonParam = searchParams.get('season')
+  const needsMode = kind === 'chars' || kind === 'matrix'
+  if (!id || !isShortId(id) || !KINDS.includes(kind ?? '') || (needsMode && !MODE_IDS.includes(mode))) {
+    return Response.json({ error: 'id, kind (chars|matrix|league|peak) and mode (1-5) required' }, { status: 400 })
   }
 
   const profileResult = await getCachedPlayerProfile(id)
@@ -58,8 +77,27 @@ export async function GET(req: Request) {
     return Response.json({ error: 'Player not found' }, { status: 404 })
   }
   const play = profileResult.profile.play
+  const current = play?.current_season_id
+  if (current == null) {
+    return Response.json({ error: 'Data source temporarily unavailable' }, { status: 503 })
+  }
+  // Only phases this player's profile lists, so the id can't be used to probe arbitrary seasons.
+  const season = seasonParam == null ? current : Number(seasonParam)
+  if (!Number.isInteger(season) || !(play?.season_ids ?? [current]).includes(season)) {
+    return Response.json({ error: 'unknown season' }, { status: 400 })
+  }
+  const past = season !== current
 
-  if (mode === 1) {
+  if (kind === 'league' || kind === 'peak') {
+    try {
+      const league = await cachedLeague(past, id, season, kind === 'peak')
+      return Response.json({ league }, { headers: CACHE_HEADERS })
+    } catch {
+      return Response.json({ error: 'Data source temporarily unavailable' }, { status: 503 })
+    }
+  }
+
+  if (!past && mode === 1) {
     if (kind === 'chars') {
       return Response.json({ winRates: slim(play?.character_win_rates ?? []) }, { headers: CACHE_HEADERS })
     }
@@ -67,17 +105,12 @@ export async function GET(req: Request) {
     return Response.json({ rows, totalBattles }, { headers: CACHE_HEADERS })
   }
 
-  const seasonId = play?.current_season_id
-  if (seasonId == null) {
-    return Response.json({ error: 'Data source temporarily unavailable' }, { status: 503 })
-  }
-
   try {
     if (kind === 'chars') {
-      const winRates = await cachedWinRates(id, seasonId, mode)
+      const winRates = await cachedWinRates(past, id, season, mode)
       return Response.json({ winRates }, { headers: CACHE_HEADERS })
     }
-    const { rows, totalBattles } = await cachedMatchupRows(id, seasonId, mode)
+    const { rows, totalBattles } = await cachedMatchupRows(past, id, season, mode)
     return Response.json({ rows, totalBattles }, { headers: CACHE_HEADERS })
   } catch {
     return Response.json({ error: 'Data source temporarily unavailable' }, { status: 503 })

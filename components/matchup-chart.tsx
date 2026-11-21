@@ -6,13 +6,14 @@ import { Card, CardTitle } from '@/components/ui/card'
 import { getCharacterImageUrl, getCharacterByBucklerId } from '@/lib/constants/characters'
 import { getWinrateMode, getServerWinrateMode, setWinrateMode, subscribeWinrateMode, type WinrateModeId } from '@/lib/constants/winrate-modes'
 import { WinrateModeButtons } from '@/components/winrate-mode-buttons'
+import { getSeason, subscribeSeason } from '@/lib/constants/season'
 import type { MatchupRow, MatchupVs } from '@/lib/supabase/ranked-stats'
 
 interface MatchupChartProps {
   playerId: string
   rows: MatchupRow[] | null   // mode "All" from /api/ranked-stats; null = still loading
   totalBattles: number
-  seasonId?: number | null    // Buckler phase the matchup data is for (current phase only)
+  seasonId?: number | null    // current Buckler phase (what `rows` covers)
   error?: boolean
 }
 
@@ -75,33 +76,40 @@ function MatchupBar({ vs }: { vs: MatchupVs }) {
 }
 
 export function MatchupChart({ playerId, rows, totalBattles, seasonId = null, error = false }: MatchupChartProps) {
-  // Battle-mode filter. Mode 1 ("All") is the rows prop from /api/ranked-stats; other modes are
-  // fetched once from /api/winrates and kept per mode.
+  // Battle-mode filter and phase (season bar). The current phase in mode 1 ("All") is the rows
+  // prop from /api/ranked-stats; anything else is fetched once from /api/winrates and kept per
+  // (phase, mode).
   const mode = useSyncExternalStore(subscribeWinrateMode, getWinrateMode, getServerWinrateMode)
-  const [byMode, setByMode] = useState<Partial<Record<WinrateModeId, { rows: MatchupRow[]; totalBattles: number }>>>({})
-  const [failed, setFailed] = useState(false)
+  const season = useSyncExternalStore(subscribeSeason, () => getSeason(playerId), () => null)
+  const key = `${season ?? 'current'}:${mode}`
+  const [byKey, setByKey] = useState<Record<string, { rows: MatchupRow[]; totalBattles: number }>>({})
+  const [failedKey, setFailedKey] = useState<string | null>(null)
+  const failed = failedKey === key
+  const own = season === null && mode === 1
 
   useEffect(() => {
-    if (mode === 1 || byMode[mode] || failed) return
+    if (own || byKey[key] || failed) return
     const ctrl = new AbortController()
-    fetch(`/api/winrates?id=${playerId}&mode=${mode}&kind=matrix`, { signal: ctrl.signal })
+    const seasonQs = season === null ? '' : `&season=${season}`
+    fetch(`/api/winrates?id=${playerId}&mode=${mode}&kind=matrix${seasonQs}`, { signal: ctrl.signal })
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
       })
       .then((d: { rows: MatchupRow[]; totalBattles: number }) =>
-        setByMode((prev) => ({ ...prev, [mode]: { rows: d.rows, totalBattles: d.totalBattles } })))
-      .catch(() => { if (!ctrl.signal.aborted) setFailed(true) })
+        setByKey((prev) => ({ ...prev, [key]: { rows: d.rows, totalBattles: d.totalBattles } })))
+      .catch(() => { if (!ctrl.signal.aborted) setFailedKey(key) })
     return () => ctrl.abort()
-  }, [mode, byMode, failed, playerId])
+  }, [own, key, byKey, failed, mode, season, playerId])
 
   function selectMode(m: WinrateModeId) {
-    setFailed(false)
+    setFailedKey(null)
     setWinrateMode(m)
   }
 
-  const activeRows = mode === 1 ? rows : byMode[mode]?.rows ?? null
-  const activeTotal = mode === 1 ? totalBattles : byMode[mode]?.totalBattles ?? 0
+  const activeRows = own ? rows : byKey[key]?.rows ?? null
+  const activeTotal = own ? totalBattles : byKey[key]?.totalBattles ?? 0
+  const shownSeason = season ?? seasonId
   const showError = error || failed
 
   return (
@@ -114,7 +122,7 @@ export function MatchupChart({ playerId, rows, totalBattles, seasonId = null, er
         <div className="flex items-center gap-2 flex-wrap justify-end">
           {activeRows !== null && (
             <span className="text-xs text-zinc-400">
-              {seasonId != null ? `Phase ${seasonId} · ` : ''}{activeTotal} {MODE_MATCH_LABEL[mode]}
+              {shownSeason != null ? `Phase ${shownSeason} · ` : ''}{activeTotal} {MODE_MATCH_LABEL[mode]}
             </span>
           )}
           <WinrateModeButtons value={mode} onChange={selectMode} />
