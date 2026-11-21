@@ -88,7 +88,7 @@ export const DICT = {
       aboutLink: 'About',
     },
     meta: {
-      home: { title: 'Shoryu - SF6 Stats', description: 'Street Fighter 6 player profiles, Master ranking, matchup charts, match history, and character guides.' },
+      home: { title: 'Shoryu - SF6 Stats, Rankings & Frame Data', description: 'Look up any Street Fighter 6 player: rank, MR history, matchups and recent matches. Plus the Master ranking and frame data with hitboxes for every character.' },
       ranking: { title: 'Master Ranking', description: 'Top Street Fighter 6 players ranked by Master Rating. Live global leaderboard.' },
       stats: { title: 'Stats', description: 'Street Fighter 6 character usage rates across all rank tiers.' },
       pros: { title: 'Pro Players & Creators', description: 'Top Street Fighter 6 pro players and content creators with their Buckler profiles.' },
@@ -184,7 +184,7 @@ export const DICT = {
       aboutLink: 'このサイトについて',
     },
     meta: {
-      home: { title: 'Shoryu - SF6 戦績', description: 'ストリートファイター6のプレイヤー情報、マスターランキング、キャラ相性、対戦履歴、キャラ攻略。' },
+      home: { title: 'Shoryu - スト6 戦績・ランキング・フレームデータ', description: 'ストリートファイター6のプレイヤー戦績を検索。ランク、MR推移、キャラ相性、対戦履歴に加え、マスターランキングと全キャラの判定画像付きフレームデータ。' },
       ranking: { title: 'マスターランキング', description: 'マスターレーティング順のストリートファイター6プレイヤーランキング。世界ランキングをリアルタイムで掲載。' },
       stats: { title: 'キャラ使用率', description: '全ランク帯のストリートファイター6キャラクター使用率。' },
       pros: { title: 'プロ選手・配信者', description: 'ストリートファイター6のトッププロ選手と配信者のBucklerプロフィール。' },
@@ -280,7 +280,7 @@ export const DICT = {
       aboutLink: 'Sobre',
     },
     meta: {
-      home: { title: 'Shoryu - Estatísticas de SF6', description: 'Perfis de jogadores de Street Fighter 6, ranking Master, confrontos, histórico de partidas e guias de personagens.' },
+      home: { title: 'Shoryu - Estatísticas, Ranking e Frame Data de SF6', description: 'Pesquise qualquer jogador de Street Fighter 6: rank, histórico de MR, confrontos e partidas recentes. Ranking Master e frame data com hitboxes de todos os personagens.' },
       ranking: { title: 'Ranking Master', description: 'Os melhores jogadores de Street Fighter 6 por Master Rating. Placar global ao vivo.' },
       stats: { title: 'Estatísticas', description: 'Taxas de uso dos personagens de Street Fighter 6 em todos os ranks.' },
       pros: { title: 'Profissionais e Criadores', description: 'Os melhores jogadores profissionais e criadores de conteúdo de Street Fighter 6, com seus perfis no Buckler.' },

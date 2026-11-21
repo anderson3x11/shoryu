@@ -25,11 +25,14 @@ export async function generateMetadata({ params }: CharacterPageProps) {
   const { name } = await params
   const char = CHARACTERS.find((c) => c.id === name)
   if (!char) return { title: 'Character - Shoryu' }
-  const description = `${char.name} frame data, combos, matchups, guides, tech videos and top players in Street Fighter 6.`
+  // Titled after what people search for ("ryu frame data"); the layout template adds " - Shoryu".
+  const title = `${char.name} SF6 Frame Data, Hitboxes & Guide`
+  const description = `${char.name} frame data for Street Fighter 6: every move with hitboxes, frame meter, `
+    + `startup, advantage, hitstun and juggle values, plus combos, matchups and tech videos.`
   return {
-    title: char.name,
+    title,
     description,
-    openGraph: { title: `${char.name} - SF6 - Shoryu`, description },
+    openGraph: { title: `${title} - Shoryu`, description },
   }
 }
 

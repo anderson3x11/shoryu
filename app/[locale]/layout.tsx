@@ -33,6 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: { default: t.title, template: '%s - Shoryu' },
     description: t.description,
     metadataBase: new URL(BASE),
+    // Lets Google show a large image next to the result instead of a small thumbnail.
+    robots: { googleBot: { 'max-image-preview': 'large', 'max-snippet': -1 } },
     alternates: {
       canonical: './',
       // Tell Google these are the same page in other languages, not duplicates.
@@ -45,7 +47,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title: t.title,
       description: t.description,
       url: localeHref(l, '/'),
-      images: [{ url: '/og.png', width: 1200, height: 630, alt: t.title }],
+      images: [{ url: '/og.png', width: 1920, height: 1080, alt: t.title }],
     },
     twitter: {
       card: 'summary_large_image',
