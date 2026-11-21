@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useT } from '@/lib/i18n/context'
+import { fill } from '@/lib/i18n/format'
 import {
   STREETDLE_CHARACTERS,
   compareCharacters,
@@ -15,13 +17,9 @@ import {
 type SavedState = { guessIds: string[]; won: boolean; gaveUp: boolean }
 type AttributeKey = 'gender' | 'country' | 'debut' | 'playableDebut' | 'archetype' | 'inputType'
 
-const COLUMNS: { key: AttributeKey; label: string }[] = [
-  { key: 'gender',        label: 'Gender'         },
-  { key: 'country',       label: 'Country'        },
-  { key: 'debut',         label: 'Debut'          },
-  { key: 'playableDebut', label: 'Playable Debut' },
-  { key: 'archetype',     label: 'Archetype'      },
-  { key: 'inputType',     label: 'Input'          },
+// Column headers come from the dictionary (streetdle.col), keyed by attribute.
+const COLUMNS: { key: AttributeKey }[] = [
+  { key: 'gender' }, { key: 'country' }, { key: 'debut' }, { key: 'playableDebut' }, { key: 'archetype' }, { key: 'inputType' },
 ]
 
 function cellClass(status: 'correct' | 'partial' | 'wrong') {
@@ -55,6 +53,7 @@ function CharacterSearch({ guessedIds, onGuess }: {
   guessedIds: string[]
   onGuess: (char: StreedleCharacter) => void
 }) {
+  const t = useT().streetdle
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
 
@@ -77,7 +76,7 @@ function CharacterSearch({ guessedIds, onGuess }: {
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
-        placeholder="Type a character name..."
+        placeholder={t.placeholder}
         className="w-full bg-zinc-800 border border-zinc-700 rounded-none px-5 py-3.5 text-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
       />
       {open && filtered.length > 0 && (
@@ -92,6 +91,7 @@ function CharacterSearch({ guessedIds, onGuess }: {
 }
 
 export function StreedleGame() {
+  const t = useT().streetdle
   const [target, setTarget]     = useState<StreedleCharacter | null>(null)
   const [guessIds, setGuessIds] = useState<string[]>([])
   const [won, setWon]           = useState(false)
@@ -136,19 +136,19 @@ export function StreedleGame() {
       {/* Title */}
       <div className="text-center space-y-2 pt-4">
         <h1 className="font-bebas text-5xl sm:text-8xl tracking-widest text-zinc-100">STREETDLE</h1>
-        <p className="text-zinc-300 text-lg">Guess today&apos;s Street Fighter character</p>
+        <p className="text-zinc-300 text-lg">{t.subtitle}</p>
       </div>
 
       {/* Legend */}
       <div className="flex flex-col items-center gap-3 text-base text-zinc-300">
         <div className="flex flex-wrap justify-center gap-6">
-          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-none bg-green-800 border border-green-600 inline-block" /> Correct</span>
-          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-none bg-yellow-800 border border-yellow-600 inline-block" /> Partial match</span>
-          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-none bg-red-900/40 border border-red-800 inline-block" /> Wrong</span>
+          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-none bg-green-800 border border-green-600 inline-block" /> {t.correct}</span>
+          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-none bg-yellow-800 border border-yellow-600 inline-block" /> {t.partial}</span>
+          <span className="flex items-center gap-2"><span className="w-5 h-5 rounded-none bg-red-900/40 border border-red-800 inline-block" /> {t.wrong}</span>
         </div>
         <div className="flex flex-wrap justify-center gap-6 text-zinc-400 text-sm">
-          <span>Yellow on Country: same continent</span>
-          <span>▲ later in the series / ▼ earlier</span>
+          <span>{t.countryHint}</span>
+          <span>{t.seriesHint}</span>
         </div>
       </div>
 
@@ -156,7 +156,7 @@ export function StreedleGame() {
       {won && (
         <div className="bg-green-900/30 border border-green-700 rounded-none px-5 py-4 text-center">
           <p className="text-green-400 font-semibold text-lg">
-            Correct! You got it in {guessIds.length} {guessIds.length === 1 ? 'guess' : 'guesses'}.
+            {fill(t.won, { n: guessIds.length, guesses: guessIds.length === 1 ? t.guessOne : t.guessMany })}
           </p>
           <NextPuzzleCountdown />
         </div>
@@ -169,7 +169,7 @@ export function StreedleGame() {
             <Image src={`/characters/${target.id}.png`} alt={target.name} fill className="object-cover object-top" unoptimized />
           </div>
           <div>
-            <p className="text-zinc-300 text-sm">The answer was</p>
+            <p className="text-zinc-300 text-sm">{t.answerWas}</p>
             <p className="text-zinc-100 font-semibold text-2xl">{target.name}</p>
             <NextPuzzleCountdown />
           </div>
@@ -183,7 +183,7 @@ export function StreedleGame() {
       {!gameOver && guessIds.length >= 3 && (
         <div className="flex justify-end">
           <button onClick={giveUp} className="text-base text-zinc-300 hover:text-zinc-200 transition-colors">
-            Give up
+            {t.giveUp}
           </button>
         </div>
       )}
@@ -191,7 +191,7 @@ export function StreedleGame() {
       {/* Guess count */}
       {guessIds.length > 0 && (
         <p className="text-base text-zinc-300 text-center">
-          {guessIds.length} {guessIds.length === 1 ? 'guess' : 'guesses'}
+          {guessIds.length} {guessIds.length === 1 ? t.guessOne : t.guessMany}
         </p>
       )}
 
@@ -201,9 +201,9 @@ export function StreedleGame() {
           <table className="w-full text-sm border-collapse" style={{ minWidth: 820 }}>
             <thead>
               <tr className="border-b border-zinc-800 bg-zinc-900/50">
-                <th className="text-left px-3 py-2.5 text-zinc-300 font-medium w-40">Character</th>
+                <th className="text-left px-3 py-2.5 text-zinc-300 font-medium w-40">{t.character}</th>
                 {COLUMNS.map(col => (
-                  <th key={col.key} className="text-center px-2 py-2.5 text-zinc-300 font-medium">{col.label}</th>
+                  <th key={col.key} className="text-center px-2 py-2.5 text-zinc-300 font-medium">{t.col[col.key]}</th>
                 ))}
               </tr>
             </thead>
@@ -243,7 +243,7 @@ export function StreedleGame() {
       )}
 
       {guesses.length === 0 && !gameOver && (
-        <div className="text-center py-16 text-zinc-400 text-lg">No guesses yet</div>
+        <div className="text-center py-16 text-zinc-400 text-lg">{t.noGuesses}</div>
       )}
     </div>
   )
@@ -252,6 +252,7 @@ export function StreedleGame() {
 // Ticks down to the 00:00 UTC rollover. Client-only (mounted state starts null) so the server
 // never renders a time that is already wrong by the time it reaches the browser.
 function NextPuzzleCountdown() {
+  const t = useT().streetdle
   const [left, setLeft] = useState<number | null>(null)
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -266,7 +267,7 @@ function NextPuzzleCountdown() {
   const pad = (n: number) => String(n).padStart(2, '0')
   return (
     <p className="text-zinc-400 text-sm mt-1 tabular-nums">
-      Next character in {pad(h)}:{pad(m)}:{pad(sec)}
+      {fill(t.nextIn, { time: `${pad(h)}:${pad(m)}:${pad(sec)}` })}
     </p>
   )
 }
