@@ -293,9 +293,11 @@ function FrameMeter({ segments }: { segments: FrameSegment[] }) {
           <span
             key={key}
             className={cn(
-              'flex h-4 w-3 items-center justify-center text-[10px] font-bold leading-none tabular-nums',
+              'flex h-4 w-3 items-center justify-center text-[11px] font-bold leading-none tabular-nums text-white',
+              // A black outline (a stroke drawn under the fill, not a text shadow) keeps the digits
+              // readable on every block color.
+              '[-webkit-text-stroke:2.5px_#000] [paint-order:stroke_fill]',
               FRAME_KIND[s.kind].className,
-              s.kind === 'landing' ? 'text-zinc-900' : 'text-white',
             )}
           >
             {digit}
