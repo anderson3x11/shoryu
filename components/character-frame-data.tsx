@@ -10,6 +10,7 @@ import {
 } from '@/lib/supercombo'
 import type { FatExtra } from '@/lib/fat'
 import { FilterChips } from '@/components/filter-chips'
+import { Picker } from '@/components/picker'
 
 const WIKI = 'https://wiki.supercombo.gg'
 
@@ -154,14 +155,13 @@ export function CharacterFrameData({ moves, extras, accent }: {
             )
           })}
         </div>
-        <select
-          aria-label="Sort moves"
+        <Picker
+          className="sm:w-48"
+          label="Sort moves"
           value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="w-full sm:w-auto rounded-none border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-200 focus:border-[color:var(--accent)] focus:outline-none cursor-pointer"
-        >
-          {SORTS.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
-        </select>
+          onChange={setSort}
+          options={SORTS.map((x) => ({ value: x.id, label: x.label }))}
+        />
       </div>
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-zinc-400">

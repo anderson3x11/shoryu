@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { getCharacterByBucklerId, getCharacterImageUrl } from '@/lib/constants/characters'
 import { getSeason, setSeason, subscribeSeason } from '@/lib/constants/season'
 import { useT } from '@/lib/i18n/context'
+import { Picker } from '@/components/picker'
 import type { BucklerLeagueInfo } from '@/lib/buckler'
 
 interface Peak { characterId: number; mr: number; ranking: number }
@@ -45,21 +46,16 @@ export function SeasonBar({ playerId, seasonIds, current }: {
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-      <select
-        aria-label={t.phase}
-        value={shown}
-        onChange={(e) => {
-          const v = Number(e.target.value)
-          setSeason(playerId, v === current ? null : v)
-        }}
-        className="w-full sm:w-auto rounded-none border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 focus:border-amber-400 focus:outline-none cursor-pointer"
-      >
-        {seasonIds.map((id) => (
-          <option key={id} value={id}>
-            {t.phase} {id}{id === current ? ` (${t.current})` : ''}
-          </option>
-        ))}
-      </select>
+      <Picker
+        className="sm:w-52"
+        label={t.phase}
+        value={String(shown)}
+        onChange={(v) => setSeason(playerId, Number(v) === current ? null : Number(v))}
+        options={seasonIds.map((id) => ({
+          value: String(id),
+          label: `${t.phase} ${id}${id === current ? ` (${t.current})` : ''}`,
+        }))}
+      />
 
       {peak === undefined ? null : peak && char ? (
         <div className="flex items-center gap-2 text-sm">
