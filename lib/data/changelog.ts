@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.2.1",
+    title: "Fresh Rivals",
+    date: "2026-11-21",
+    items: [
+      "Rivals now look at your ranked games from the last 90 days, so they show who you face now and no more \"Unknown\" opponents",
+    ],
+  },
+  {
     version: "1.2",
     title: "Head to Head",
     date: "2026-11-21",

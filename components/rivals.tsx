@@ -7,6 +7,8 @@ import { Card, CardTitle } from '@/components/ui/card'
 import { getCharacterImageUrl } from '@/lib/constants/characters'
 import type { Rival, RivalsData } from '@/lib/supabase/ranked-stats'
 import { cn } from '@/lib/utils'
+import { fill } from '@/lib/i18n/format'
+import { RIVALS_WINDOW_DAYS } from '@/lib/supabase/ranked-stats'
 
 interface RivalsProps {
   data: RivalsData | null   // null = still loading
@@ -24,6 +26,7 @@ export function Rivals({ data, error = false }: RivalsProps) {
       <div className="px-4 pt-4 pb-3 flex items-center gap-2">
         <span className="block w-1.5 h-5 -skew-x-12 bg-amber-400" />
         <CardTitle className="font-bebas text-xl tracking-widest text-zinc-100 leading-none">{t.player.rivals}</CardTitle>
+        <span className="text-xs text-zinc-500">{fill(t.profile.rivalsWindow, { days: RIVALS_WINDOW_DAYS })}</span>
       </div>
 
       {data === null && !error && (

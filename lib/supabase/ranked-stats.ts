@@ -252,11 +252,15 @@ export interface RivalsData {
 const RIVALS_LIST_SIZE = 6
 // Victims/tormentors need enough games to be a real pattern rather than one lucky/unlucky match.
 const RIVAL_MIN_GAMES = 3
+// Rivals look at recent games only. All-time let opponents from months ago crowd out the current
+// ones, and the oldest rows (synced before opponent names were stored) showed up as "Unknown".
+export const RIVALS_WINDOW_DAYS = 90
 
 // Head-to-head records grouped by opponent, from the same synced DB battles as everything else
 // (no extra Buckler fetch). Names come from opp_name; rows synced before Rivals have none, so we
 // keep the most recent named sighting of each opponent and fall back in the UI.
-export function buildRivals(battles: DBBattle[]): RivalsData {
+export function buildRivals(battles: DBBattle[], now = Date.now()): RivalsData {
+  const since = now - RIVALS_WINDOW_DAYS * 24 * 60 * 60 * 1000
   interface Acc {
     playerId: number
     name: string | null
@@ -269,7 +273,7 @@ export function buildRivals(battles: DBBattle[]): RivalsData {
   const byOpp = new Map<number, Acc>()
 
   for (const b of battles) {
-    if (!b.opp_player_id) continue
+    if (!b.opp_player_id || new Date(b.played_at).getTime() < since) continue
     let a = byOpp.get(b.opp_player_id)
     if (!a) {
       a = { playerId: b.opp_player_id, name: null, nameAt: -Infinity, charCounts: new Map(), wins: 0, losses: 0, total: 0 }
