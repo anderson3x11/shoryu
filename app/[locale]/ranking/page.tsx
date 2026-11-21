@@ -3,7 +3,8 @@ import { DEFAULT_LOCALE, isLocale, localeHref, type Locale } from '@/lib/i18n/lo
 import { getDict } from '@/lib/i18n/dict'
 import Image from 'next/image'
 import { unstable_cache } from 'next/cache'
-import { getRankingSnapshot } from '@/lib/supabase/snapshots'
+import { getRankingSnapshot, getRankingSnappedAt } from '@/lib/supabase/snapshots'
+import { fill, formatAge } from '@/lib/i18n/format'
 import { ServiceUnavailable } from '@/components/service-unavailable'
 import { CHARACTERS, getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
@@ -20,6 +21,12 @@ const PAGE_SIZE = 30
 const cachedRanking = unstable_cache(getRankingSnapshot, ['ranking-snapshot'], {
   revalidate: 300,
 })
+const cachedSnappedAt = unstable_cache(getRankingSnappedAt, ['ranking-snapped-at'], { revalidate: 300 })
+
+// Age of the snapshot at request time (the page is dynamic, so this is read per render).
+function secondsSince(ms: number): number {
+  return Math.max(0, Math.floor((Date.now() - ms) / 1000))
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
@@ -92,7 +99,7 @@ export default async function RankingPage({
 
   // Served from the twice-daily sync snapshot in Supabase, paginated in-memory — no live
   // Buckler request per page load. Missing snapshot (sync never ran) → retry-later fallback.
-  const allPlayers = await cachedRanking()
+  const [allPlayers, snappedAt] = await Promise.all([cachedRanking(), cachedSnappedAt()])
   if (!allPlayers) return <ServiceUnavailable />
 
   // Filter options come from the whole top 500 (with counts), so every option has players.
@@ -129,6 +136,13 @@ export default async function RankingPage({
         </div>
         <span className="text-sm text-zinc-300">{t.page} {page}</span>
       </div>
+
+      {/* Not live: the twice-daily cron snapshot. Say so, since a profile can be newer. */}
+      {snappedAt && (
+        <p className="text-xs text-zinc-400 -mt-3">
+          {fill(t.snapshot, { age: formatAge(secondsSince(snappedAt), locale, getDict(locale).player.justNow) })}
+        </p>
+      )}
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <RankingFilters

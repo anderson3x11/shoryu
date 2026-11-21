@@ -44,6 +44,17 @@ export async function getRankingSnapshot(): Promise<BucklerRankingEntry[] | null
   return data.data as BucklerRankingEntry[]
 }
 
+// When the newest ranking snapshot was taken (ms), so the page can say how old it is.
+export async function getRankingSnappedAt(): Promise<number | null> {
+  const { data } = await supabase
+    .from('ranking_snapshot')
+    .select('snapped_at')
+    .order('snapped_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  return data ? new Date(data.snapped_at).getTime() : null
+}
+
 export async function saveRankingSnapshot(entries: BucklerRankingEntry[]) {
   return supabase.from('ranking_snapshot').insert({ data: entries })
 }

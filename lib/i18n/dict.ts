@@ -185,6 +185,7 @@ export const DICT = {
       players: 'players',
       noMatch: 'No player in the top 500 matches these filters.',
       noData: 'No ranking data available.',
+      snapshot: "Snapshot taken {age}, refreshed every 12 hours. Ranks and Legend status move after every game, so a player's profile can be more recent than this list.",
     },
     search: {
       placeholder: 'Search by CFN name or ID',
@@ -443,6 +444,7 @@ export const DICT = {
       players: '人',
       noMatch: 'この条件に合うプレイヤーは上位500人にいません。',
       noData: 'ランキングデータがありません。',
+      snapshot: '{age}に取得したスナップショットで、12時間ごとに更新されます。ランクやレジェンドの状態は対戦ごとに変わるため、プレイヤーのプロフィールの方が新しい場合があります。',
     },
     search: {
       placeholder: 'CFN名またはIDで検索',
@@ -701,6 +703,7 @@ export const DICT = {
       players: 'jogadores',
       noMatch: 'Nenhum jogador do top 500 corresponde a esses filtros.',
       noData: 'Nenhum dado de ranking disponível.',
+      snapshot: 'Captura feita {age}, atualizada a cada 12 horas. Rank e status Legend mudam a cada partida, então o perfil de um jogador pode estar mais atualizado que esta lista.',
     },
     search: {
       placeholder: 'Buscar por nome CFN ou ID',
