@@ -1,13 +1,14 @@
 import Link from 'next/link'
-import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { DEFAULT_LOCALE, isLocale, localeHref, type Locale } from '@/lib/i18n/locales'
 import { getDict } from '@/lib/i18n/dict'
 import Image from 'next/image'
 import { unstable_cache } from 'next/cache'
 import { getRankingSnapshot } from '@/lib/supabase/snapshots'
 import { ServiceUnavailable } from '@/components/service-unavailable'
-import { getCharacterImageUrl } from '@/lib/constants/characters'
+import { CHARACTERS, getCharacterImageUrl } from '@/lib/constants/characters'
 import { getRankImageUrl, getRank, getEffectiveRankId } from '@/lib/constants/ranks'
 import type { BucklerRankingEntry } from '@/lib/buckler/types'
+import { RankingFilters } from './ranking-filters'
 
 export const revalidate = 300
 
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { ...getDict(isLocale(locale) ? locale : DEFAULT_LOCALE).meta.ranking }
 }
 
-function RankingCard({ entry }: { entry: BucklerRankingEntry }) {
+function RankingCard({ entry, locale }: { entry: BucklerRankingEntry; locale: Locale }) {
   const banner = entry.fighter_banner_info
   const charSlug = entry.character_tool_name
   const rankId = getEffectiveRankId(
@@ -52,7 +53,7 @@ function RankingCard({ entry }: { entry: BucklerRankingEntry }) {
       </div>
       <div className="flex-1 min-w-0 space-y-0.5">
         <Link
-          href={`/player/${banner.personal_info.short_id}`}
+          href={localeHref(locale, `/player/${banner.personal_info.short_id}`)}
           prefetch={false}
           className="font-semibold text-zinc-100 hover:text-white transition-colors leading-tight truncate block"
         >
@@ -76,11 +77,16 @@ function RankingCard({ entry }: { entry: BucklerRankingEntry }) {
 }
 
 export default async function RankingPage({
+  params,
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>
+  params: Promise<{ locale: string }>
+  searchParams: Promise<{ page?: string; char?: string; country?: string }>
 }) {
-  const { page: pageStr } = await searchParams
+  const { locale: raw } = await params
+  const locale = isLocale(raw) ? raw : DEFAULT_LOCALE
+  const t = getDict(locale).rankingPage
+  const { page: pageStr, char, country } = await searchParams
   const parsed = Number(pageStr ?? '1')
   const requestedPage = Number.isFinite(parsed) ? Math.max(1, Math.floor(parsed)) : 1
 
@@ -88,29 +94,60 @@ export default async function RankingPage({
   // Buckler request per page load. Missing snapshot (sync never ran) → retry-later fallback.
   const allPlayers = await cachedRanking()
   if (!allPlayers) return <ServiceUnavailable />
-  const totalPages = Math.max(1, Math.ceil(allPlayers.length / PAGE_SIZE))
+
+  // Filter options come from the whole top 500 (with counts), so every option has players.
+  const count = (key: (e: BucklerRankingEntry) => string) => {
+    const m = new Map<string, number>()
+    for (const e of allPlayers) m.set(key(e), (m.get(key(e)) ?? 0) + 1)
+    return m
+  }
+  const charCounts = count((e) => e.character_tool_name)
+  const characters = [...charCounts]
+    .map(([value, n]) => ({ value, count: n, label: CHARACTERS.find((c) => c.slug === value)?.name ?? value }))
+    .sort((a, b) => a.label.localeCompare(b.label))
+  const countries = [...count((e) => e.fighter_banner_info.home_name)]
+    .map(([value, n]) => ({ value, count: n, label: value }))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+
+  const filtered = allPlayers.filter((e) =>
+    (!char || e.character_tool_name === char) && (!country || e.fighter_banner_info.home_name === country))
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   // Clamp rather than render an empty list for ?page=999 (or ?page=abc, which parsed to 1 above).
   const page = Math.min(requestedPage, totalPages)
-  const players = allPlayers.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  const players = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  const pageHref = (p: number) => {
+    const qs = new URLSearchParams({ ...(char && { char }), ...(country && { country }), page: String(p) })
+    return localeHref(locale, `/ranking?${qs}`)
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-baseline justify-between">
         <div className="flex items-center gap-3">
           <span className="block w-2 h-10 sm:h-12 -skew-x-12 bg-amber-400 shrink-0" />
-          <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">Master Ranking</h1>
+          <h1 className="font-bebas text-4xl sm:text-6xl tracking-widest text-zinc-100">{t.title}</h1>
         </div>
-        <span className="text-sm text-zinc-300">Page {page}</span>
+        <span className="text-sm text-zinc-300">{t.page} {page}</span>
+      </div>
+
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+        <RankingFilters
+          characters={characters}
+          countries={countries}
+          labels={{ allCharacters: t.allCharacters, allCountries: t.allCountries }}
+        />
+        {(char || country) && <span className="text-sm text-zinc-400">{filtered.length} {t.players}</span>}
       </div>
 
       {players.length === 0 ? (
-        <p className="text-zinc-300">No ranking data available.</p>
+        <p className="text-zinc-300">{allPlayers.length ? t.noMatch : t.noData}</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {players.map((entry) => (
             <RankingCard
               key={`${entry.master_rating_ranking}-${entry.fighter_banner_info.personal_info.short_id}`}
               entry={entry}
+              locale={locale}
             />
           ))}
         </div>
@@ -119,27 +156,27 @@ export default async function RankingPage({
       <div className="flex items-center justify-center gap-4 pt-2">
         {page > 1 ? (
           <Link
-            href={`/ranking?page=${page - 1}`}
+            href={pageHref(page - 1)}
             className="px-4 py-2 rounded-none border border-zinc-700 text-sm text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
           >
-            ← Previous
+            ← {t.previous}
           </Link>
         ) : (
           <span className="px-4 py-2 rounded-none border border-zinc-800 text-sm text-zinc-300 cursor-not-allowed">
-            ← Previous
+            ← {t.previous}
           </span>
         )}
 
         {page < totalPages ? (
           <Link
-            href={`/ranking?page=${page + 1}`}
+            href={pageHref(page + 1)}
             className="px-4 py-2 rounded-none border border-zinc-700 text-sm text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
           >
-            Next →
+            {t.next} →
           </Link>
         ) : (
           <span className="px-4 py-2 rounded-none border border-zinc-800 text-sm text-zinc-300 cursor-not-allowed">
-            Next →
+            {t.next} →
           </span>
         )}
       </div>
