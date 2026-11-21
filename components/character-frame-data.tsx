@@ -106,7 +106,7 @@ export function CharacterFrameData({ moves, extras, accent }: {
         <span className="uppercase tracking-wider text-zinc-500">Frame meter</span>
         {FRAME_KINDS.map((k) => (
           <span key={k.kind} className="flex items-center gap-1">
-            <span className={cn('h-2.5 w-1.5', k.className)} />
+            <span className={cn('h-3 w-2', k.className)} />
             {k.label}
           </span>
         ))}
@@ -278,16 +278,36 @@ function MoveCard({ move, extra }: { move: Move; extra?: FatExtra }) {
   )
 }
 
-/** One block per frame, like the in-game meter. Wraps on long moves instead of shrinking the blocks. */
+/**
+ * One block per frame, like the in-game meter. Wraps on long moves instead of shrinking the blocks.
+ * Each segment's frame count sits in its last blocks, one digit per block ("13" spans two), like FAT;
+ * those blocks are grouped so a wrap never splits a number across two rows.
+ */
 function FrameMeter({ segments }: { segments: FrameSegment[] }) {
   const summary = segments.map((s) => `${FRAME_KIND[s.kind].label} ${s.frames}`).join(', ')
   return (
     <div role="img" aria-label={`Frame meter: ${summary}`} title={summary} className="flex flex-wrap gap-px">
-      {segments.flatMap((s, i) =>
-        Array.from({ length: s.frames }, (_, j) => (
-          <span key={`${i}-${j}`} className={cn('h-3 w-1.5', FRAME_KIND[s.kind].className)} />
-        )),
-      )}
+      {segments.flatMap((s, i) => {
+        const digits = String(s.frames)
+        const block = (key: string, digit?: string) => (
+          <span
+            key={key}
+            className={cn(
+              'flex h-4 w-3 items-center justify-center text-[10px] font-bold leading-none tabular-nums',
+              FRAME_KIND[s.kind].className,
+              s.kind === 'landing' ? 'text-zinc-900' : 'text-white',
+            )}
+          >
+            {digit}
+          </span>
+        )
+        return [
+          ...Array.from({ length: s.frames - digits.length }, (_, j) => block(`${i}-${j}`)),
+          <span key={`${i}-n`} className="flex gap-px">
+            {[...digits].map((d, j) => block(`${i}-d${j}`, d))}
+          </span>,
+        ]
+      })}
     </div>
   )
 }
