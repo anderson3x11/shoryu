@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ChangelogLink } from '@/components/changelog-link'
+import { CURRENT_VERSION } from '@/lib/data/changelog'
 import { DEFAULT_LOCALE, localeHref, type Locale } from '@/lib/i18n/locales'
 import { getDict } from '@/lib/i18n/dict'
 
@@ -9,8 +10,14 @@ export function SiteFooter({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const href = (path: string) => localeHref(locale, path)
   return (
     <footer className="border-t border-zinc-800 bg-zinc-950">
-      <div className="max-w-[90rem] mx-auto px-6 h-12 flex items-center justify-between">
-        <ChangelogLink />
+      {/* Wraps onto a second line on narrow phones rather than squeezing the disclaimer. */}
+      <div className="max-w-[90rem] mx-auto px-6 min-h-12 py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <div className="flex items-center gap-3">
+          <ChangelogLink />
+          <Link href={href('/changelog')} prefetch={false} className="text-xs tabular-nums text-zinc-500 hover:text-zinc-300 transition-colors">
+            v{CURRENT_VERSION}
+          </Link>
+        </div>
         <p className="text-xs text-zinc-700">{t.notAffiliated}</p>
         <div className="flex items-center gap-4">
           <a

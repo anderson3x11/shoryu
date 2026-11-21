@@ -1,10 +1,27 @@
 export interface ChangelogEntry {
-  date: string   // "YYYY-MM-DD"
+  version: string  // "1.15": minor for a feature release, patch for a small one
+  title: string    // release name shown next to the version
+  date: string     // "YYYY-MM-DD"
   items: string[]
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.15",
+    title: "Head to Head",
+    date: "2026-11-21",
+    items: [
+      "Phase picker on player profiles: look back at any past phase, with its win rates, matchups, final ranks and peak MR",
+      "New Compare page: two players side by side, with their ranked head-to-head record",
+      "Master ranking filters: by character and by country",
+      "Frame data: quick filters (plus on block, safe, invincible, armor), sorting, and search in move notes",
+      "Arjun's frame data now has hitbox images",
+      "The current version is now shown in the footer",
+    ],
+  },
+  {
+    version: "1.14",
+    title: "Frame Perfect",
     date: "2026-11-21",
     items: [
       "Frame meter on every move: startup, active and recovery frames at a glance, like the in-game meter",
@@ -17,6 +34,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.13",
+    title: "Hitbox Reveal",
     date: "2026-10-19",
     items: [
       "Frame data redesigned as cards, with the hitbox image of every move",
@@ -25,6 +44,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.12",
+    title: "Here Comes Arjun",
     date: "2026-10-14",
     items: [
       "Arjun is in: he shows up on the character grid, in stats and matchups, and has his own page",
@@ -32,6 +53,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.11",
+    title: "Here Comes Yasmine",
     date: "2026-08-05",
     items: [
       "Yasmine is in: she shows up on the character grid, in stats and matchups, and has her own page",
@@ -39,6 +62,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.10",
+    title: "Rivals",
     date: "2026-07-06",
     items: [
       "New Rivals tab on player profiles: see the opponents you face the most, the ones you beat the most, and the ones who give you the most trouble",
@@ -46,6 +71,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.9",
+    title: "Fresh Costume",
     date: "2026-06-20",
     items: [
       "Fresh new look across the whole site: a sharper fighting-game style with a bold new accent color",
@@ -55,6 +82,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.8",
+    title: "Memory Card",
     date: "2026-06-16",
     items: [
       "Battle history now stored in a database, matchup chart and LP/MR history get faster on every visit",
@@ -63,12 +92,16 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.7.1",
+    title: "New Stage",
     date: "2026-06-13",
     items: [
       "Shoryu has a new home: shoryu.site",
     ],
   },
   {
+    version: "1.7",
+    title: "Tier List",
     date: "2026-06-08",
     items: [
       "New Stats page: character usage rates by league and control type",
@@ -77,6 +110,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.6.2",
+    title: "Hotfix",
     date: "2026-06-05",
     items: [
       "Started adding Ingrid stuff on her page",
@@ -84,6 +119,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.6.1",
+    title: "Patch Notes",
     date: "2026-06-03",
     items: [
       "Added this Changelog page so you always know what's new",
@@ -91,6 +128,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.6",
+    title: "Session Mode",
     date: "2026-06-02",
     items: [
       "Match history now shows how much LP or MR you gained/lost after each ranked game",
@@ -100,6 +139,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.5",
+    title: "Streetdle",
     date: "2026-06-01",
     items: [
       "New mini game: Streetdle ! Guess the daily SF character, 72 characters from across the series",
@@ -107,6 +148,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.4",
+    title: "Scouting Report",
     date: "2026-05-26",
     items: [
       "Player search now has a full results page with pagination",
@@ -115,6 +158,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.3",
+    title: "Quick Rise",
     date: "2026-05-25",
     items: [
       "Recently searched players now appear on the home page for quick access",
@@ -122,6 +167,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.2",
+    title: "Fight!",
     date: "2026-05-22",
     items: [
       "Shoryu is live!",
@@ -131,6 +178,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.1",
+    title: "Matchup Mind",
     date: "2026-05-21",
     items: [
       "Matchup chart: see your win rate for every character combination",
@@ -138,9 +187,14 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
   },
   {
+    version: "1.0",
+    title: "Round One",
     date: "2026-05-20",
     items: [
       "Player profiles are up : rank, region, platform, character stats, and match history",
     ],
   },
 ]
+
+/** The version the site is on: the newest changelog entry. */
+export const CURRENT_VERSION = CHANGELOG[0].version
