@@ -1,0 +1,420 @@
+{
+ "dhalsim_1hk": {
+  "blockstun": "18",
+  "hitstop": "13",
+  "range": "1.29",
+  "juggle": "1 / 1 / 5",
+  "perfectParry": "-23",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_1hp": {
+  "hitstun": "27",
+  "blockstun": "21",
+  "hitstop": "13",
+  "range": "1.46",
+  "hitConfirm": "18",
+  "afterDriveRush": "17 / 11",
+  "perfectParry": "-22",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_1lk": {
+  "hitstun": "14",
+  "blockstun": "10",
+  "hitstop": "9",
+  "range": "1.05",
+  "scaling": "20% Start",
+  "perfectParry": "-11",
+  "superGain": "300 / 150"
+ },
+ "dhalsim_1mk": {
+  "hitstun": "20",
+  "blockstun": "16",
+  "hitstop": "9",
+  "range": "1.19",
+  "hitConfirm": "13",
+  "scaling": "20% Start",
+  "afterDriveRush": "8 / 4",
+  "perfectParry": "-21",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_214214k": {
+  "blockstun": "61(57)",
+  "hitstop": "8x5",
+  "scaling": "40% Minimum",
+  "juggle": "1 / 6x4,100 / 99",
+  "perfectParry": "-4"
+ },
+ "dhalsim_236236k": {
+  "blockstun": "18",
+  "hitstop": "20",
+  "range": "1.356",
+  "scaling": "50% Minimum / 10% Immediate (special)",
+  "juggle": "- / - / 10",
+  "perfectParry": "-78"
+ },
+ "dhalsim_236236k(ca)": {
+  "blockstun": "18",
+  "hitstop": "20",
+  "range": "1.356",
+  "scaling": "50% Minimum / 10% Immediate (special)",
+  "juggle": "- / - / 10",
+  "perfectParry": "-78"
+ },
+ "dhalsim_236kk": {
+  "hitstun": "29 total",
+  "blockstun": "25 total",
+  "hitstop": "7,7",
+  "hitConfirm": "11",
+  "scaling": "20% Start / Combo (2 hits)",
+  "juggle": "0,0 / 0,0 / 3,3",
+  "perfectParry": "-6"
+ },
+ "dhalsim_236p": {
+  "hitstun": "32",
+  "blockstun": "28",
+  "hitstop": "8",
+  "hitConfirm": "4",
+  "juggle": "1 / 1 / 3",
+  "perfectParry": "-23",
+  "superGain": "600 / 300"
+ },
+ "dhalsim_236pp": {
+  "blockstun": "31(23)",
+  "hitstop": "8,8",
+  "hitConfirm": "11",
+  "juggle": "1,1 / 1,1 / 6,7",
+  "perfectParry": "-11"
+ },
+ "dhalsim_236p_hold": {
+  "blockstun": "32(22)",
+  "hitstop": "8,8",
+  "hitConfirm": "11",
+  "juggle": "1,1 / 1,1 / 6,7",
+  "perfectParry": "-9"
+ },
+ "dhalsim_2hk": {
+  "blockstun": "20",
+  "hitstop": "13",
+  "range": "1.50~3.057",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-34(-19)",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_2hp": {
+  "hitstun": "27",
+  "blockstun": "16",
+  "hitstop": "13",
+  "range": "2.95",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-26",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_2lk": {
+  "hitstun": "18",
+  "blockstun": "13",
+  "hitstop": "9",
+  "range": "0.814~1.44",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-21(-15)",
+  "superGain": "300 / 150"
+ },
+ "dhalsim_2lp": {
+  "hitstun": "16",
+  "blockstun": "11",
+  "hitstop": "9",
+  "range": "1.14",
+  "hitConfirm": "15",
+  "scaling": "20% Start",
+  "afterDriveRush": "6 / 1",
+  "perfectParry": "-10",
+  "superGain": "300 / 150"
+ },
+ "dhalsim_2lplk": {
+  "range": "0.8",
+  "scaling": "20% Immediate"
+ },
+ "dhalsim_2mk": {
+  "hitstun": "24",
+  "blockstun": "17",
+  "hitstop": "11",
+  "range": "1.302~2.51",
+  "scaling": "20% Start",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-25(-13)",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_2mp": {
+  "hitstun": "19",
+  "blockstun": "15",
+  "hitstop": "11",
+  "range": "1.96",
+  "hitConfirm": "15",
+  "juggle": "1 / 1 / 2",
+  "afterDriveRush": "9 / 5",
+  "perfectParry": "-17",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_4hk": {
+  "hitstun": "26",
+  "blockstun": "17",
+  "hitstop": "13",
+  "range": "0.8",
+  "juggle": "1 / 1 / 0",
+  "perfectParry": "-24",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_4hp": {
+  "hitstun": "27",
+  "blockstun": "20",
+  "hitstop": "13",
+  "range": "1.50~2.52",
+  "hitConfirm": "21",
+  "scaling": "20% Start",
+  "juggle": "1 / 1 / 2",
+  "afterDriveRush": "17 / 10",
+  "perfectParry": "-34",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_4lplk": {
+  "range": "0.8",
+  "scaling": "20% Immediate"
+ },
+ "dhalsim_4mk": {
+  "hitstun": "24",
+  "blockstun": "21",
+  "hitstop": "11",
+  "range": "1.18",
+  "hitConfirm": "16",
+  "afterDriveRush": "14 / 11",
+  "perfectParry": "-19",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_4mp": {
+  "hitstun": "24",
+  "blockstun": "19",
+  "hitstop": "11",
+  "range": "1.079",
+  "hitConfirm": "19",
+  "afterDriveRush": "11 / 6",
+  "perfectParry": "-20",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_5hk": {
+  "hitstun": "26",
+  "blockstun": "17",
+  "hitstop": "13",
+  "range": "3.34",
+  "hitConfirm": "20",
+  "juggle": "1 / 5 / 1",
+  "afterDriveRush": "12 / 3",
+  "perfectParry": "-21",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_5hp": {
+  "hitstun": "25",
+  "blockstun": "20",
+  "hitstop": "13",
+  "range": "2.604~3.624",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-29",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_5lk": {
+  "hitstun": "17",
+  "blockstun": "9",
+  "hitstop": "9",
+  "range": "1.55",
+  "hitConfirm": "14",
+  "scaling": "20% Start",
+  "afterDriveRush": "6 / -2",
+  "perfectParry": "-13",
+  "superGain": "300 / 150"
+ },
+ "dhalsim_5lp": {
+  "hitstun": "15",
+  "blockstun": "10",
+  "hitstop": "9",
+  "range": "0.88",
+  "hitConfirm": "13",
+  "scaling": "20% Start",
+  "afterDriveRush": "5 / 0",
+  "perfectParry": "-9",
+  "superGain": "300 / 150"
+ },
+ "dhalsim_5mk": {
+  "hitstun": "19",
+  "blockstun": "15",
+  "hitstop": "11",
+  "range": "2.5",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-19",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_5mp": {
+  "hitstun": "22",
+  "blockstun": "17",
+  "hitstop": "11",
+  "range": "2.983",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-20",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_63214hk": {
+  "blockstun": "27",
+  "hitstop": "8",
+  "hitConfirm": "15",
+  "scaling": "Combo (2 hits)",
+  "juggle": "1 / 1 / 1",
+  "perfectParry": "-26",
+  "superGain": "1200 / 600"
+ },
+ "dhalsim_63214hp": {
+  "blockstun": "29 total",
+  "hitstop": "4,4,6",
+  "hitConfirm": "32",
+  "juggle": "1,1,1 / 1,1,1 / 5,5,5",
+  "perfectParry": "-30(-28)"
+ },
+ "dhalsim_63214kk": {
+  "blockstun": "30",
+  "hitstop": "0,0 (3,3)",
+  "hitConfirm": "15",
+  "juggle": "0,1 / 0,1 / 2,3",
+  "perfectParry": "-21"
+ },
+ "dhalsim_63214lk": {
+  "blockstun": "27",
+  "hitstop": "8",
+  "hitConfirm": "13",
+  "juggle": "1 / 1 / 1",
+  "perfectParry": "-31",
+  "superGain": "1200 / 600"
+ },
+ "dhalsim_63214lp": {
+  "blockstun": "26",
+  "hitstop": "10",
+  "hitConfirm": "21",
+  "juggle": "3 / 1 / 2",
+  "perfectParry": "-29",
+  "superGain": "900 / 450"
+ },
+ "dhalsim_63214mk": {
+  "blockstun": "27",
+  "hitstop": "8",
+  "hitConfirm": "13",
+  "juggle": "1 / 1 / 1",
+  "perfectParry": "-28",
+  "superGain": "1200 / 600"
+ },
+ "dhalsim_63214mp": {
+  "blockstun": "28 total",
+  "hitstop": "4,6",
+  "hitConfirm": "26",
+  "juggle": "1,1 / 1,1 / 2,3",
+  "perfectParry": "-41"
+ },
+ "dhalsim_63214pp": {
+  "blockstun": "38 total",
+  "hitstop": "3x4",
+  "hitConfirm": "27",
+  "juggle": "0 (1 on last hit) / 0x4,1 / 1x5",
+  "perfectParry": "-38"
+ },
+ "dhalsim_6hphk": {
+  "blockstun": "30 total",
+  "hitstop": "4,16",
+  "range": "1.3",
+  "juggle": "200 / 100 / 1",
+  "perfectParry": "-27"
+ },
+ "dhalsim_6hphk_recovery": {
+  "blockstun": "30 total",
+  "hitstop": "4,16",
+  "range": "1.3",
+  "juggle": "200 / 100 / 1",
+  "perfectParry": "-27"
+ },
+ "dhalsim_hphk": {
+  "blockstun": "34",
+  "hitstop": "25",
+  "range": "2.258",
+  "scaling": "20% Start",
+  "juggle": "0 (Crumple: -1) / 1 / 0",
+  "perfectParry": "-35"
+ },
+ "dhalsim_j2lp": {
+  "hitstun": "18",
+  "blockstun": "14",
+  "hitstop": "13",
+  "hitConfirm": "24~",
+  "juggle": "1 / 1 / 3",
+  "perfectParry": "-34(-8)",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_j63214pp": {
+  "hitstun": "37 total",
+  "blockstun": "38 total",
+  "hitstop": "6,6",
+  "scaling": "20% Start",
+  "juggle": "0,0 / 0,1 / 3,4",
+  "perfectParry": "-10~"
+ },
+ "dhalsim_jhk": {
+  "hitstun": "19",
+  "blockstun": "15",
+  "hitstop": "13",
+  "range": "0.94~2.82",
+  "scaling": "20% Start",
+  "juggle": "2 / 1 / 4",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_jhp": {
+  "hitstun": "23",
+  "blockstun": "19",
+  "hitstop": "13",
+  "range": "1.22~1.68",
+  "scaling": "20% Start",
+  "juggle": "1 / 1 / 4",
+  "superGain": "1000 / 500"
+ },
+ "dhalsim_jlk": {
+  "hitstun": "12",
+  "blockstun": "9",
+  "hitstop": "9",
+  "range": "1.03",
+  "superGain": "300 / 150"
+ },
+ "dhalsim_jlp": {
+  "hitstun": "17",
+  "blockstun": "9",
+  "hitstop": "9",
+  "range": "0.84",
+  "superGain": "300 / 150"
+ },
+ "dhalsim_jmk": {
+  "hitstun": "17",
+  "blockstun": "13",
+  "hitstop": "11",
+  "range": "1.76",
+  "scaling": "20% Start",
+  "juggle": "2 / 1 / 0",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_jmp": {
+  "hitstun": "17",
+  "blockstun": "11",
+  "hitstop": "11",
+  "range": "2.36",
+  "hitConfirm": "24",
+  "scaling": "20% Start",
+  "juggle": "1 / 1(2) / 1",
+  "superGain": "500 / 250"
+ },
+ "dhalsim_lplk": {
+  "range": "0.8",
+  "scaling": "20% Immediate"
+ },
+ "dhalsim_mpmk": {
+  "scaling": "50% Multiplier (Perfect)"
+ }
+}

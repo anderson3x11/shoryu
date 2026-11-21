@@ -2,7 +2,7 @@
 //   npx tsx scripts/check-frame-data.ts
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { hitboxShots, orderMoves, type Move, type MoveGroup } from '../lib/supercombo'
+import { frameMeter, hitboxShots, orderMoves, type Move, type MoveGroup } from '../lib/supercombo'
 
 const moves = (id: string): Move[] => JSON.parse(readFileSync(`lib/data/supercombo/${id}.json`, 'utf8')).moves
 const order = (id: string, group: MoveGroup) => orderMoves(group, moves(id).filter((m) => m.group === group)).map((m) => m.input)
@@ -23,4 +23,12 @@ assert.deepEqual(labels('J_6mk_dl2_hitbox_preview.png', 'J_6mk_dl2_hitbox_1.png'
 assert.deepEqual(labels('A_5lp_hitbox.png', 'A_5lp_hitbox.png'), ['Hitbox'])
 assert.deepEqual(labels('H_214p_hitbox1.png', 'H_214p_enhanced.png'), ['Hitbox 1', 'Hitbox 2'])
 
-console.log('frame data order and hitbox labels: ok')
+const meter = (startup: string, active: string, recovery: string) =>
+  frameMeter({ startup, active, recovery })?.map((s) => `${s.kind}:${s.frames}`).join(' ') ?? null
+assert.equal(meter('4', '3', '7'), 'startup:3 active:3 recovery:7')
+assert.equal(meter('16', '2(13)2', '14+17 land'), 'startup:15 active:2 gap:13 active:2 recovery:14 landing:17')
+assert.equal(meter('1', '2,2', '20(22)'), 'active:2 active:2 recovery:20')
+assert.equal(meter('10', 'until land', '17 land'), null)
+assert.equal(meter('10', '90', '90'), null)
+
+console.log('frame data order, hitbox labels and frame meter: ok')

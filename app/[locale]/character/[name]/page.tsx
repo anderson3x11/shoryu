@@ -10,6 +10,7 @@ import { CharacterVitals } from '@/components/character-vitals'
 import { CharacterFrameData } from '@/components/character-frame-data'
 import { CharacterPatches } from '@/components/character-patches'
 import { getCharacterWiki, type Reason } from '@/lib/supercombo'
+import { FAT_URL, getFatExtras } from '@/lib/fat'
 
 const TECH_ORDER = ['guides', 'combos', 'pressure', 'oki', 'matchup', 'techs'] as const
 const TECH_LABELS: Record<string, string> = { guides: 'Guides', combos: 'Combos', pressure: 'Pressure', oki: 'Okizeme', matchup: 'Matchups', techs: 'Tech' }
@@ -59,7 +60,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   if (!char) notFound()
 
   const links = CHARACTER_LINKS[char.id] ?? {}
-  const wiki = await getCharacterWiki(char.id)
+  const [wiki, fat] = await Promise.all([getCharacterWiki(char.id), getFatExtras(char.id)])
 
   // Collect all YouTube URLs and fetch thumbnails in parallel
   const watchItems = [
@@ -238,7 +239,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   if (wiki?.moves.length) {
     tabs.push({
       id: 'frames', label: 'Frame Data', count: wiki.moves.length,
-      content: <CharacterFrameData moves={wiki.moves} accent={accent} />,
+      content: <CharacterFrameData moves={wiki.moves} extras={fat} accent={accent} />,
     })
   }
   if (watchItems.length || hasTechs) {
@@ -278,7 +279,12 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           >
             SuperCombo wiki
           </a>
-          , maintained by the community under CC BY-SA.
+          , maintained by the community under CC BY-SA. Hitstun, juggle, hit confirm windows and the
+          other extra frame data come from{' '}
+          <a href={FAT_URL} target="_blank" rel="noopener noreferrer" className="underline hover:text-zinc-300">
+            FAT
+          </a>
+          {' '}by D4RKONION and the FAT team, under GPL-3.0.
         </p>
       )}
     </div>

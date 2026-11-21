@@ -189,3 +189,51 @@ export function hitboxShots(paths: string[]): { path: string; label: string }[] 
   return [...labelled.filter((s) => s.full), ...labelled.filter((s) => !s.full)]
     .map(({ path, label }) => ({ path, label }))
 }
+
+// ---------------------------------------------------------------------------
+// Frame meter
+// ---------------------------------------------------------------------------
+
+export type FrameKind = 'startup' | 'active' | 'gap' | 'recovery' | 'landing'
+export interface FrameSegment { kind: FrameKind; frames: number }
+
+/** Past this many frames (taunts, long supers) a meter is a wall of blocks, not a read. */
+const METER_MAX = 120
+
+// "13+2" (freeze + startup) is one startup; "20(22)" lists an alternative, keep the first.
+function startupFrames(s: string): number | null {
+  const m = s.replace(/\(.*$/, '').trim().match(/^(\d+)(?:\+(\d+))?$/)
+  return m ? Number(m[1]) + Number(m[2] ?? 0) : null
+}
+
+// "3", "2,2" (hits back to back) or "2(13)2(13)2" (active, gap, active...).
+function activeSegments(s: string): FrameSegment[] | null {
+  if (!/^\d+(?:(?:,|\(\d+\))\d+)*$/.test(s.trim())) return null
+  return [...s.matchAll(/(\()?(\d+)\)?/g)].map((m) => ({ kind: m[1] ? 'gap' : 'active', frames: Number(m[2]) }))
+}
+
+// "7", "17 land", "14+17 land"; a trailing "(...)" alternative is dropped.
+function recoverySegments(s: string): FrameSegment[] | null {
+  const m = s.replace(/\(.*$/, '').trim().match(/^(\d+)(?:\+(\d+))?( land)?$/)
+  if (!m) return null
+  const [a, b, land] = [Number(m[1]), m[2] ? Number(m[2]) : null, Boolean(m[3])]
+  if (!land) return b === null ? [{ kind: 'recovery', frames: a }] : null
+  return b === null
+    ? [{ kind: 'landing', frames: a }]
+    : [{ kind: 'recovery', frames: a }, { kind: 'landing', frames: b }]
+}
+
+/**
+ * The move as a frame meter, the way the in-game one reads: startup (frames before the first
+ * active one), active frames with any gaps between hits, then recovery and landing recovery.
+ * Null when one of the three values isn't a plain frame count.
+ */
+export function frameMeter(move: Pick<Move, 'startup' | 'active' | 'recovery'>): FrameSegment[] | null {
+  const startup = startupFrames(move.startup)
+  const active = activeSegments(move.active)
+  const recovery = recoverySegments(move.recovery)
+  if (startup === null || startup < 1 || !active || !recovery) return null
+  const segments = [{ kind: 'startup' as const, frames: startup - 1 }, ...active, ...recovery]
+    .filter((s) => s.frames > 0)
+  return segments.reduce((n, s) => n + s.frames, 0) > METER_MAX ? null : segments
+}

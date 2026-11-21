@@ -53,6 +53,7 @@ To keep Buckler traffic low, most data is cached in Supabase:
 | Match history | Buckler | On demand, stored incrementally |
 | Ranking, pros, usage rates | Buckler | `/api/cron/sync`, every 12h |
 | Character reference data | [SuperCombo wiki](https://wiki.supercombo.gg) | `scripts/refresh-supercombo.ts`, by hand after a balance patch |
+| Extra frame data (hitstun, juggle, hit confirm...) | [FAT](https://github.com/D4RKONION/FAT) | `scripts/refresh-fat.ts`, by hand, after the SuperCombo refresh |
 | Tournaments | [Liquipedia](https://liquipedia.net/fighters) | `scripts/refresh-tournaments.ts`, weekly GitHub Action |
 
 ## Getting started
@@ -124,6 +125,8 @@ curl -H "Authorization: Bearer CRON_SECRET" http://localhost:3000/api/cron/sync
 | `npm run start` | Serve the production build. |
 | `npm run lint` | Run ESLint. |
 | `npx tsx scripts/refresh-supercombo.ts [charId ...]` | Regenerate the character reference data in `lib/data/supercombo/`. |
+| `npx tsx scripts/refresh-fat.ts` | Regenerate `lib/data/fat/` from FAT (run after the SuperCombo refresh). |
+| `npx tsx scripts/check-frame-data.ts` | Check the frame data move order, hitbox labels and frame meter. |
 | `npx tsx scripts/refresh-tournaments.ts` | Regenerate `lib/data/tournaments.json` from Liquipedia. |
 
 ## Deployment
@@ -174,13 +177,17 @@ A few conventions to follow:
 - Character reference data comes from the [SuperCombo wiki](https://wiki.supercombo.gg), and tournament
   data from [Liquipedia](https://liquipedia.net/fighters). Both are licensed under
   [CC BY-SA](https://creativecommons.org/licenses/by-sa/3.0/). Thanks to their editors.
+- Extra frame data (hitstun, blockstun, juggle, hit confirm windows, drive rush and perfect parry
+  advantage, super gain) comes from [FAT](https://github.com/D4RKONION/FAT) by D4RKONION and the FAT
+  team, licensed under [GPL-3.0](https://github.com/D4RKONION/FAT/blob/HEAD/LICENSE). Thanks to them.
 - Player data comes from Capcom's [Buckler's Boot Camp](https://www.streetfighter.com/6/buckler).
 
 ## License
 
 The source code is released under the [MIT License](LICENSE).
 
-The MIT License covers only this project's code. Wiki-derived data keeps its CC BY-SA license.
+The MIT License covers only this project's code. Wiki-derived data keeps its CC BY-SA license, and
+the FAT-derived data in `lib/data/fat/` keeps FAT's GPL-3.0 license.
 Street Fighter, character names, artwork and rank icons are trademarks and property of Capcom.
 Bundled fonts are covered by their own licenses. Shoryu is a fan project, not affiliated with or
 endorsed by Capcom.

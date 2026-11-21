@@ -1,0 +1,477 @@
+{
+ "yasmine_214hp": {
+  "blockstun": "20",
+  "hitstop": "12,1,13",
+  "range": "2.693~2.914",
+  "hitConfirm": "16",
+  "juggle": "1,1,1 / 1,0,1 / 3,5,5",
+  "perfectParry": "-17(-16)"
+ },
+ "yasmine_214mp": {
+  "hitstun": "27,21,24 (47 total)",
+  "blockstun": "20",
+  "hitstop": "12,1,13",
+  "range": "2.246~2.405",
+  "hitConfirm": "16",
+  "scaling": "40% Start",
+  "juggle": "1,1,1 / 1,0,1 / 3,5,5",
+  "perfectParry": "-24(-23)"
+ },
+ "yasmine_214pp": {
+  "blockstun": "18",
+  "hitstop": "10,5,12",
+  "range": "2.855~2.944",
+  "hitConfirm": "14",
+  "juggle": "1,1,2 / 0,0,4 / 1,6,6",
+  "perfectParry": "-28(-27)"
+ },
+ "yasmine_22p": {
+  "hitstun": "27",
+  "blockstun": "22,24",
+  "hitstop": "8(9)",
+  "hitConfirm": "4",
+  "scaling": "20% Start / Combo (2 hits)",
+  "juggle": "1 / 0,1 / 2,10",
+  "perfectParry": "-15"
+ },
+ "yasmine_22pp": {
+  "hitstun": "28",
+  "blockstun": "24,33",
+  "hitstop": "8(9)",
+  "hitConfirm": "4",
+  "scaling": "20% Start / Combo (2 hits)",
+  "juggle": "1 / 0,0,1 / 2,10,10",
+  "perfectParry": "-15"
+ },
+ "yasmine_236236k": {
+  "blockstun": "22",
+  "hitstop": "10",
+  "scaling": "30% Minimum",
+  "juggle": "- / - / 99",
+  "perfectParry": "-54"
+ },
+ "yasmine_236236p": {
+  "blockstun": "25",
+  "hitstop": "7",
+  "range": "1.921",
+  "scaling": "50% Minimum / 10% Immediate (special)",
+  "juggle": "- / - / 99",
+  "perfectParry": "-71"
+ },
+ "yasmine_236236p(ca)": {
+  "blockstun": "25",
+  "hitstop": "7",
+  "range": "1.921",
+  "scaling": "50% Minimum / 10% Immediate (special)",
+  "juggle": "- / - / 99",
+  "perfectParry": "-71"
+ },
+ "yasmine_236hp": {
+  "hitstun": "28",
+  "blockstun": "19",
+  "hitstop": "10",
+  "range": "2.03",
+  "hitConfirm": "14 / ,17",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-23",
+  "superGain": "250 / 125"
+ },
+ "yasmine_236hp_6p": {
+  "blockstun": "20,20,14 (33 total)",
+  "hitstop": "1,1,5,13",
+  "range": "1.78~1.94",
+  "hitConfirm": "96",
+  "juggle": "1(3) / 0,0,1,1 / 5,5,5,6"
+ },
+ "yasmine_236hp_6p_enhanced": {
+  "blockstun": "20,20,26,23 (77 total)",
+  "hitstop": "1,1,5,13",
+  "range": "1.78~1.94",
+  "hitConfirm": "96",
+  "juggle": "3 / 0,0,1,1 / 5,5,5,6"
+ },
+ "yasmine_236k_k": {
+  "hitstun": "23",
+  "blockstun": "17",
+  "hitstop": "15",
+  "scaling": "30% Start",
+  "juggle": "1 / 1 / 15",
+  "perfectParry": "-17(-11)",
+  "superGain": "600 / 300"
+ },
+ "yasmine_236k_p": {
+  "hitstun": "25",
+  "blockstun": "17",
+  "hitstop": "15",
+  "scaling": "30% Start",
+  "juggle": "1 / 1 / 15",
+  "perfectParry": "-21(-15)",
+  "superGain": "600 / 300"
+ },
+ "yasmine_236lp": {
+  "hitstun": "26",
+  "blockstun": "19",
+  "hitstop": "10",
+  "range": "1.577",
+  "hitConfirm": "14 / ,17",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-23",
+  "superGain": "400 / 200"
+ },
+ "yasmine_236lp_6p": {
+  "hitstun": "26,26,25,24 (62 total)",
+  "blockstun": "20,20,14 (33 total)",
+  "hitstop": "1,1,5,10",
+  "range": "1.78~1.81",
+  "hitConfirm": "87",
+  "juggle": "1 / 0,0,1,1 / 5,5,5,6"
+ },
+ "yasmine_236lp_6p_enhanced": {
+  "blockstun": "20,20,20,22 (70 total)",
+  "hitstop": "1,1,5,10",
+  "range": "1.78~1.94",
+  "hitConfirm": "87",
+  "juggle": "1 / 0,0,1,1 / 5,5,5,6"
+ },
+ "yasmine_236mp": {
+  "hitstun": "26",
+  "blockstun": "19",
+  "hitstop": "10",
+  "range": "1.83",
+  "hitConfirm": "14 / ,17",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-23",
+  "superGain": "250 / 125"
+ },
+ "yasmine_236mp_6p": {
+  "blockstun": "20,20,14 (33 total)",
+  "hitstop": "1,1,5,6",
+  "range": "1.78~1.81",
+  "hitConfirm": "89",
+  "scaling": "Combo (2 hits)",
+  "juggle": "1 / 0,0,1,1 / 5,5,5,6"
+ },
+ "yasmine_236mp_6p_enhanced": {
+  "blockstun": "20,20,26,23 (77 total)",
+  "hitstop": "1,1,5,6",
+  "range": "1.78~1.94",
+  "hitConfirm": "89",
+  "scaling": "Combo (2 hits)",
+  "juggle": "1 / 0,0,1,1 / 5,5,5,6"
+ },
+ "yasmine_236pp": {
+  "hitstun": "23",
+  "blockstun": "22",
+  "hitstop": "10",
+  "range": "1.727",
+  "hitConfirm": "17",
+  "juggle": "1 / 1 / 15",
+  "perfectParry": "-23",
+  "superGain": "400 / 200"
+ },
+ "yasmine_236pp_6p": {
+  "blockstun": "20,20,14 (33 total)",
+  "hitstop": "1,1,5",
+  "range": "1.78~1.94",
+  "hitConfirm": "101",
+  "juggle": "0 / 0 / 16"
+ },
+ "yasmine_236pp_6p_enhanced": {
+  "blockstun": "18,20,20,22 (70 total)",
+  "hitstop": "1,1,5,10",
+  "range": "1.78~1.94",
+  "hitConfirm": "101",
+  "juggle": "0 / 0 / 16"
+ },
+ "yasmine_2hk": {
+  "blockstun": "18",
+  "hitstop": "13",
+  "range": "1.84",
+  "juggle": "1 / 1 / 1",
+  "perfectParry": "-26",
+  "superGain": "1000 / 500"
+ },
+ "yasmine_2hp": {
+  "hitstun": "31",
+  "blockstun": "18",
+  "hitstop": "13",
+  "range": "1.238",
+  "hitConfirm": "16",
+  "afterDriveRush": "21 / 8",
+  "perfectParry": "-27",
+  "superGain": "1000 / 500"
+ },
+ "yasmine_2lk": {
+  "hitstun": "15",
+  "blockstun": "11",
+  "hitstop": "9",
+  "range": "1.12",
+  "scaling": "20% Start",
+  "perfectParry": "-11",
+  "superGain": "300 / 150"
+ },
+ "yasmine_2lp": {
+  "hitstun": "15",
+  "blockstun": "10",
+  "hitstop": "9",
+  "range": "0.97",
+  "hitConfirm": "13",
+  "scaling": "20% Start",
+  "afterDriveRush": "5 / 0",
+  "perfectParry": "-9",
+  "superGain": "300 / 150"
+ },
+ "yasmine_2mk": {
+  "hitstun": "21",
+  "blockstun": "16",
+  "hitstop": "9",
+  "range": "1.456",
+  "hitConfirm": "13",
+  "scaling": "20% Start",
+  "afterDriveRush": "9 / 4",
+  "perfectParry": "-20",
+  "superGain": "600 / 300"
+ },
+ "yasmine_2mk_hk": {
+  "blockstun": "16,17 (31 total)",
+  "hitstop": "9,11",
+  "range": "1.578",
+  "hitConfirm": ",37",
+  "juggle": "1 / 1,1 / 0,3"
+ },
+ "yasmine_2mp": {
+  "hitstun": "23",
+  "blockstun": "17",
+  "hitstop": "11",
+  "range": "1.25",
+  "hitConfirm": "15",
+  "afterDriveRush": "13 / 7",
+  "perfectParry": "-15",
+  "superGain": "600 / 300"
+ },
+ "yasmine_4hk": {
+  "blockstun": "18",
+  "hitstop": "13 (PC: 20)",
+  "range": "1.183~1.235",
+  "hitConfirm": "16 (PC: 23)",
+  "scaling": "20% Start",
+  "afterDriveRush": "KD +45 / 8",
+  "perfectParry": "-22",
+  "superGain": "1000 / 500"
+ },
+ "yasmine_4lplk": {
+  "range": "0.8",
+  "scaling": "20% Immediate"
+ },
+ "yasmine_5hk": {
+  "hitstun": "24",
+  "blockstun": "19",
+  "hitstop": "13 (PC: 20)",
+  "range": "1.872~1.968",
+  "scaling": "30% Start",
+  "perfectParry": "-21",
+  "superGain": "1000 / 500"
+ },
+ "yasmine_5hp": {
+  "hitstun": "25,25,19 (37 total)",
+  "blockstun": "17,17,14 (32 total)",
+  "hitstop": "2,2,13",
+  "range": "1.46~1.973",
+  "hitConfirm": "19",
+  "juggle": "1,1,1 / 0,2,1 / 10,11,12",
+  "afterDriveRush": "13 / 5",
+  "perfectParry": "-15"
+ },
+ "yasmine_5lk": {
+  "hitstun": "16",
+  "blockstun": "10",
+  "hitstop": "9",
+  "range": "1.3",
+  "hitConfirm": "12",
+  "scaling": "20% Start",
+  "afterDriveRush": "5 / -1",
+  "perfectParry": "-12",
+  "superGain": "300 / 150"
+ },
+ "yasmine_5lp": {
+  "hitstun": "14",
+  "blockstun": "9",
+  "hitstop": "9",
+  "range": "1.01",
+  "hitConfirm": "13",
+  "scaling": "20% Start",
+  "afterDriveRush": "4 / -1",
+  "perfectParry": "-8",
+  "superGain": "300 / 150"
+ },
+ "yasmine_5lp_lp": {
+  "hitstun": "14,17 (27 total)",
+  "blockstun": "9,15",
+  "hitstop": "9,10",
+  "range": "1.419",
+  "hitConfirm": "32~34(13)",
+  "juggle": "1 / 1,1 / 0,3",
+  "afterDriveRush": "5 / 3",
+  "perfectParry": "-16"
+ },
+ "yasmine_5mk": {
+  "hitstun": "25",
+  "blockstun": "18",
+  "hitstop": "11",
+  "range": "1.618",
+  "perfectParry": "-20",
+  "superGain": "700 / 350"
+ },
+ "yasmine_5mk_mk": {
+  "hitstun": "25,22 (38 total)",
+  "blockstun": "18,22 (38 total)",
+  "hitstop": "11,11",
+  "range": "1.734~1.783",
+  "juggle": "1 / 1,1 / 0,3"
+ },
+ "yasmine_5mk_mk_hk": {
+  "blockstun": "18,22,22 (59 total)",
+  "hitstop": "11,11,13",
+  "range": "2.043",
+  "hitConfirm": ",76",
+  "juggle": "1 / 1,1,1 / 0,3,4"
+ },
+ "yasmine_5mp": {
+  "hitstun": "22,22 (32 total)",
+  "blockstun": "16,17 (27 total)",
+  "hitstop": "4,11",
+  "range": "1.011",
+  "juggle": "0,1 / 0,1 / 0,0",
+  "perfectParry": "-18"
+ },
+ "yasmine_5mp_mp": {
+  "blockstun": "16,17,16 (39 total)",
+  "hitstop": "4,11,13",
+  "range": "1.1",
+  "hitConfirm": "54",
+  "scaling": "Combo (2 hits)",
+  "juggle": "1 / 0,1,1 / 0,0,1",
+  "afterDriveRush": "KD +44 / 6"
+ },
+ "yasmine_5pppkkk": {
+  "blockstun": "20",
+  "hitstop": "13",
+  "range": "1.084",
+  "perfectParry": "-175",
+  "superGain": "600 / 300"
+ },
+ "yasmine_623hk": {
+  "blockstun": "17",
+  "hitstop": "15,3,1x3,11",
+  "range": "1.259 (1st)",
+  "juggle": "1 / 1,0x4,1 / 15,16",
+  "perfectParry": "-47"
+ },
+ "yasmine_623kk": {
+  "blockstun": "16",
+  "hitstop": "15,3,1x3,11",
+  "range": "1.271 (1st)",
+  "juggle": "1 / 1,0x4,1 / 15,16",
+  "perfectParry": "-54"
+ },
+ "yasmine_623lk": {
+  "blockstun": "20",
+  "hitstop": "15,3,1,11",
+  "range": "1.03 (1st)",
+  "juggle": "1 / 1,0x2,1 / 15,16",
+  "perfectParry": "-47"
+ },
+ "yasmine_623mk": {
+  "blockstun": "20",
+  "hitstop": "15,3,1,1,11",
+  "range": "1.109 (1st)",
+  "juggle": "1 / 1,0x3,1 / 15,16",
+  "perfectParry": "-47"
+ },
+ "yasmine_6hphk": {
+  "blockstun": "21",
+  "hitstop": "20",
+  "range": "1.684",
+  "juggle": "200 / 100 / 1",
+  "perfectParry": "-27"
+ },
+ "yasmine_6hphk_recovery": {
+  "blockstun": "21",
+  "hitstop": "20",
+  "range": "1.684",
+  "juggle": "200 / 100 / 1",
+  "perfectParry": "-27"
+ },
+ "yasmine_6mp": {
+  "hitstun": "24",
+  "blockstun": "18",
+  "hitstop": "11",
+  "range": "1.527~1.601",
+  "perfectParry": "-19",
+  "superGain": "500 / 250"
+ },
+ "yasmine_hphk": {
+  "blockstun": "34",
+  "hitstop": "25",
+  "range": "2.548",
+  "scaling": "20% Start",
+  "juggle": "0 (Crumple: -1) / 1 / 0",
+  "perfectParry": "-35"
+ },
+ "yasmine_jhk": {
+  "hitstun": "19",
+  "blockstun": "15",
+  "hitstop": "13",
+  "range": "1.17",
+  "perfectParry": "-6(-2)",
+  "superGain": "1000 / 500"
+ },
+ "yasmine_jhp": {
+  "hitstun": "19",
+  "blockstun": "15",
+  "hitstop": "13",
+  "range": "0.73~0.98",
+  "perfectParry": "-9(-2)",
+  "superGain": "1000 / 500"
+ },
+ "yasmine_jlk": {
+  "hitstun": "14",
+  "blockstun": "10",
+  "hitstop": "9",
+  "range": "0.55",
+  "perfectParry": "-7(-2)",
+  "superGain": "300 / 150"
+ },
+ "yasmine_jlp": {
+  "hitstun": "13",
+  "blockstun": "9",
+  "hitstop": "9",
+  "range": "0.79",
+  "perfectParry": "-5(-2)",
+  "superGain": "300 / 150"
+ },
+ "yasmine_jmk": {
+  "hitstun": "17",
+  "blockstun": "13",
+  "hitstop": "11",
+  "range": "1.08",
+  "perfectParry": "-5(-2)",
+  "superGain": "500 / 250"
+ },
+ "yasmine_jmp": {
+  "hitstun": "15",
+  "blockstun": "11",
+  "hitstop": "11",
+  "range": "0.8",
+  "juggle": "1 / 1 / 2",
+  "perfectParry": "-3(-2)",
+  "superGain": "500 / 250"
+ },
+ "yasmine_lplk": {
+  "range": "0.8",
+  "scaling": "20% Immediate"
+ },
+ "yasmine_mpmk": {
+  "scaling": "50% Multiplier (Perfect)"
+ }
+}

@@ -4,7 +4,11 @@ import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import { Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { advTone, hitboxShots, orderMoves, TONE_CLASS, type Move, type MoveGroup } from '@/lib/supercombo'
+import {
+  advTone, frameMeter, hitboxShots, orderMoves, TONE_CLASS,
+  type FrameKind, type FrameSegment, type Move, type MoveGroup,
+} from '@/lib/supercombo'
+import type { FatExtra } from '@/lib/fat'
 import { FilterChips } from '@/components/filter-chips'
 
 const WIKI = 'https://wiki.supercombo.gg'
@@ -21,10 +25,38 @@ const GROUP_LABELS: Record<MoveGroup, string> = {
 
 const GROUP_ORDER: MoveGroup[] = ['normal', 'air', 'throw', 'special', 'super', 'drive', 'taunt']
 
+// The in-game frame meter colors: green startup, red active, blue recovery.
+const FRAME_KINDS: { kind: FrameKind; label: string; className: string }[] = [
+  { kind: 'startup', label: 'Startup', className: 'bg-emerald-500' },
+  { kind: 'active', label: 'Active', className: 'bg-rose-500' },
+  { kind: 'gap', label: 'Gap', className: 'bg-zinc-700' },
+  { kind: 'recovery', label: 'Recovery', className: 'bg-blue-600' },
+  { kind: 'landing', label: 'Landing', className: 'bg-blue-300' },
+]
+const FRAME_KIND = Object.fromEntries(FRAME_KINDS.map((k) => [k.kind, k])) as Record<FrameKind, (typeof FRAME_KINDS)[number]>
+
+// FAT fields, in reading order. Pairs read "on hit / on block".
+const FAT_FACTS: [keyof FatExtra, string, string?][] = [
+  ['hitstun', 'Hitstun'],
+  ['blockstun', 'Blockstun'],
+  ['hitstop', 'Hitstop'],
+  ['hitConfirm', 'Hit confirm', 'Frames to confirm into a special or super'],
+  ['afterDriveRush', 'After drive rush', 'Advantage on hit / on block after a drive rush'],
+  ['perfectParry', 'On perfect parry'],
+  ['juggle', 'Juggle', 'Juggle start / increase / limit'],
+  ['scaling', 'Scaling'],
+  ['range', 'Range'],
+  ['superGain', 'Super gain', 'Super meter gained on hit / on block'],
+]
+
 /** Notes longer than this start clamped, with a toggle to read the rest. */
 const NOTES_CLAMP = 180
 
-export function CharacterFrameData({ moves, accent }: { moves: Move[]; accent: string }) {
+export function CharacterFrameData({ moves, extras, accent }: {
+  moves: Move[]
+  extras: Record<string, FatExtra>
+  accent: string
+}) {
   const [group, setGroup] = useState<string>('all')
   const [query, setQuery] = useState('')
 
@@ -70,6 +102,16 @@ export function CharacterFrameData({ moves, accent }: { moves: Move[]; accent: s
 
       <FilterChips items={chips} active={group} onSelect={setGroup} accent={accent} />
 
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-zinc-400">
+        <span className="uppercase tracking-wider text-zinc-500">Frame meter</span>
+        {FRAME_KINDS.map((k) => (
+          <span key={k.kind} className="flex items-center gap-1">
+            <span className={cn('h-2.5 w-1.5', k.className)} />
+            {k.label}
+          </span>
+        ))}
+      </div>
+
       {sections.map((s) => (
         <section key={s.group} className="space-y-3 pt-2">
           <div className="flex items-center gap-2">
@@ -80,7 +122,7 @@ export function CharacterFrameData({ moves, accent }: { moves: Move[]; accent: s
             <span className="text-xs text-zinc-500">{s.moves.length}</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {s.moves.map((m) => <MoveCard key={m.id} move={m} />)}
+            {s.moves.map((m) => <MoveCard key={m.id} move={m} extra={extras[m.id]} />)}
           </div>
         </section>
       ))}
@@ -93,7 +135,7 @@ export function CharacterFrameData({ moves, accent }: { moves: Move[]; accent: s
 }
 
 /** One move, laid out like a frame data card: hitbox image first, the core numbers big, the rest below. */
-function MoveCard({ move }: { move: Move }) {
+function MoveCard({ move, extra }: { move: Move; extra?: FatExtra }) {
   // Hitbox first: seeing where the move hits is the point of the image.
   const shots = [
     ...hitboxShots(move.hitboxes),
@@ -122,6 +164,10 @@ function MoveCard({ move }: { move: Move }) {
     ['Drive dmg (block)', move.driveBlk],
     ['Drive gain', move.driveGain],
   ].filter(([, v]) => v) as [string, string][]
+  const fatFacts = FAT_FACTS
+    .map(([key, label, hint]) => ({ label, hint, value: extra?.[key] }))
+    .filter((f) => f.value)
+  const meter = frameMeter(move)
 
   const longNotes = move.notes.length > NOTES_CLAMP
 
@@ -187,12 +233,25 @@ function MoveCard({ move }: { move: Move }) {
           ))}
         </dl>
 
+        {meter && <FrameMeter segments={meter} />}
+
         {facts.length > 0 && (
           <dl className="flex flex-wrap gap-x-4 gap-y-1">
             {facts.map(([k, v]) => (
               <div key={k} className="flex gap-1.5 text-xs">
                 <dt className="text-zinc-500">{k}</dt>
                 <dd className="font-medium text-zinc-200">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        {fatFacts.length > 0 && (
+          <dl className="flex flex-wrap gap-x-4 gap-y-1 border-t border-zinc-800 pt-2">
+            {fatFacts.map((f) => (
+              <div key={f.label} className="flex gap-1.5 text-xs" title={f.hint}>
+                <dt className="text-zinc-500">{f.label}</dt>
+                <dd className="font-medium text-zinc-200">{f.value}</dd>
               </div>
             ))}
           </dl>
@@ -216,5 +275,19 @@ function MoveCard({ move }: { move: Move }) {
         )}
       </div>
     </article>
+  )
+}
+
+/** One block per frame, like the in-game meter. Wraps on long moves instead of shrinking the blocks. */
+function FrameMeter({ segments }: { segments: FrameSegment[] }) {
+  const summary = segments.map((s) => `${FRAME_KIND[s.kind].label} ${s.frames}`).join(', ')
+  return (
+    <div role="img" aria-label={`Frame meter: ${summary}`} title={summary} className="flex flex-wrap gap-px">
+      {segments.flatMap((s, i) =>
+        Array.from({ length: s.frames }, (_, j) => (
+          <span key={`${i}-${j}`} className={cn('h-3 w-1.5', FRAME_KIND[s.kind].className)} />
+        )),
+      )}
+    </div>
   )
 }
