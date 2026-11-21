@@ -49,6 +49,28 @@ const FAT_FACTS: [keyof FatExtra, string, string?][] = [
   ['superGain', 'Super gain', 'Super meter gained on hit / on block'],
 ]
 
+// First number of a frame value ("-13(-28)" -> -13, "KD +29" -> 29); null when there is none.
+function frameNumber(v: string): number | null {
+  const m = v.match(/[-+]?\d+/)
+  return m ? Number(m[0]) : null
+}
+
+// Quick filters, combinable. "Safe" is -3 or better on block, the usual unpunishable threshold.
+const QUICK_FILTERS: { id: string; label: string; test: (m: Move) => boolean }[] = [
+  { id: 'plus', label: 'Plus on block', test: (m) => (frameNumber(m.blockAdv) ?? -99) >= 1 },
+  { id: 'safe', label: 'Safe on block', test: (m) => (frameNumber(m.blockAdv) ?? -99) >= -3 },
+  { id: 'invuln', label: 'Invincible', test: (m) => Boolean(m.invuln) },
+  { id: 'armor', label: 'Armor', test: (m) => Boolean(m.armor) },
+]
+
+// Sorting stays within each move group; ties keep the reading order.
+const SORTS: { id: string; label: string; key?: (m: Move) => number }[] = [
+  { id: 'default', label: 'Move order' },
+  { id: 'startup', label: 'Fastest startup', key: (m) => frameNumber(m.startup) ?? 999 },
+  { id: 'block', label: 'Best on block', key: (m) => -(frameNumber(m.blockAdv) ?? -999) },
+  { id: 'hit', label: 'Best on hit', key: (m) => -(frameNumber(m.hitAdv) ?? -999) },
+]
+
 /** Notes longer than this start clamped, with a toggle to read the rest. */
 const NOTES_CLAMP = 180
 
@@ -59,6 +81,8 @@ export function CharacterFrameData({ moves, extras, accent }: {
 }) {
   const [group, setGroup] = useState<string>('all')
   const [query, setQuery] = useState('')
+  const [quick, setQuick] = useState<string[]>([])
+  const [sort, setSort] = useState('default')
 
   const chips = useMemo(() => {
     const counts = new Map<MoveGroup, number>()
@@ -72,15 +96,22 @@ export function CharacterFrameData({ moves, extras, accent }: {
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
+    const tests = QUICK_FILTERS.filter((f) => quick.includes(f.id)).map((f) => f.test)
     return moves.filter((m) => {
       if (group !== 'all' && m.group !== group) return false
+      if (!tests.every((t) => t(m))) return false
       if (!q) return true
-      return m.input.toLowerCase().includes(q) || m.name.toLowerCase().includes(q)
+      // Notes too, so "projectile" or "anti-air" find the moves described that way.
+      return [m.input, m.name, m.notes.replace(/<[^>]+>/g, '')].some((v) => v.toLowerCase().includes(q))
     })
-  }, [moves, group, query])
+  }, [moves, group, query, quick])
 
+  const sortKey = SORTS.find((x) => x.id === sort)?.key
   const sections = GROUP_ORDER
-    .map((g) => ({ group: g, moves: orderMoves(g, visible.filter((m) => m.group === g)) }))
+    .map((g) => {
+      const ordered = orderMoves(g, visible.filter((m) => m.group === g))
+      return { group: g, moves: sortKey ? [...ordered].sort((a, b) => sortKey(a) - sortKey(b)) : ordered }
+    })
     .filter((s) => s.moves.length > 0)
 
   return (
@@ -91,7 +122,7 @@ export function CharacterFrameData({ moves, extras, accent }: {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Find a move, 2MK or Shoryuken"
+            placeholder="Find a move: 2MK, Shoryuken, projectile..."
             className="w-full rounded-none border border-zinc-800 bg-zinc-900 pl-9 pr-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[color:var(--accent)] focus:outline-none"
           />
         </label>
@@ -101,6 +132,37 @@ export function CharacterFrameData({ moves, extras, accent }: {
       </div>
 
       <FilterChips items={chips} active={group} onSelect={setGroup} accent={accent} />
+
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:justify-between">
+        <div className="flex flex-wrap gap-1.5">
+          {QUICK_FILTERS.map((f) => {
+            const on = quick.includes(f.id)
+            return (
+              <button
+                key={f.id}
+                aria-pressed={on}
+                onClick={() => setQuick(on ? quick.filter((x) => x !== f.id) : [...quick, f.id])}
+                className={cn(
+                  'rounded-none border px-2.5 py-1 text-xs font-semibold cursor-pointer transition-colors',
+                  on
+                    ? 'border-[color:var(--accent)] bg-zinc-900 text-zinc-100'
+                    : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-100',
+                )}
+              >
+                {f.label}
+              </button>
+            )
+          })}
+        </div>
+        <select
+          aria-label="Sort moves"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          className="w-full sm:w-auto rounded-none border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-200 focus:border-[color:var(--accent)] focus:outline-none cursor-pointer"
+        >
+          {SORTS.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
+        </select>
+      </div>
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-zinc-400">
         <span className="uppercase tracking-wider text-zinc-500">Frame meter</span>
