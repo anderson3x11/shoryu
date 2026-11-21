@@ -13,6 +13,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       "Hitbox buttons now say what they show (full hitbox, hit 1, hit 2...), and \"Move\" became \"Hide hitbox\"",
       "The \"Updated\" time next to Refresh now shows when the profile was really last updated",
       "Fixed the top menu overflowing on tablets and small laptops",
+      "A broken or mistyped link now lands on a proper page with a player search",
     ],
   },
   {
