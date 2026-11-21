@@ -281,22 +281,24 @@ function MoveCard({ move, extra }: { move: Move; extra?: FatExtra }) {
 /**
  * One block per frame, like the in-game meter. Wraps on long moves instead of shrinking the blocks.
  * Each segment's frame count sits in its last blocks, one digit per block ("13" spans two), like FAT;
- * those blocks are grouped so a wrap never splits a number across two rows.
+ * those blocks are grouped so a wrap never splits a number across two rows. Sized like FAT: 12x24
+ * blocks in 2px black borders (outlines overlapping in the 2px gaps, so a wrapped row keeps them).
  */
 function FrameMeter({ segments }: { segments: FrameSegment[] }) {
   const summary = segments.map((s) => `${FRAME_KIND[s.kind].label} ${s.frames}`).join(', ')
   return (
-    <div role="img" aria-label={`Frame meter: ${summary}`} title={summary} className="flex flex-wrap gap-px">
+    <div role="img" aria-label={`Frame meter: ${summary}`} title={summary} className="flex flex-wrap gap-0.5 p-0.5">
       {segments.flatMap((s, i) => {
         const digits = String(s.frames)
         const block = (key: string, digit?: string) => (
           <span
             key={key}
             className={cn(
-              'flex h-4 w-3 items-center justify-center text-[11px] font-bold leading-none tabular-nums text-white',
+              'flex h-6 w-3 items-center justify-center outline-2 outline-black',
+              'text-[17px] font-semibold leading-none tabular-nums text-white',
               // A black outline (a stroke drawn under the fill, not a text shadow) keeps the digits
               // readable on every block color.
-              '[-webkit-text-stroke:2.5px_#000] [paint-order:stroke_fill]',
+              '[-webkit-text-stroke:2px_#000] [paint-order:stroke_fill]',
               FRAME_KIND[s.kind].className,
             )}
           >
@@ -305,7 +307,7 @@ function FrameMeter({ segments }: { segments: FrameSegment[] }) {
         )
         return [
           ...Array.from({ length: s.frames - digits.length }, (_, j) => block(`${i}-${j}`)),
-          <span key={`${i}-n`} className="flex gap-px">
+          <span key={`${i}-n`} className="flex gap-0.5">
             {[...digits].map((d, j) => block(`${i}-d${j}`, d))}
           </span>,
         ]
