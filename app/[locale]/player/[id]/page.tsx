@@ -1,6 +1,6 @@
 import { cache } from 'react'
 import { notFound } from 'next/navigation'
-import { getCachedPlayerProfile, getProfileFetchedAt } from '@/lib/supabase/player-cache'
+import { getCachedPlayerProfile } from '@/lib/supabase/player-cache'
 import { ServiceUnavailable } from '@/components/service-unavailable'
 import { PlayerHeader } from '@/components/player-header'
 import { RefreshProfileButton } from '@/components/refresh-profile-button'
@@ -44,9 +44,8 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
   const banner = profile.fighter_banner_info
   const shortId = banner?.personal_info?.short_id ?? id
 
-  // Age of the stored profile, so the Refresh button can say how old what you're reading is.
-  const numId = Number(shortId)
-  const fetchedAt = Number.isFinite(numId) ? await getProfileFetchedAt(numId) : null
+  // Age of the copy being shown (just now when this view refetched it), for the Refresh button.
+  const fetchedAt = result.fetchedAt ?? null
 
   // Build phase list — currently only one phase available from profile page.
   // When Buckler exposes per-phase endpoints, add more PhaseData entries here.

@@ -45,29 +45,32 @@ async function writeCached(playerId: number, profile: BucklerProfilePage) {
 // DB-cached wrapper around getPlayerProfileResult. Returns the stored profile when it is fresh
 // (or when Buckler is down but we have any stored copy), otherwise fetches once and stores it.
 // `force` bypasses the TTL — used by the manual refresh route.
+// An "ok" result carries `fetchedAt`, the age of the copy it serves. Callers use that instead of
+// a second getProfileFetchedAt read: Next memoizes identical GETs within a render, so that read
+// would return the row from before a refetch here wrote the new timestamp.
 export async function getCachedPlayerProfile(
   shortId: string | number,
   force = false,
-): Promise<PlayerProfileResult> {
+): Promise<PlayerProfileResult & { fetchedAt?: number }> {
   const numId = Number(shortId)
   const hasNumId = Number.isFinite(numId)
   const cached = hasNumId ? await readCached(numId) : null
 
   if (!force && cached && Date.now() - cached.fetchedAt < TTL_MS) {
-    return { status: 'ok', profile: cached.profile }
+    return { status: 'ok', profile: cached.profile, fetchedAt: cached.fetchedAt }
   }
 
   const live = await getPlayerProfileResult(shortId)
   if (live.status === 'ok') {
     if (hasNumId) await writeCached(numId, live.profile)
-    return live
+    return { ...live, fetchedAt: Date.now() }
   }
   // Buckler unreachable (e.g. dead cookie) but we have a stored copy → serve it stale rather
   // than an error screen. A positive "notfound" still falls through unchanged.
   // Not on `force`: a manual refresh that silently returned the same stored copy looked like a
   // successful refresh that changed nothing, so the caller needs the failure.
   if (live.status === 'unavailable' && cached && !force) {
-    return { status: 'ok', profile: cached.profile }
+    return { status: 'ok', profile: cached.profile, fetchedAt: cached.fetchedAt }
   }
   return live
 }
